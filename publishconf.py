@@ -10,15 +10,18 @@ import sys
 sys.path.append(os.curdir)
 from pelicanconf import *
 
-SITEURL = 'http://andrewmellor.co.uk'
+SITEURL = 'http://andy1080.github.io'
 RELATIVE_URLS = False
 
 FEED_ALL_ATOM = 'feeds/all.atom.xml'
 CATEGORY_FEED_ATOM = 'feeds/%s.atom.xml'
 
+SOCIAL = SOCIAL + (('rss', SITEURL + '/' + FEED_ALL_ATOM),)
+
 DELETE_OUTPUT_DIRECTORY = True
 
 # Following items are often useful when publishing
 
-#DISQUS_SITENAME = ""
-#GOOGLE_ANALYTICS = ""
+DISQUS_SITENAME = "empiricalstateofmind"
+GOOGLE_ANALYTICS = "UA-49010624-3"
+ADDTHIS_PROFILE = 'ra-5477a96408ae534a'
