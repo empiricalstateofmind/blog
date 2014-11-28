@@ -1,14 +1,10 @@
-Title: Testing page 1
+Title: UNDER CONSTRUCTION
 Authors: Andy Mellor
 Date: 2014-11-27
 Comments: true
 Status: draft
-Slug: My-test-post
+Slug: Under-Construction
 Tags: Testing, Blogging
 Category: Debug
 
-``` python
-
-def myfunction(x):
-	return x**2
-```
+Blog currently under contruction, please come back later.
