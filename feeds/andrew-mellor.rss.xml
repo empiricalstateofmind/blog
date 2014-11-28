@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Empircal State of Mind</title><link>http://andy1080.github.io/</link><description></description><atom:link href="http://andy1080.github.io/feeds/andrew-mellor.rss.xml" rel="self"></atom:link><lastBuildDate>Thu, 27 Nov 2014 00:00:00 +0100</lastBuildDate><item><title>Notebooks!</title><link>http://andy1080.github.io/blog/2014/11/27/notebooks/</link><description>&lt;p&gt;
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Empircal State of Mind</title><link>http://andy1080.github.io/</link><description></description><atom:link href="http://andy1080.github.io/feeds/andrew-mellor.rss.xml" rel="self"></atom:link><lastBuildDate>Wed, 26 Nov 2014 00:00:00 +0100</lastBuildDate><item><title>Notebooks!</title><link>http://andy1080.github.io/blog/2014/11/26/notebooks/</link><description>&lt;p&gt;
 &lt;div class="cell border-box-sizing code_cell rendered"&gt;
 &lt;div class="input"&gt;
 &lt;div class="prompt input_prompt"&gt;
@@ -3864,4 +3864,4 @@ In&amp;nbsp;[]:
 &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;/div&gt;&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Andrew Mellor</dc:creator><pubDate>Thu, 27 Nov 2014 00:00:00 +0100</pubDate><guid>tag:andy1080.github.io,2014-11-27:blog/2014/11/27/notebooks/</guid></item></channel></rss>
+&lt;/div&gt;&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Andrew Mellor</dc:creator><pubDate>Wed, 26 Nov 2014 00:00:00 +0100</pubDate><guid>tag:andy1080.github.io,2014-11-26:blog/2014/11/26/notebooks/</guid></item></channel></rss>
