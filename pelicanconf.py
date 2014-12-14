@@ -3,7 +3,7 @@
 from __future__ import unicode_literals
 
 AUTHOR = u'Andrew Mellor'
-SITENAME = u'Empircal State of Mind'
+SITENAME = u'Empirical State of Mind'
 HIDE_SITENAME = False
 SITEURL = ''
 
@@ -21,11 +21,13 @@ ARTICLE_SAVE_AS = 'blog/{date:%Y}/{date:%m}/{date:%d}/{slug}/index.html'
 #ARTICLE_SAVE_AS = 'blog/{slug}.html'
 
 # Title menu options
-MENUITEMS = [('Home Page', 'http://andrewmellor.co.uk')]
+MENUITEMS = []
 NEWEST_FIRST_ARCHIVES = True
 DISPLAY_CATEGORIES_ON_MENU = False
+PAGE_ORDER_BY = 'order'
 
-STATIC_PATHS = ['images', 'figures', 'code', 'notebooks', 'pdfs', 'favicon.png']
+STATIC_PATHS = ['images', 'figures', 'code', 'notebooks', 'pdfs', 'favicon.png','extra/CNAME', 'data']
+EXTRA_PATH_METADATA = {'extra/CNAME': {'path': 'CNAME'},}
 CODE_DIR = 'code'
 NOTEBOOK_DIR = 'notebooks'
 
@@ -35,7 +37,7 @@ BOOTSTRAP_THEME = "flatly"
 PLUGIN_PATHS = ['pelican-plugins']
 PLUGINS = ['summary', 'liquid_tags.img', 'liquid_tags.video',
 'liquid_tags.include_code', 'liquid_tags.notebook',
-'liquid_tags.literal']
+'liquid_tags.literal', 'render_math']
 
 # Theme Extras
 #SITELOGO = 'images/network.png'
@@ -70,10 +72,3 @@ HIDE_SIDEBAR = False
 DISQUS_DISPLAY_COUNTS = True
 USE_OPEN_GRAPH = True
 TWITTER_CARDS = True
-
-
-# TO DO
-
-
-#PIWIK_URL, PIWIK_SSL_URL and PIWIK_SITE_ID
-
