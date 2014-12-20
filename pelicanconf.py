@@ -40,9 +40,9 @@ PLUGINS = ['summary', 'liquid_tags.img', 'liquid_tags.video',
 'liquid_tags.literal', 'render_math']
 
 # Theme Extras
-#SITELOGO = 'images/network.png'
-#SITELOGO_SIZE 
-FAVICON = 'images/network.png'
+#SITELOGO = 'images/favicon.png'
+#SITELOGO_SIZE = 36
+FAVICON = 'images/favicon.png'
 
 DEFAULT_PAGINATION = False
 
