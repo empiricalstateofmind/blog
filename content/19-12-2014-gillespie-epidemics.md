@@ -8,17 +8,17 @@ Status: Published
 
 <!-- PELICAN_BEGIN_SUMMARY -->
 
-The stochastic simulation algorithm (SSA), or Gillespie algorithm, provides a means to sample directly from the state
+The Stochastic Simulation Algorithm (SSA), or Gillespie algorithm, provides a means to sample directly from the state
 distribution of a system governed by the master equation. Whilst this methodology has been used for the simulation of chemical
 reactions for decades, its applicability and utility in the simulation of dynamical processes on networks is not well known.
-We will look at an implementation the Gillespie Algorithm for an epidemic process on an random network, and consider the implementation issues when using Numpy.
+We will look at an implementation the Gillespie Algorithm for an epidemic process on an random network, and consider the implementation issues when using the well known Python package, Numpy.
 
 <!-- PELICAN_END_SUMMARY -->
 
 The Model
 ---
 
-We will look at one of the most simplistic models simple model of epidemic spread, the SI model. An *node* (person) can either be susceptible to (S) or infected with (I) a disease. Nodes are connected along *links* which describe some interaction between the two bodies for which the disease may possibly travel. For example, our network might contain links between every two people who have passed within 5 metres of each other over a day [^1]. Simpler networks could be family ties, coworkers, and coinhabitants if such high resolution data isn't achievable. 
+We will look at one of the most simplistic models of epidemic spread, the SI model. A *node* (person) can either be susceptible to (S) or infected with (I) a disease. Nodes are connected along *links* which describe some interaction between the two bodies on which the disease may possibly travel. For example, our network might contain links between every two people who have passed within 5 metres of each other over a day [^1]. Simpler networks could be family ties, coworkers, and coinhabitants if such high resolution data isn't achievable. 
 
 The model consists of two reactions,
 $$\begin{align} 
@@ -26,8 +26,8 @@ $$\begin{align}
     S &\xrightarrow{\gamma} I.
     \end{align}$$
     
-A susceptible node can meet an infected node and subsequently become infected itself with some probability **(1)** (contagion). A susceptible node can also spontaneously become infected by itself **(2)** (spontaneous infection). This accounts for any chance of becoming infected which is not accounted for in our model otherwise.
-The following code will run one simulation to get an feel for the dynamics, the class *SI_Simulation* will be discussed in detail later.
+A susceptible node can meet an infected node and subsequently become infected itself with some probability (contagion) **(1)**. A susceptible node can also spontaneously become infected by itself (spontaneous infection) **(2)**. This accounts for any chance of becoming infected which is not accounted for in our model otherwise.
+The following code will run one simulation to get a feel for the dynamics, the class *SI_Simulation* will be discussed in detail later.
 
 {% notebook simulation.ipynb cells[3:7] %}
 
@@ -51,7 +51,7 @@ been suggested, the most famous of which are the Gibson-Bruck algorithm[^2] and 
 Traditional simulation methods are *interval*-driven; they
 choose a small time step $\Delta t$ and consider whether a reaction
 happens in the interval $[t, t + \Delta t)$. These types of simulations
-come in two different flavours, synchronous updating
+come in two different flavours; synchronous updating
 where each node has a chance to react during an interval and
 asynchronous updating, where a individual node is chosen at
 random and then given the possibility to react. Interestingly
@@ -118,7 +118,7 @@ $$ \underline{\alpha} = (\gamma \textbf{1} + \lambda \textbf{A}\textbf{s}_I) \ci
 
 where $\circ$ is the element-wise vector multiplication and $(\textbf{s}_I)_i = 1$ if node $i$ is infected and $0$ otherwise. The indicator vector $\textbf{s}_S$ is similarly defined. $\textbf{A}$ is the [adjacency matrix](http://en.wikipedia.org/wiki/Adjacency_matrix) of the network which describes which nodes are connected to each other. This propensity definition calculates all the propensities at once however in most cases (particularly on sparse networks) when a node changes state only a small fraction of the nodes will change propensity. We can therefore save time by only calculating reaction propensities which change at each step. 
 
-The different implementations 
+The different implementations are:
 
 **ALL**
 
