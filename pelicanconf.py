@@ -60,7 +60,7 @@ DISPLAY_RECENT_POSTS_ON_SIDEBAR = True
 RECENT_POST_COUNT = 5
 HIDE_SIDEBAR = False
 
-#EXTRA_HEADER = open('_nb_header.html').read().decode('utf-8')
+EXTRA_HEADER = open('_nb_header.html').read().decode('utf-8')
 
 # Social - added with publishing
 #DISQUS_SITENAME = 'empiricalstateofmind'
