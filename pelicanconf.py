@@ -53,7 +53,7 @@ DEFAULT_PAGINATION = False
 # Sidebar
 SOCIAL = (('twitter', 'https://twitter.com/EmpiricalSOM'),
           ('linkedin', 'https://www.linkedin.com/pub/andrew-mellor/49/74b/842'),
-          ('github', 'https://github.com/Andy1080'),)
+          ('github', 'https://github.com/empiricalstateofmind'),)
 DISPLAY_TAGS_ON_SIDEBAR = True
 DISPLAY_CATEGORIES_ON_SIDEBAR = False
 TAG_CLOUD_MAX_ITEMS = 10
@@ -61,7 +61,7 @@ DISPLAY_RECENT_POSTS_ON_SIDEBAR = True
 RECENT_POST_COUNT = 5
 HIDE_SIDEBAR = False
 
-EXTRA_HEADER = open('_nb_header.html').read().decode('utf-8')
+EXTRA_HEADER = open('_notebook_header.html').read().decode('utf-8')
 
 # Social - added with publishing
 #DISQUS_SITENAME = 'empiricalstateofmind'
