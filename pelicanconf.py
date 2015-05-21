@@ -34,6 +34,7 @@ NOTEBOOK_DIR = 'notebooks'
 # Theming + Plugins
 THEME = "./pelican-themes/pelican-bootstrap3"
 BOOTSTRAP_THEME = "flatly"
+PYGMENTS_STYLE = "default"
 PLUGIN_PATHS = ['pelican-plugins']
 PLUGINS = ['summary', 'liquid_tags.img', 'liquid_tags.video',
 'liquid_tags.include_code', 'liquid_tags.notebook',
