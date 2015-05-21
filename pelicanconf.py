@@ -32,7 +32,7 @@ CODE_DIR = 'code'
 NOTEBOOK_DIR = 'notebooks'
 
 # Theming + Plugins
-THEME = "pelican-bootstrap3"
+THEME = "./pelican-themes/pelican-bootstrap3"
 BOOTSTRAP_THEME = "flatly"
 PLUGIN_PATHS = ['pelican-plugins']
 PLUGINS = ['summary', 'liquid_tags.img', 'liquid_tags.video',
