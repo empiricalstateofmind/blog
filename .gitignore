@@ -1,5 +1,6 @@
 *.pyc
-output
+output/
 _build
 _nb_header.html
-./cache
+cache/
+.ipynb_checkpoints/
