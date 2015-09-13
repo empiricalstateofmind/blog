@@ -1,0 +1,1211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Andrew Mellor</title><link href="http://empiricalstateofmind.github.io/" rel="alternate"></link><link href="http://empiricalstateofmind.github.io/feeds/dynamical-proccesses.atom.xml" rel="self"></link><id>http://empiricalstateofmind.github.io/</id><updated>2014-12-19T00:00:00+01:00</updated><entry><title>Network Dynamics with Python and the Gillespie Algorithm: An Epidemic Example</title><link href="http://empiricalstateofmind.github.io/blog/2014/12/19/gillespie-epidemics/" rel="alternate"></link><updated>2014-12-19T00:00:00+01:00</updated><author><name>Andy Mellor</name></author><id>tag:empiricalstateofmind.github.io,2014-12-19:blog/2014/12/19/gillespie-epidemics/</id><summary type="html">
+
+&lt;p&gt;The Stochastic Simulation Algorithm (SSA), or Gillespie algorithm, provides a means to sample directly from the state
+distribution of a system governed by the master equation. Whilst this methodology has been used for the simulation of chemical
+reactions for decades, its applicability and utility in the simulation of dynamical processes on networks is not well known.
+We will look at an implementation the Gillespie Algorithm for an epidemic process on an random network, and consider the implementation issues when using the well known Python package, Numpy.&lt;/p&gt;
+
+
+&lt;h2&gt;The Model&lt;/h2&gt;
+&lt;p&gt;We will look at one of the most simplistic models of epidemic spread, the SI model. A &lt;em&gt;node&lt;/em&gt; (person) can either be susceptible to (S) or infected with (I) a disease. Nodes are connected along &lt;em&gt;links&lt;/em&gt; which describe some interaction between the two bodies on which the disease may possibly travel. For example, our network might contain links between every two people who have passed within 5 metres of each other over a day &lt;sup id="fnref:1"&gt;&lt;a class="footnote-ref" href="#fn:1" rel="footnote"&gt;1&lt;/a&gt;&lt;/sup&gt;. Simpler networks could be family ties, coworkers, and coinhabitants if such high resolution data isn't achievable. &lt;/p&gt;
+&lt;p&gt;The model consists of two reactions,
+&lt;/p&gt;
+&lt;div class="math"&gt;$$\begin{align} 
+    S + I &amp;amp;\xrightarrow{\lambda} I + I,  \\
+    S &amp;amp;\xrightarrow{\gamma} I.
+    \end{align}$$&lt;/div&gt;
+&lt;p&gt;A susceptible node can meet an infected node and subsequently become infected itself with some probability (contagion) &lt;strong&gt;(1)&lt;/strong&gt;. A susceptible node can also spontaneously become infected by itself (spontaneous infection) &lt;strong&gt;(2)&lt;/strong&gt;. This accounts for any chance of becoming infected which is not accounted for in our model otherwise.
+The following code will run one simulation to get a feel for the dynamics, the class &lt;em&gt;SI_Simulation&lt;/em&gt; will be discussed in detail later.&lt;/p&gt;
+&lt;p&gt;
+&lt;div class="cell border-box-sizing code_cell rendered"&gt;
+&lt;div class="input"&gt;
+&lt;div class="prompt input_prompt"&gt;In&amp;nbsp;[14]:&lt;/div&gt;
+&lt;div class="inner_cell"&gt;
+    &lt;div class="input_area"&gt;
+&lt;div class=" highlight hl-ipython3"&gt;&lt;pre&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;simulation&lt;/span&gt; &lt;span class="k"&gt;import&lt;/span&gt; &lt;span class="n"&gt;SI_Simulation&lt;/span&gt; &lt;span class="c"&gt;# Import the model.&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;div class="cell border-box-sizing code_cell rendered"&gt;
+&lt;div class="input"&gt;
+&lt;div class="prompt input_prompt"&gt;In&amp;nbsp;[45]:&lt;/div&gt;
+&lt;div class="inner_cell"&gt;
+    &lt;div class="input_area"&gt;
+&lt;div class=" highlight hl-ipython3"&gt;&lt;pre&gt;&lt;span class="n"&gt;G&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;nx&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;erdos_renyi_graph&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1000&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mf"&gt;0.05&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="c"&gt;# Use Networkx to generate a random graph.&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;div class="cell border-box-sizing code_cell rendered"&gt;
+&lt;div class="input"&gt;
+&lt;div class="prompt input_prompt"&gt;In&amp;nbsp;[46]:&lt;/div&gt;
+&lt;div class="inner_cell"&gt;
+    &lt;div class="input_area"&gt;
+&lt;div class=" highlight hl-ipython3"&gt;&lt;pre&gt;&lt;span class="n"&gt;model&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;SI_Simulation&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;G&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;lam&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mf"&gt;0.8&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;gam&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mf"&gt;0.001&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;i0&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mf"&gt;0.0&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="c"&gt;# Setup the simulation with given parameters.&lt;/span&gt;
+&lt;span class="n"&gt;model&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;RunToConvergence&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="c"&gt;# Run the simulation.&lt;/span&gt;
+&lt;span class="n"&gt;model&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;IntegrateSolution&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="c"&gt;# Numerically integrate the mean field equations.&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;div class="cell border-box-sizing code_cell rendered"&gt;
+&lt;div class="input"&gt;
+&lt;div class="prompt input_prompt"&gt;In&amp;nbsp;[50]:&lt;/div&gt;
+&lt;div class="inner_cell"&gt;
+    &lt;div class="input_area"&gt;
+&lt;div class=" highlight hl-ipython3"&gt;&lt;pre&gt;&lt;span class="c"&gt;# Simulation.&lt;/span&gt;
+&lt;span class="n"&gt;plot&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;model&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;times&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;model&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;S&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;model&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;N&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;g-&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;label&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;Susceptible (sim)&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;span class="n"&gt;plot&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;model&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;times&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;model&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;I&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;model&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;N&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;r-&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;label&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;Infected (sim)&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+
+&lt;span class="c"&gt;# Numerical Integration.&lt;/span&gt;
+&lt;span class="n"&gt;t&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;linspace&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;model&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;times&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt;&lt;span class="mi"&gt;100&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;plot&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;t&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;model&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;solution&lt;/span&gt;&lt;span class="p"&gt;[:,&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;g--&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;label&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;Susceptible (approx)&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;span class="n"&gt;plot&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;t&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;model&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;solution&lt;/span&gt;&lt;span class="p"&gt;[:,&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;r--&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;label&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;Infected  (approx)&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+
+&lt;span class="n"&gt;xlabel&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;t&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;ylabel&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;Population Fraction&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="n"&gt;legend&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;bbox_to_anchor&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mf"&gt;1.0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mf"&gt;0.7&lt;/span&gt;&lt;span class="p"&gt;));&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class="output_wrapper"&gt;
+&lt;div class="output"&gt;
+
+
+&lt;div class="output_area"&gt;&lt;div class="prompt"&gt;&lt;/div&gt;
+
+
+&lt;div class="output_png output_subarea "&gt;
+&lt;img src="data:image/png;base64,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
+AAAASUVORK5CYII=
+"
+&gt;
+&lt;/div&gt;
+
+&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;/div&gt;&lt;/p&gt;
+&lt;p&gt;The simulation approximately follows the mean-field prediction &lt;sup id="fnref:4"&gt;&lt;a class="footnote-ref" href="#fn:4" rel="footnote"&gt;4&lt;/a&gt;&lt;/sup&gt; which assumes all nodes have the same degree and are identical in their placement in the network. The number of infected follows an S-shaped curve; infection is slow at first and then rapidily increases before slowing towards the final state.
+This is easily explainable. To begin with there are little-to-no infected nodes and so the chances of contagion are low; we must wait for a node to spontaneously become infected which is a slow process. When half of the nodes are infected then there are lots of S-I connections and the infection rate is at its highest (think of maximising &lt;span class="math"&gt;\(x(1-x)\)&lt;/span&gt;).
+Towards the end of the process there will be very few susceptible nodes left to become infected and hence the process slows.&lt;/p&gt;
+&lt;p&gt;This model and the S-shaped curve has been used in marketing to model the adoption of consumer products from as early as 1969. The &lt;a href="http://en.wikipedia.org/wiki/Bass_diffusion_model"&gt;Bass Model&lt;/a&gt; as it is called is one of the top 5 most frequently cited papers in the 50-year history of the journal &lt;em&gt;Management Science&lt;/em&gt;. One might rightly question why such a simple model has been so well adopted when it is such an oversimplification. Partly the reason is due to the ability to fit parameters to data, or most likely &lt;em&gt;over-fit&lt;/em&gt; parameters to data, but that is a different issue entirely!&lt;/p&gt;
+&lt;p&gt;The literature on epidemic and innovation models is extremely rich and is at such a point where any written review of it would be outdated by the time it was finished. For now we'll look at how to simulate the SI model on a network.&lt;/p&gt;
+&lt;h2&gt;Gillespie&lt;/h2&gt;
+&lt;p&gt;The &lt;a href="http://en.wikipedia.org/wiki/Gillespie_algorithm"&gt;Gillespie algorithm&lt;/a&gt;, or the stochastic simulation algorithm
+(SSA) was first introduced in 1976 as a means of
+providing statistically exact simulations of reacting chemical
+species within a reaction volume. There are also
+a number of improvements and approximations which have
+been suggested, the most famous of which are the Gibson-Bruck algorithm&lt;sup id="fnref:2"&gt;&lt;a class="footnote-ref" href="#fn:2" rel="footnote"&gt;2&lt;/a&gt;&lt;/sup&gt; and the Tau-leap approximation&lt;sup id="fnref:3"&gt;&lt;a class="footnote-ref" href="#fn:3" rel="footnote"&gt;3&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
+&lt;p&gt;Traditional simulation methods are &lt;em&gt;interval&lt;/em&gt;-driven; they
+choose a small time step &lt;span class="math"&gt;\(\Delta t\)&lt;/span&gt; and consider whether a reaction
+happens in the interval &lt;span class="math"&gt;\([t, t + \Delta t)\)&lt;/span&gt;. These types of simulations
+come in two different flavours; synchronous updating
+where each node has a chance to react during an interval and
+asynchronous updating, where a individual node is chosen at
+random and then given the possibility to react. Interestingly
+enough, these two simulation schemes can give different results
+depending on the dynamics at play. One also has
+to take into consideration the length of time step which can
+have considerable effects on the reliability of the results however
+it is possible to choose these values sensibly to reduce
+error. Another caveat of interval
+methods is that they can be extremely computationally inefficient. There may be multiple intervals computed before
+a reaction takes place, especially if the rate of reaction is
+small. This means that multiple random numbers are generated
+which have no effect on the system. In practice, the
+time interval is chosen such that the expected number of reactions
+in an interval is one however this requires the interval
+length to be adjusted as the simulation evolves and reaction
+propensities change.&lt;/p&gt;
+&lt;p&gt;By contrast the Gillespie algorithm is &lt;em&gt;event&lt;/em&gt;-driven; it calculates
+the time until the next event happens then progresses
+time forward until that time and executes the event. This
+means that an &lt;em&gt;infintesimally small&lt;/em&gt; time increment &lt;span class="math"&gt;\(dt\)&lt;/span&gt; is never
+approximated by a finite timestep &lt;span class="math"&gt;\(\Delta t\)&lt;/span&gt;. It also has the added
+advantage that each iteration of the algorithm responds to
+a reaction or event meaning that computation is not wasted as in the traditional counterparts.&lt;/p&gt;
+&lt;p&gt;The implementation follows the simple steps:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ol&gt;
+&lt;li&gt;Generate two random numbers &lt;span class="math"&gt;\(r_1\)&lt;/span&gt;, &lt;span class="math"&gt;\(r_2\)&lt;/span&gt; picked from a uniform distribution on &lt;span class="math"&gt;\((0,1)\)&lt;/span&gt;.&lt;/li&gt;
+&lt;li&gt;
+&lt;ul&gt;
+&lt;li&gt;Compute the propensity function &lt;span class="math"&gt;\(\alpha_i^m(t)\)&lt;/span&gt; for each node &lt;span class="math"&gt;\(i\)&lt;/span&gt; and reaction &lt;span class="math"&gt;\(m\)&lt;/span&gt;.&lt;/li&gt;
+&lt;li&gt;Compute the total propensity for the system,
+   &lt;div class="math"&gt;$$\begin{align*}
+\alpha_0 = \sum_{m=1}^{M}\sum_{i=1}^{N}\alpha_i^m(t).
+\end{align*}$$&lt;/div&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Compute the time until the next reaction takes place as 
+   &lt;div class="math"&gt;$$\begin{align*}
+    \tau = \frac{1}{\alpha_0}\log\left( \frac{1}{r_1} \right). 
+    \end{align*}$$&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;Compute which reaction occurs at time &lt;span class="math"&gt;\(t+\tau\)&lt;/span&gt;, i.e. find &lt;span class="math"&gt;\(k,j\)&lt;/span&gt; such that
+   &lt;div class="math"&gt;$$\begin{align*}
+    r_2 \geq \frac{1}{\alpha_0}\sum_{m=1}^{k-1}\sum_{i=1}^{j-1}\alpha_i^m(t) \hspace{1ex} \text{and} \hspace{1ex} r_2 &amp;lt; \frac{1}{\alpha_0}\sum_{m=1}^{k}\sum_{i=1}^{j}\alpha_i^m(t).
+    \end{align*}$$&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;Update the node states and propensities for the &lt;span class="math"&gt;\(k\)&lt;/span&gt;-th reaction of  the &lt;span class="math"&gt;\(j\)&lt;/span&gt;-th node.&lt;/li&gt;
+&lt;li&gt;Repeat from step 1(a) from time &lt;span class="math"&gt;\(t+\tau\)&lt;/span&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/blockquote&gt;
+&lt;h2&gt;Code&lt;/h2&gt;
+&lt;p&gt;The model is implemented as a Python class which keeps track of the individual node states as well as the overall level of infected and susceptible nodes. The main functions are &lt;em&gt;RunIteration()&lt;/em&gt; where the key steps of the above algorithm are run, and &lt;em&gt;UpdatePropensity()&lt;/em&gt; which calculates the propensities for nodes to become infected. You will see that there are in fact 5 seperate implementations of the &lt;em&gt;UpdatePropensity()&lt;/em&gt; function. This is the computational bottleneck of the simulation and so, in the next section, we explore the merits and caveats of these different implementations.&lt;/p&gt;
+&lt;figure class='code'&gt;
+&lt;figcaption&gt;&lt;span&gt;SI_Simulation Class&lt;/span&gt; &lt;a href='/code/simulation.py'&gt;download&lt;/a&gt;&lt;/figcaption&gt;
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;networkx&lt;/span&gt; &lt;span class="kn"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;nx&lt;/span&gt;
+&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;numpy&lt;/span&gt; &lt;span class="kn"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;np&lt;/span&gt;
+
+&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;SI_Simulation&lt;/span&gt;&lt;span class="p"&gt;():&lt;/span&gt;
+    &lt;span class="sd"&gt;&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
+&lt;span class="sd"&gt;    A class to simulate the SI Model.&lt;/span&gt;
+&lt;span class="sd"&gt;    ===================================================&lt;/span&gt;
+&lt;span class="sd"&gt;    Input: A - Network adjacency matrix (numpy array) or Networkx graph object.&lt;/span&gt;
+&lt;span class="sd"&gt;           lam - Contagion parameter.&lt;/span&gt;
+&lt;span class="sd"&gt;           gam - Spontaneous infection parameter.&lt;/span&gt;
+&lt;span class="sd"&gt;           i0 - Initial infected fraction.&lt;/span&gt;
+&lt;span class="sd"&gt;           prop - Propensity calculation method [ALL,TAKE,FANCY,LOOP,SLICE].&lt;/span&gt;
+&lt;span class="sd"&gt;    &amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
+
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;__init__&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;A&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;lam&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mf"&gt;0.1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;gam&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mf"&gt;0.001&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;i0&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mf"&gt;0.1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;prop&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;ALL&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+
+        &lt;span class="c"&gt;# Network setup.&lt;/span&gt;
+        &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="nb"&gt;type&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;A&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;==&lt;/span&gt;&lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ndarray&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+            &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;A&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;A&lt;/span&gt;
+        &lt;span class="k"&gt;elif&lt;/span&gt; &lt;span class="nb"&gt;type&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;A&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;==&lt;/span&gt;&lt;span class="n"&gt;nx&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;classes&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;graph&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Graph&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+            &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;A&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;nx&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;adj_matrix&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;A&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;A&lt;/span&gt;
+        &lt;span class="k"&gt;else&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+            &lt;span class="k"&gt;raise&lt;/span&gt; &lt;span class="ne"&gt;BaseException&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;Input an adjacency matrix or networkx object only.&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+        &lt;span class="c"&gt;# Model Parameters.&lt;/span&gt;
+        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;N&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;A&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;shape&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;lam&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;lam&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;N&lt;/span&gt;
+        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;gam&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;gam&lt;/span&gt;
+        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;prop&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;prop&lt;/span&gt;
+
+        &lt;span class="c"&gt;# Time-keeping.&lt;/span&gt;
+        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;t&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;
+        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;times&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+        
+        &lt;span class="c"&gt;# Node numbers.&lt;/span&gt;
+        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;I&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nb"&gt;int&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;i0&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;N&lt;/span&gt;&lt;span class="p"&gt;)]&lt;/span&gt;
+        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;S&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;N&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;I&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]]&lt;/span&gt;
+        
+        &lt;span class="c"&gt;# Node states.&lt;/span&gt;
+        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;X&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;array&lt;/span&gt;&lt;span class="p"&gt;([&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;S&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;I&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;reshape&lt;/span&gt;&lt;span class="p"&gt;((&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;N&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+        &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;random&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;shuffle&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;X&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+         
+        &lt;span class="c"&gt;# Initial propensity setup.        &lt;/span&gt;
+        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;UpdatePropensityALL&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; 
+        
+        &lt;span class="c"&gt;# Select which propensity scheme to use.&lt;/span&gt;
+        &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;prop&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;ALL&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+            &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;UpdatePropensity&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;UpdatePropensityALL&lt;/span&gt; 
+        &lt;span class="k"&gt;elif&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;prop&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;FANCY&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+            &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;UpdatePropensity&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;UpdatePropensityFANCY&lt;/span&gt; 
+        &lt;span class="k"&gt;elif&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;prop&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;TAKE&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+            &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;UpdatePropensity&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;UpdatePropensityTAKE&lt;/span&gt; 
+        &lt;span class="k"&gt;elif&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;prop&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;SLICE&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+            &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;UpdatePropensity&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;UpdatePropensitySLICE&lt;/span&gt;
+        &lt;span class="k"&gt;elif&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;prop&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;LOOP&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+            &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;UpdatePropensity&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;UpdatePropensityLOOP&lt;/span&gt;
+        &lt;span class="k"&gt;else&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+            &lt;span class="k"&gt;raise&lt;/span&gt; &lt;span class="ne"&gt;BaseException&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;Please specify a propensity scheme [ALL,TAKE,FANCY,LOOP,SLICE].&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="bp"&gt;None&lt;/span&gt;
+        
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;UpdatePropensityALL&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;n_nodes&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;None&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;IP&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;gam&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;lam&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;A&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;dot&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;X&lt;/span&gt;&lt;span class="o"&gt;==&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;X&lt;/span&gt;&lt;span class="o"&gt;==&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="bp"&gt;None&lt;/span&gt;
+    
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;UpdatePropensityTAKE&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;n_nodes&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;   
+        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;IP&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;n_nodes&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;gam&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;lam&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;take&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;A&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;n_nodes&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;axis&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;dot&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;X&lt;/span&gt;&lt;span class="o"&gt;==&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="p"&gt;((&lt;/span&gt;&lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;take&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;X&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;n_nodes&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;axis&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;==&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="bp"&gt;None&lt;/span&gt;    
+    
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;UpdatePropensityFANCY&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;n_nodes&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;IP&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;n_nodes&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;gam&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;lam&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;A&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;n_nodes&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;dot&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;X&lt;/span&gt;&lt;span class="o"&gt;==&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;X&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;n_nodes&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;==&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="bp"&gt;None&lt;/span&gt;
+        
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;UpdatePropensityLOOP&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;n_nodes&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;        
+        &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;node&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;n_nodes&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+            &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;IP&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;node&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;gam&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;lam&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;A&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;node&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;dot&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;X&lt;/span&gt;&lt;span class="o"&gt;==&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;X&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;node&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;==&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="bp"&gt;None&lt;/span&gt;
+    
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;UpdatePropensitySLICE&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;n_nodes&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;        
+        &lt;span class="n"&gt;nmax&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;nmin&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;n_nodes&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;max&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;&lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;n_nodes&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;min&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;IP&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;nmin&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="n"&gt;nmax&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;gam&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;lam&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;A&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;nmin&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="n"&gt;nmax&lt;/span&gt;&lt;span class="p"&gt;,:]&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;dot&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;X&lt;/span&gt;&lt;span class="o"&gt;==&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;X&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;nmin&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="n"&gt;nmax&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;==&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="bp"&gt;None&lt;/span&gt;
+        
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;RunIteration&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        
+        &lt;span class="c"&gt;# Termination.&lt;/span&gt;
+        &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;S&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+            &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;S&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;array&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;S&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;dtype&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="nb"&gt;float&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+            &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;I&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;array&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;I&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;dtype&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="nb"&gt;float&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+            &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="bp"&gt;False&lt;/span&gt;
+
+        &lt;span class="c"&gt;# 1. Generate random numbers r1,r2 uniformly distributed in (0,1)&lt;/span&gt;
+        &lt;span class="n"&gt;r1&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;random&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;rand&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+        &lt;span class="n"&gt;r2&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;random&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;rand&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+        
+        &lt;span class="c"&gt;# 2. Calculate alpha.&lt;/span&gt;
+        &lt;span class="n"&gt;cumsum&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;IP&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;cumsum&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;alpha&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;cumsum&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+
+        &lt;span class="c"&gt;# 3. Compute the time until the next reaction takes place.&lt;/span&gt;
+        &lt;span class="n"&gt;tau&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mf"&gt;1.0&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;alpha&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;log&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;float&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mf"&gt;1.0&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;r1&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;t&lt;/span&gt; &lt;span class="o"&gt;+=&lt;/span&gt; &lt;span class="n"&gt;tau&lt;/span&gt;
+        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;times&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;append&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;t&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+        &lt;span class="c"&gt;# 4. Compute which reaction takes place.&lt;/span&gt;
+        &lt;span class="n"&gt;index&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;searchsorted&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;cumsum&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;r2&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;alpha&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+        &lt;span class="c"&gt;# 5. Update node states. &lt;/span&gt;
+        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;X&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;index&lt;/span&gt;&lt;span class="o"&gt;%&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;N&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;
+        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;S&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;append&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;S&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;I&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;append&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;I&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+            
+        &lt;span class="c"&gt;# 6. Update propensities&lt;/span&gt;
+        &lt;span class="n"&gt;n1&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;nonzero&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;A&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;index&lt;/span&gt;&lt;span class="o"&gt;%&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;N&lt;/span&gt;&lt;span class="p"&gt;])[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+        &lt;span class="n"&gt;n1&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;append&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;n1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;index&lt;/span&gt;&lt;span class="o"&gt;%&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;N&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        
+        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;UpdatePropensity&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;n1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="bp"&gt;True&lt;/span&gt;
+
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;RunToConvergence&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="n"&gt;running&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;True&lt;/span&gt;
+        &lt;span class="k"&gt;while&lt;/span&gt; &lt;span class="n"&gt;running&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+            &lt;span class="n"&gt;running&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;RunIteration&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="bp"&gt;None&lt;/span&gt;
+    
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;IntegrateSolution&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;scipy.integrate&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;odeint&lt;/span&gt;
+        &lt;span class="n"&gt;gam&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;gam&lt;/span&gt;
+        &lt;span class="n"&gt;lam&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;lam&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;N&lt;/span&gt;
+        &lt;span class="n"&gt;k&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;A&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sum&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;axis&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;mean&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+
+        &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;deriv&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;t&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+            &lt;span class="n"&gt;xdot&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;gam&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;lam&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]),&lt;/span&gt;
+                    &lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;gam&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;lam&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;])]&lt;/span&gt;
+            &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;xdot&lt;/span&gt;
+
+        &lt;span class="n"&gt;x0&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nb"&gt;float&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;S&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;N&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="nb"&gt;float&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;I&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;N&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+        &lt;span class="n"&gt;t&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;linspace&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;times&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt;&lt;span class="mi"&gt;100&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="n"&gt;x&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;odeint&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;deriv&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;x0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;t&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;solution&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;x&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="bp"&gt;None&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;/figure&gt;
+
+&lt;p&gt;This framework is adaptable to many network dynamics. Provided the propensity of a reaction is properly calculated, and the network states updated then any number of reactions can be cast into this form, including dynamics which alter the structure of the network itself.&lt;/p&gt;
+&lt;h2&gt;Efficiency&lt;/h2&gt;
+&lt;p&gt;In theory, this is the currently the most efficient way of implementing the model, however intricacies in the Python language (and the Numpy package) require that more thought is given as to how it is written.&lt;/p&gt;
+&lt;p&gt;The most intensive aspect of the algorithm is the calculation of the propensities for each node (and reaction).
+This can be written in terms of matrix multiplication.&lt;/p&gt;
+&lt;div class="math"&gt;$$ \underline{\alpha} = (\gamma \textbf{1} + \lambda \textbf{A}\textbf{s}_I) \circ \textbf{s}_S $$&lt;/div&gt;
+&lt;p&gt;where &lt;span class="math"&gt;\(\circ\)&lt;/span&gt; is the element-wise vector multiplication and &lt;span class="math"&gt;\((\textbf{s}_I)_i = 1\)&lt;/span&gt; if node &lt;span class="math"&gt;\(i\)&lt;/span&gt; is infected and &lt;span class="math"&gt;\(0\)&lt;/span&gt; otherwise. The indicator vector &lt;span class="math"&gt;\(\textbf{s}_S\)&lt;/span&gt; is similarly defined. &lt;span class="math"&gt;\(\textbf{A}\)&lt;/span&gt; is the &lt;a href="http://en.wikipedia.org/wiki/Adjacency_matrix"&gt;adjacency matrix&lt;/a&gt; of the network which describes which nodes are connected to each other. This propensity definition calculates all the propensities at once however in most cases (particularly on sparse networks) when a node changes state only a small fraction of the nodes will change propensity. We can therefore save time by only calculating reaction propensities which change at each step. &lt;/p&gt;
+&lt;p&gt;The different implementations are:&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;ALL&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Calculate all entries of &lt;span class="math"&gt;\(\underline{\alpha}\)&lt;/span&gt; at each iteration.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Pros&lt;/em&gt;: Easy to write, no array copying, fixed number of calculations. &lt;br&gt;
+&lt;em&gt;Cons&lt;/em&gt;: Lots of duplication, especially on sparse networks.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;FANCY&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Calculate only effected entries of &lt;span class="math"&gt;\(\underline{\alpha}\)&lt;/span&gt; at each iteration using Numpy's &lt;a href="http://wiki.scipy.org/Tentative_NumPy_Tutorial#head-0dffc419afa7d77d51062d40d2d84143db8216c2"&gt;fancy indexing&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Pros&lt;/em&gt;: Easy to write, efficient. &lt;br&gt;
+&lt;em&gt;Cons&lt;/em&gt;: Creates a copy of each array which is sampled using fancy indexing.&lt;/p&gt;
+&lt;p&gt;This methodology is exactly what we want. The implementation in Numpy however means that a copy of the array is always generated which adds significant cost for non-sparse networks.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;TAKE&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Calculate only effected entries of &lt;span class="math"&gt;\(\underline{\alpha}\)&lt;/span&gt; at each iteration using Numpy's &lt;a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.take.html"&gt;take&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Pros&lt;/em&gt;: Efficient. &lt;br&gt;
+&lt;em&gt;Cons&lt;/em&gt;: Creates a copy of each array which is sampled using take.&lt;/p&gt;
+&lt;p&gt;This method is equivalent to fancy indexing however it bypasses some ambiguity in the fancy indexing syntax to allow for a more efficient implementation.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;LOOP&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Calculate only effected entries of &lt;span class="math"&gt;\(\underline{\alpha}\)&lt;/span&gt; at each iteration using a native Python loop.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Pros&lt;/em&gt;: Easy to write, efficient. &lt;br&gt;
+&lt;em&gt;Cons&lt;/em&gt;: Native Python loops inherently slow.&lt;/p&gt;
+&lt;p&gt;A very basic approach to the problem. This is used as an upper bound to the problem.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;SLICE&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Calculate a subset of entries of &lt;span class="math"&gt;\(\underline{\alpha}\)&lt;/span&gt; at each iteration using a Numpy slice.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Pros&lt;/em&gt;: Easy to write, no array copying. &lt;br&gt;
+&lt;em&gt;Cons&lt;/em&gt;: Not fully efficient, efficiency is variable.&lt;/p&gt;
+&lt;p&gt;This method is more of a cheat. It takes a minimal covering of the effected nodes and uses slicing to get the relevant rows of the matrix. Slicing in Numpy does not make a copy of the array which is a clear advantage.&lt;/p&gt;
+&lt;p&gt;We'll look at the simulation times for near-complete graphs (high degree):&lt;/p&gt;
+&lt;p&gt;
+&lt;div class="cell border-box-sizing code_cell rendered"&gt;
+&lt;div class="input"&gt;
+&lt;div class="prompt input_prompt"&gt;In&amp;nbsp;[279]:&lt;/div&gt;
+&lt;div class="inner_cell"&gt;
+    &lt;div class="input_area"&gt;
+&lt;div class=" highlight hl-ipython3"&gt;&lt;pre&gt;&lt;span class="n"&gt;G&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;nx&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;erdos_renyi_graph&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1000&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mf"&gt;0.95&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;div class="cell border-box-sizing code_cell rendered"&gt;
+&lt;div class="input"&gt;
+&lt;div class="prompt input_prompt"&gt;In&amp;nbsp;[280]:&lt;/div&gt;
+&lt;div class="inner_cell"&gt;
+    &lt;div class="input_area"&gt;
+&lt;div class=" highlight hl-ipython3"&gt;&lt;pre&gt;&lt;span class="o"&gt;%%&lt;/span&gt;&lt;span class="k"&gt;timeit&lt;/span&gt;
+model = SI_Simulation(G, lam=0.1, gam=0.05, i0=0.1, prop=&amp;#39;TAKE&amp;#39;)
+model.RunToConvergence()
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class="output_wrapper"&gt;
+&lt;div class="output"&gt;
+
+
+&lt;div class="output_area"&gt;&lt;div class="prompt"&gt;&lt;/div&gt;
+&lt;div class="output_subarea output_stream output_stdout output_text"&gt;
+&lt;pre&gt;1 loops, best of 3: 2.35 s per loop
+&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;div class="cell border-box-sizing code_cell rendered"&gt;
+&lt;div class="input"&gt;
+&lt;div class="prompt input_prompt"&gt;In&amp;nbsp;[281]:&lt;/div&gt;
+&lt;div class="inner_cell"&gt;
+    &lt;div class="input_area"&gt;
+&lt;div class=" highlight hl-ipython3"&gt;&lt;pre&gt;&lt;span class="o"&gt;%%&lt;/span&gt;&lt;span class="k"&gt;timeit&lt;/span&gt;
+model = SI_Simulation(G, lam=0.1, gam=0.05, i0=0.1, prop=&amp;#39;ALL&amp;#39;)
+model.RunToConvergence()
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class="output_wrapper"&gt;
+&lt;div class="output"&gt;
+
+
+&lt;div class="output_area"&gt;&lt;div class="prompt"&gt;&lt;/div&gt;
+&lt;div class="output_subarea output_stream output_stdout output_text"&gt;
+&lt;pre&gt;1 loops, best of 3: 1.72 s per loop
+&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;div class="cell border-box-sizing code_cell rendered"&gt;
+&lt;div class="input"&gt;
+&lt;div class="prompt input_prompt"&gt;In&amp;nbsp;[282]:&lt;/div&gt;
+&lt;div class="inner_cell"&gt;
+    &lt;div class="input_area"&gt;
+&lt;div class=" highlight hl-ipython3"&gt;&lt;pre&gt;&lt;span class="o"&gt;%%&lt;/span&gt;&lt;span class="k"&gt;timeit&lt;/span&gt;
+model = SI_Simulation(G, lam=0.1, gam=0.05, i0=0.1, prop=&amp;#39;LOOP&amp;#39;)
+model.RunToConvergence()
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class="output_wrapper"&gt;
+&lt;div class="output"&gt;
+
+
+&lt;div class="output_area"&gt;&lt;div class="prompt"&gt;&lt;/div&gt;
+&lt;div class="output_subarea output_stream output_stdout output_text"&gt;
+&lt;pre&gt;1 loops, best of 3: 18.8 s per loop
+&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;div class="cell border-box-sizing code_cell rendered"&gt;
+&lt;div class="input"&gt;
+&lt;div class="prompt input_prompt"&gt;In&amp;nbsp;[283]:&lt;/div&gt;
+&lt;div class="inner_cell"&gt;
+    &lt;div class="input_area"&gt;
+&lt;div class=" highlight hl-ipython3"&gt;&lt;pre&gt;&lt;span class="o"&gt;%%&lt;/span&gt;&lt;span class="k"&gt;timeit&lt;/span&gt;
+model = SI_Simulation(G, lam=0.1, gam=0.05, i0=0.1, prop=&amp;#39;FANCY&amp;#39;)
+model.RunToConvergence()
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class="output_wrapper"&gt;
+&lt;div class="output"&gt;
+
+
+&lt;div class="output_area"&gt;&lt;div class="prompt"&gt;&lt;/div&gt;
+&lt;div class="output_subarea output_stream output_stdout output_text"&gt;
+&lt;pre&gt;1 loops, best of 3: 9.62 s per loop
+&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;div class="cell border-box-sizing code_cell rendered"&gt;
+&lt;div class="input"&gt;
+&lt;div class="prompt input_prompt"&gt;In&amp;nbsp;[284]:&lt;/div&gt;
+&lt;div class="inner_cell"&gt;
+    &lt;div class="input_area"&gt;
+&lt;div class=" highlight hl-ipython3"&gt;&lt;pre&gt;&lt;span class="o"&gt;%%&lt;/span&gt;&lt;span class="k"&gt;timeit&lt;/span&gt;
+model = SI_Simulation(G, lam=0.1, gam=0.05, i0=0.1, prop=&amp;#39;SLICE&amp;#39;)
+model.RunToConvergence()
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class="output_wrapper"&gt;
+&lt;div class="output"&gt;
+
+
+&lt;div class="output_area"&gt;&lt;div class="prompt"&gt;&lt;/div&gt;
+&lt;div class="output_subarea output_stream output_stdout output_text"&gt;
+&lt;pre&gt;1 loops, best of 3: 1.66 s per loop
+&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;/div&gt;&lt;/p&gt;
+&lt;p&gt;We can see that, for near-complete graphs the SLICE method is the fastest,  followed closely by the ALL method. The TAKE method takes almost 50% more time again which is due to the copying previously mentioned. The FANCY index seems to have a large overhead given it is carrying out the exact same function as TAKE. The native Python LOOP is by contrast too slow to even consider.
+Conversely, we'll look at the behaviour on sparse networks (low degree):&lt;/p&gt;
+&lt;p&gt;
+&lt;div class="cell border-box-sizing code_cell rendered"&gt;
+&lt;div class="input"&gt;
+&lt;div class="prompt input_prompt"&gt;In&amp;nbsp;[285]:&lt;/div&gt;
+&lt;div class="inner_cell"&gt;
+    &lt;div class="input_area"&gt;
+&lt;div class=" highlight hl-ipython3"&gt;&lt;pre&gt;&lt;span class="n"&gt;G&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;nx&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;erdos_renyi_graph&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1000&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mf"&gt;0.05&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;div class="cell border-box-sizing code_cell rendered"&gt;
+&lt;div class="input"&gt;
+&lt;div class="prompt input_prompt"&gt;In&amp;nbsp;[286]:&lt;/div&gt;
+&lt;div class="inner_cell"&gt;
+    &lt;div class="input_area"&gt;
+&lt;div class=" highlight hl-ipython3"&gt;&lt;pre&gt;&lt;span class="o"&gt;%%&lt;/span&gt;&lt;span class="k"&gt;timeit&lt;/span&gt;
+model = SI_Simulation(G, lam=0.1, gam=0.05, i0=0.1, prop=&amp;#39;TAKE&amp;#39;)
+model.RunToConvergence()
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class="output_wrapper"&gt;
+&lt;div class="output"&gt;
+
+
+&lt;div class="output_area"&gt;&lt;div class="prompt"&gt;&lt;/div&gt;
+&lt;div class="output_subarea output_stream output_stdout output_text"&gt;
+&lt;pre&gt;1 loops, best of 3: 200 ms per loop
+&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;div class="cell border-box-sizing code_cell rendered"&gt;
+&lt;div class="input"&gt;
+&lt;div class="prompt input_prompt"&gt;In&amp;nbsp;[287]:&lt;/div&gt;
+&lt;div class="inner_cell"&gt;
+    &lt;div class="input_area"&gt;
+&lt;div class=" highlight hl-ipython3"&gt;&lt;pre&gt;&lt;span class="o"&gt;%%&lt;/span&gt;&lt;span class="k"&gt;timeit&lt;/span&gt;
+model = SI_Simulation(G, lam=0.1, gam=0.05, i0=0.1, prop=&amp;#39;ALL&amp;#39;)
+model.RunToConvergence()
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class="output_wrapper"&gt;
+&lt;div class="output"&gt;
+
+
+&lt;div class="output_area"&gt;&lt;div class="prompt"&gt;&lt;/div&gt;
+&lt;div class="output_subarea output_stream output_stdout output_text"&gt;
+&lt;pre&gt;1 loops, best of 3: 841 ms per loop
+&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;div class="cell border-box-sizing code_cell rendered"&gt;
+&lt;div class="input"&gt;
+&lt;div class="prompt input_prompt"&gt;In&amp;nbsp;[288]:&lt;/div&gt;
+&lt;div class="inner_cell"&gt;
+    &lt;div class="input_area"&gt;
+&lt;div class=" highlight hl-ipython3"&gt;&lt;pre&gt;&lt;span class="o"&gt;%%&lt;/span&gt;&lt;span class="k"&gt;timeit&lt;/span&gt;
+model = SI_Simulation(G, lam=0.1, gam=0.05, i0=0.1, prop=&amp;#39;LOOP&amp;#39;)
+model.RunToConvergence()
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class="output_wrapper"&gt;
+&lt;div class="output"&gt;
+
+
+&lt;div class="output_area"&gt;&lt;div class="prompt"&gt;&lt;/div&gt;
+&lt;div class="output_subarea output_stream output_stdout output_text"&gt;
+&lt;pre&gt;1 loops, best of 3: 1.03 s per loop
+&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;div class="cell border-box-sizing code_cell rendered"&gt;
+&lt;div class="input"&gt;
+&lt;div class="prompt input_prompt"&gt;In&amp;nbsp;[289]:&lt;/div&gt;
+&lt;div class="inner_cell"&gt;
+    &lt;div class="input_area"&gt;
+&lt;div class=" highlight hl-ipython3"&gt;&lt;pre&gt;&lt;span class="o"&gt;%%&lt;/span&gt;&lt;span class="k"&gt;timeit&lt;/span&gt;
+model = SI_Simulation(G, lam=0.1, gam=0.05, i0=0.1, prop=&amp;#39;FANCY&amp;#39;)
+model.RunToConvergence()
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class="output_wrapper"&gt;
+&lt;div class="output"&gt;
+
+
+&lt;div class="output_area"&gt;&lt;div class="prompt"&gt;&lt;/div&gt;
+&lt;div class="output_subarea output_stream output_stdout output_text"&gt;
+&lt;pre&gt;1 loops, best of 3: 592 ms per loop
+&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;div class="cell border-box-sizing code_cell rendered"&gt;
+&lt;div class="input"&gt;
+&lt;div class="prompt input_prompt"&gt;In&amp;nbsp;[290]:&lt;/div&gt;
+&lt;div class="inner_cell"&gt;
+    &lt;div class="input_area"&gt;
+&lt;div class=" highlight hl-ipython3"&gt;&lt;pre&gt;&lt;span class="o"&gt;%%&lt;/span&gt;&lt;span class="k"&gt;timeit&lt;/span&gt;
+model = SI_Simulation(G, lam=0.1, gam=0.05, i0=0.1, prop=&amp;#39;SLICE&amp;#39;)
+model.RunToConvergence()
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class="output_wrapper"&gt;
+&lt;div class="output"&gt;
+
+
+&lt;div class="output_area"&gt;&lt;div class="prompt"&gt;&lt;/div&gt;
+&lt;div class="output_subarea output_stream output_stdout output_text"&gt;
+&lt;pre&gt;1 loops, best of 3: 832 ms per loop
+&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;/div&gt;&lt;/p&gt;
+&lt;p&gt;Now we can see that the TAKE function is by far the fastest in the low degree limit. With only a relatively small amount of data to be copied this undertaking does not outweigh the potentially huge gains over calculating all propensities. &lt;/p&gt;
+&lt;p&gt;These are single instances and so we should not take them as gospel. What we're interested in is when should we value one method over another? To investigate this we should look over a full range of values for repeated simulation, for which we'll need to import the &lt;em&gt;timeit&lt;/em&gt; module (rather than using the in-built cell magic).
+An example statement would be something along the lines of:&lt;/p&gt;
+&lt;p&gt;
+&lt;div class="cell border-box-sizing code_cell rendered"&gt;
+&lt;div class="input"&gt;
+&lt;div class="prompt input_prompt"&gt;In&amp;nbsp;[&amp;nbsp;]:&lt;/div&gt;
+&lt;div class="inner_cell"&gt;
+    &lt;div class="input_area"&gt;
+&lt;div class=" highlight hl-ipython3"&gt;&lt;pre&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;timeit&lt;/span&gt; &lt;span class="k"&gt;import&lt;/span&gt; &lt;span class="n"&gt;timeit&lt;/span&gt;
+&lt;span class="n"&gt;num_sims&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;10&lt;/span&gt;
+
+&lt;span class="n"&gt;setup&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
+&lt;span class="s"&gt;from simulation import SI_Simulation&lt;/span&gt;
+&lt;span class="s"&gt;import networkx as nx&lt;/span&gt;
+&lt;span class="s"&gt;G = nx.erdos_renyi_graph(1000,0.5, seed=50)&lt;/span&gt;
+&lt;span class="s"&gt;&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
+
+&lt;span class="n"&gt;stmt&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
+&lt;span class="s"&gt;model = SI_Simulation(G,lam=0.1, gam=0.05, i0=0.1, prop=&amp;#39;TAKE&amp;#39;)&lt;/span&gt;
+&lt;span class="s"&gt;model.RunToConvergence()&lt;/span&gt;
+&lt;span class="s"&gt;&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
+
+&lt;span class="n"&gt;timeit&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;stmt&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;stmt&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;setup&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;setup&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;number&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;num_sims&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;/div&gt;&lt;/p&gt;
+&lt;p&gt;Now, computing simulation times for across networks of varying size and degree we can see when we should use either method. The dashed lines are for the ALL method and the solid lines represent the TAKE method.&lt;/p&gt;
+&lt;p&gt;&lt;img src="/images/performance.png" alt="Performance" title="Performance"&gt;&lt;/p&gt;
+&lt;p&gt;For small networks there is little in terms of performance between the two implementations. As we increase the system size we see that the TAKE method performs significantly faster for small &lt;span class="math"&gt;\(\langle k \rangle / N\)&lt;/span&gt;, and significantly slower for large &lt;span class="math"&gt;\(\langle k \rangle / N\)&lt;/span&gt;.
+From this quick study it seems sensible to use TAKE when &lt;span class="math"&gt;\(\langle k \rangle / N &amp;lt; 0.5\)&lt;/span&gt;. This figure is dependent the propensity calculation as well as the underlying tradeoff between calculation and array copying and so should not be taken as gospel. For the SI model one would most likely use the TAKE method as most human contact networks are sparse in nature.&lt;/p&gt;
+&lt;h2&gt;Concluding Remarks&lt;/h2&gt;
+&lt;p&gt;Epidemic modelling has exploded in recent years. Not long ago this simple model was once &lt;em&gt;state-of-the-art&lt;/em&gt;. Variants now combine in a number of different factors; edge creation/breaking,  vaccination, behavioural changes, travel, susceptibility to name just a few. Regardless of the complexity the underlying principles often boil down to the simple contagion principle in this model. The mathematics of these more complex models is lagging behind and large-scale simulation is used to understand their behaviours.
+It is therefore extremely important that simulation is accurate and efficient.&lt;/p&gt;
+&lt;p&gt;From a technical standpoint this Python implementation of the simulation allows for suitable trade-off with the tools used, but I am keen to improve this framework where possible. The developers of Numpy have stated that fancy indexing will always copy an array and there are no plans to change it. There are some other avenues to explore such as Cython, or even a full C implementation. I am however interested to see if anyone has any other possible implementations (in Python or otherwise) which would significantly improve on this.&lt;/p&gt;
+&lt;p&gt;Understandably, this post has been on the technical side but if you've made it this far then I hope you've found it interesting and clear. Feel free to contact me with any questions.&lt;/p&gt;
+&lt;div class="footnote"&gt;
+&lt;hr /&gt;
+&lt;ol&gt;
+&lt;li id="fn:1"&gt;
+&lt;p&gt;SocioPatterns: http://www.sociopatterns.org/datasets/&amp;#160;&lt;a class="footnote-backref" href="#fnref:1" rev="footnote" title="Jump back to footnote 1 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:2"&gt;
+&lt;p&gt;M. A. Gibson and J. Bruck. &lt;em&gt;Effcient exact stochastic simulation of chemical systems with many species and many
+channels.&lt;/em&gt; The Journal of Physical Chemistry A&amp;#160;&lt;a class="footnote-backref" href="#fnref:2" rev="footnote" title="Jump back to footnote 2 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:3"&gt;
+&lt;p&gt;M. Rathinam, L. R. Petzold, Y. Cao, and D. T. Gillespie. &lt;em&gt;Stiffness in stochastic chemically reacting systems: The
+implicit tau-leaping method.&lt;/em&gt; The Journal of Chemical Physics&amp;#160;&lt;a class="footnote-backref" href="#fnref:3" rev="footnote" title="Jump back to footnote 3 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:4"&gt;
+&lt;p&gt;The solution of the differential equations &lt;div class="math"&gt;$$ \begin{align*}
+    \frac{dS}{dt} &amp;amp;= -\gamma S - \lambda \frac{k}{N} S I,\\
+    \frac{dI}{dt} &amp;amp;= +\gamma S + \lambda \frac{k}{N} S I,
+    \end{align*} $$&lt;/div&gt;
+where &lt;span class="math"&gt;\(k\)&lt;/span&gt; is the average degree of the network. Left as an exercise.&amp;#160;&lt;a class="footnote-backref" href="#fnref:4" rev="footnote" title="Jump back to footnote 4 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+&lt;script type="text/javascript"&gt;if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width &lt; 768) ? "left" : align;
+        indent = (screen.width &lt; 768) ? "0em" : indent;
+        linebreak = (screen.width &lt; 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    var location_protocol = (false) ? 'https' : document.location.protocol;
+    if (location_protocol !== 'http' &amp;&amp; location_protocol !== 'https') location_protocol = 'https:';
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = location_protocol + '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+&lt;/script&gt;</summary><category term="Gillespie"></category><category term="Epidemics"></category><category term="Simulation"></category></entry></feed>
