@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Andrew Mellor</title><link>http://empiricalstateofmind.github.io/</link><description></description><atom:link href="http://empiricalstateofmind.github.io/feeds/andy-mellor.rss.xml" rel="self"></atom:link><lastBuildDate>Thu, 30 Apr 2015 00:00:00 +0200</lastBuildDate><item><title>Easy Parallel Computing with IPython</title><link>http://empiricalstateofmind.github.io/blog/2015/04/30/easy-parallel/</link><description>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Andrew Mellor</title><link>http://empiricalstateofmind.io/blog/</link><description></description><atom:link href="http://empiricalstateofmind.io/blog/feeds/andy-mellor.rss.xml" rel="self"></atom:link><lastBuildDate>Thu, 30 Apr 2015 00:00:00 +0200</lastBuildDate><item><title>Easy Parallel Computing with IPython</title><link>http://empiricalstateofmind.io/blog/articles/2015/04/30/easy-parallel/</link><description>
 
 &lt;p&gt;After speaking to a number of academics involved with Monte Carlo simulations, I realised many of them resort to creating bash scripts to 
 run a number of python instances of simulation before writing another script to piece the data back together. It turns out this is incredibly simple 
@@ -8035,7 +8035,7 @@ Wall time: 1.97 s
 
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Andy Mellor</dc:creator><pubDate>Thu, 30 Apr 2015 00:00:00 +0200</pubDate><guid>tag:empiricalstateofmind.github.io,2015-04-30:blog/2015/04/30/easy-parallel/</guid><category>IPython</category><category>Parallel</category><category>Fractals</category></item><item><title>Network Dynamics with Python and the Gillespie Algorithm: An Epidemic Example</title><link>http://empiricalstateofmind.github.io/blog/2014/12/19/gillespie-epidemics/</link><description>
+&lt;/div&gt;&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Andy Mellor</dc:creator><pubDate>Thu, 30 Apr 2015 00:00:00 +0200</pubDate><guid>tag:empiricalstateofmind.io,2015-04-30:blog/articles/2015/04/30/easy-parallel/</guid><category>IPython</category><category>Parallel</category><category>Fractals</category></item><item><title>Network Dynamics with Python and the Gillespie Algorithm: An Epidemic Example</title><link>http://empiricalstateofmind.io/blog/articles/2014/12/19/gillespie-epidemics/</link><description>
 
 &lt;p&gt;The Stochastic Simulation Algorithm (SSA), or Gillespie algorithm, provides a means to sample directly from the state
 distribution of a system governed by the master equation. Whilst this methodology has been used for the simulation of chemical
@@ -9244,7 +9244,7 @@ where &lt;span class="math"&gt;\(k\)&lt;/span&gt; is the average degree of the n
         "}";
     (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
 }
-&lt;/script&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Andy Mellor</dc:creator><pubDate>Fri, 19 Dec 2014 00:00:00 +0100</pubDate><guid>tag:empiricalstateofmind.github.io,2014-12-19:blog/2014/12/19/gillespie-epidemics/</guid><category>Gillespie</category><category>Epidemics</category><category>Simulation</category></item><item><title>Interactive Networks with Networkx and D3</title><link>http://empiricalstateofmind.github.io/blog/2014/12/14/d3-networks/</link><description>
+&lt;/script&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Andy Mellor</dc:creator><pubDate>Fri, 19 Dec 2014 00:00:00 +0100</pubDate><guid>tag:empiricalstateofmind.io,2014-12-19:blog/articles/2014/12/19/gillespie-epidemics/</guid><category>Gillespie</category><category>Epidemics</category><category>Simulation</category></item><item><title>Interactive Networks with Networkx and D3</title><link>http://empiricalstateofmind.io/blog/articles/2014/12/14/d3-networks/</link><description>
 
 &lt;p&gt;
 &lt;div class="cell border-box-sizing text_cell rendered"&gt;
@@ -10594,4 +10594,4 @@ div#d3-container-degree { margin-left: auto; margin-right: auto; position: relat
         "}";
     (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
 }
-&lt;/script&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Andy Mellor</dc:creator><pubDate>Sun, 14 Dec 2014 00:00:00 +0100</pubDate><guid>tag:empiricalstateofmind.github.io,2014-12-14:blog/2014/12/14/d3-networks/</guid><category>D3</category><category>networkx</category><category>IPython</category></item></channel></rss>
+&lt;/script&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Andy Mellor</dc:creator><pubDate>Sun, 14 Dec 2014 00:00:00 +0100</pubDate><guid>tag:empiricalstateofmind.io,2014-12-14:blog/articles/2014/12/14/d3-networks/</guid><category>D3</category><category>networkx</category><category>IPython</category></item></channel></rss>
