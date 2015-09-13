@@ -10367,7 +10367,7 @@ div#d3-container-degree { margin-left: auto; margin-right: auto; position: relat
     }
 
     // We load the JSON network file.
-    d3.json("/data/graph.json", function(error, graph2) {
+    d3.json("/blog/data/graph.json", function(error, graph2) {
         // Within this block, the network has been loaded
         // and stored in the 'graph' object.
 
@@ -10445,7 +10445,7 @@ div#d3-container-degree { margin-left: auto; margin-right: auto; position: relat
     }
 
     // We load the JSON network file.
-    d3.json("/data/graph.json", function(error, graph) {
+    d3.json("/blog/data/graph.json", function(error, graph) {
         // Within this block, the network has been loaded
         // and stored in the 'graph' object.
 
