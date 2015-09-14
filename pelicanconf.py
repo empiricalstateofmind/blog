@@ -3,7 +3,7 @@
 from __future__ import unicode_literals
 
 AUTHOR = u'Andrew Mellor'
-SITENAME = u'Empirical State of Mind'
+SITENAME = u'Andrew Mellor'
 HIDE_SITENAME = False
 SITEURL = ''
 
@@ -15,8 +15,8 @@ DEFAULT_DATE_FORMAT = '%d %b, %Y'
 DEFAULT_LANG = u'en'
 
 # Set the article URL
-ARTICLE_URL = 'blog/{date:%Y}/{date:%m}/{date:%d}/{slug}/'
-ARTICLE_SAVE_AS = 'blog/{date:%Y}/{date:%m}/{date:%d}/{slug}/index.html'
+ARTICLE_URL = 'articles/{date:%Y}/{date:%m}/{date:%d}/{slug}/'
+ARTICLE_SAVE_AS = 'articles/{date:%Y}/{date:%m}/{date:%d}/{slug}/index.html'
 #ARTICLE_URL = 'blog/{slug}.html'
 #ARTICLE_SAVE_AS = 'blog/{slug}.html'
 
@@ -63,7 +63,11 @@ HIDE_SIDEBAR = False
 
 EXTRA_HEADER = open('_notebook_header.html').read().decode('utf-8')
 
-# Social - added with publishing
+MENUITEMS = [('Home', '/'),
+	      ('Vitae', '/vitae'),
+	      ('Research','/research')]
+
+#Social - added with publishing
 #DISQUS_SITENAME = 'empiricalstateofmind'
 #ADDTHIS_PROFILE = 'ra-5477a96408ae534a'
 #GOOGLE_ANALYTICS = 'UA-49010624-3'

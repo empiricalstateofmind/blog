@@ -1,5 +1,6 @@
 Title: About 
 Order: 02
+Status: hidden
 
 ![alt text]({filename}/images/network.png "Network")
 
