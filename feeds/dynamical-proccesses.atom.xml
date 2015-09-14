@@ -1121,7 +1121,7 @@ An example statement would be something along the lines of:&lt;/p&gt;
 
 &lt;/div&gt;&lt;/p&gt;
 &lt;p&gt;Now, computing simulation times for across networks of varying size and degree we can see when we should use either method. The dashed lines are for the ALL method and the solid lines represent the TAKE method.&lt;/p&gt;
-&lt;p&gt;&lt;img src="/images/performance.png" alt="Performance" title="Performance"&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src="/blog/images/performance.png" alt="Performance" title="Performance"&gt;&lt;/p&gt;
 &lt;p&gt;For small networks there is little in terms of performance between the two implementations. As we increase the system size we see that the TAKE method performs significantly faster for small &lt;span class="math"&gt;\(\langle k \rangle / N\)&lt;/span&gt;, and significantly slower for large &lt;span class="math"&gt;\(\langle k \rangle / N\)&lt;/span&gt;.
 From this quick study it seems sensible to use TAKE when &lt;span class="math"&gt;\(\langle k \rangle / N &amp;lt; 0.5\)&lt;/span&gt;. This figure is dependent the propensity calculation as well as the underlying tradeoff between calculation and array copying and so should not be taken as gospel. For the SI model one would most likely use the TAKE method as most human contact networks are sparse in nature.&lt;/p&gt;
 &lt;h2&gt;Concluding Remarks&lt;/h2&gt;
