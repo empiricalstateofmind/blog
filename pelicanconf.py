@@ -65,7 +65,8 @@ EXTRA_HEADER = open('_notebook_header.html').read().decode('utf-8')
 
 MENUITEMS = [('Home', '/'),
 	      ('Vitae', '/vitae'),
-	      ('Research','/research')]
+	      ('Research','/research'),
+	      ('Blog','/blog')]
 
 #Social - added with publishing
 #DISQUS_SITENAME = 'empiricalstateofmind'
