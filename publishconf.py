@@ -23,6 +23,6 @@ DELETE_OUTPUT_DIRECTORY = True
 # Following items are often useful when publishing
 
 DISQUS_SITENAME = "empiricalstateofmind"
-GOOGLE_ANALYTICS = "UA-49010624-3"
+GOOGLE_ANALYTICS = "UA-49010624-4"
 ADDTHIS_PROFILE = 'ra-5477a96408ae534a'
 ADDTHIS_DATA_TRACK_ADDRESSBAR = False
