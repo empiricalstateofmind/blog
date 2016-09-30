@@ -17,8 +17,8 @@ DEFAULT_LANG = u'en'
 # Set the article URL
 ARTICLE_URL = 'articles/{date:%Y}/{date:%m}/{date:%d}/{slug}/'
 ARTICLE_SAVE_AS = 'articles/{date:%Y}/{date:%m}/{date:%d}/{slug}/index.html'
-#ARTICLE_URL = 'blog/{slug}.html'
-#ARTICLE_SAVE_AS = 'blog/{slug}.html'
+# ARTICLE_URL = 'blog/{slug}.html'
+# ARTICLE_SAVE_AS = 'blog/{slug}.html'
 
 # Title menu options
 MENUITEMS = []
@@ -26,7 +26,7 @@ NEWEST_FIRST_ARCHIVES = True
 DISPLAY_CATEGORIES_ON_MENU = False
 PAGE_ORDER_BY = 'order'
 
-STATIC_PATHS = ['images', 'figures', 'code', 'notebooks', 'pdfs', 'favicon.png','extra/CNAME', 'data']
+STATIC_PATHS = ['images', 'figures', 'code', 'notebooks', 'pdfs', 'favicon.png', 'extra/CNAME', 'data']
 EXTRA_PATH_METADATA = {'extra/CNAME': {'path': 'CNAME'},}
 CODE_DIR = 'code'
 NOTEBOOK_DIR = 'notebooks'
@@ -37,18 +37,18 @@ BOOTSTRAP_THEME = "flatly"
 PYGMENTS_STYLE = "default"
 PLUGIN_PATHS = ['pelican-plugins']
 PLUGINS = ['summary', 'liquid_tags.img', 'liquid_tags.video',
-'liquid_tags.include_code', 'liquid_tags.notebook',
-'liquid_tags.literal', 'render_math']
+           'liquid_tags.include_code', 'liquid_tags.notebook',
+           'liquid_tags.literal', 'render_math']
 
 # Theme Extras
-#SITELOGO = 'images/favicon.png'
-#SITELOGO_SIZE = 36
+# SITELOGO = 'images/favicon.png'
+# SITELOGO_SIZE = 36
 FAVICON = 'images/favicon.png'
 
 DEFAULT_PAGINATION = False
 
 # Uncomment following line if you want document-relative URLs when developing
-#RELATIVE_URLS = True
+# RELATIVE_URLS = True
 
 # Sidebar
 SOCIAL = (('twitter', 'https://twitter.com/EmpiricalSOM'),
@@ -64,18 +64,18 @@ HIDE_SIDEBAR = False
 EXTRA_HEADER = open('_notebook_header.html').read().decode('utf-8')
 
 MENUITEMS = [('Home', '/'),
-	      ('Vitae', '/vitae'),
-	      ('Research','/research'),
-	      ('Blog','/blog')]
+             ('Vitae', '/vitae'),
+             ('Research', '/research'),
+             ('Blog', '/blog')]
 
-#Social - added with publishing
-#DISQUS_SITENAME = 'empiricalstateofmind'
-#ADDTHIS_PROFILE = 'ra-5477a96408ae534a'
-#GOOGLE_ANALYTICS = 'UA-49010624-3'
-#GOOGLE_ANALYTICS_UNIVERSAL = 'UA-49010624-3'
-#GOOGLE_ANALYTICS_UNIVERSAL_PROPERTY = 'Empirical State of Mind'
+# Social - added with publishing
+# DISQUS_SITENAME = 'empiricalstateofmind'
+# ADDTHIS_PROFILE = 'ra-5477a96408ae534a'
+# GOOGLE_ANALYTICS = 'UA-49010624-3'
+# GOOGLE_ANALYTICS_UNIVERSAL = 'UA-49010624-3'
+# GOOGLE_ANALYTICS_UNIVERSAL_PROPERTY = 'Empirical State of Mind'
 
-#DISQUS_NO_ID = True
+# DISQUS_NO_ID = True
 DISQUS_DISPLAY_COUNTS = True
 USE_OPEN_GRAPH = True
 TWITTER_CARDS = True
