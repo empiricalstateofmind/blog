@@ -1,0 +1,8 @@
+Title: Interactive Networks with Networkx and D3
+Date: 14-12-2014
+Author: Andy Mellor
+Slug: d3-networks
+Tags: D3, networkx, IPython
+Category: Visualisation
+Status: Published
+Summary: Visualisation is undoubtably a tricky business. There are many questions to ask before even starting: What do I want to convey?  What tools do I have? Do I have the right data? This is even before considering whether your visualisation might have introduced a bias in some way. We will look at using Networkx and D3 to produce interactive network diagrams to display multiple layers of data. In this brief introduction we will render a simple graph, add some labels and colours and add some basic interaction.

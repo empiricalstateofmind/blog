@@ -1,0 +1,8 @@
+Title: Easy Parallel Computing with IPython
+Date: 30-04-2015
+Author: Andy Mellor
+Slug: easy-parallel
+Tags: IPython, Parallel, Fractals
+Category: Python
+Status: Published
+Summary: After speaking to a number of academics involved with Monte Carlo simulations, I realised many of them resort to creating bash scripts to run a number of python instances of simulation before writing another script to piece the data back together. It turns out this is incredibly simple to do in IPython, and in particular in an IPython Notebook. We take a look at how to run computations in parallel as well as giving a use-case in the creation of Julia fractals.

@@ -1,0 +1,8 @@
+Title: Network Dynamics with Python and the Gillespie Algorithm: An Epidemic Example
+Date: 19-12-2014
+Author: Andy Mellor
+Slug: gillespie-epidemics
+Tags: Gillespie, Epidemics, Simulation
+Category: Dynamical Proccesses
+Status: Published
+Summary: The Stochastic Simulation Algorithm (SSA), or Gillespie algorithm, provides a means to sample directly from the state distribution of a system governed by the master equation. Whilst this methodology has been used for the simulation of chemical reactions for decades, its applicability and utility in the simulation of dynamical processes on networks is not well known. We will look at an implementation the Gillespie Algorithm for an epidemic process on an random network, and consider the implementation issues when using the well known Python package, Numpy.

@@ -1,13 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*- #
-from __future__ import unicode_literals
 
 AUTHOR = u'Andrew Mellor'
 SITENAME = u'Andrew Mellor'
 HIDE_SITENAME = False
 SITEURL = ''
 
-PATH = 'content'
+#PATH = 'content'
 
 # Timezones
 TIMEZONE = 'Europe/Paris'
@@ -32,13 +31,20 @@ CODE_DIR = 'code'
 NOTEBOOK_DIR = 'notebooks'
 
 # Theming + Plugins
+MARKUP = ('md', 'ipynb') # For ipynb plugin.
 THEME = "./pelican-themes/pelican-bootstrap3"
 BOOTSTRAP_THEME = "flatly"
 PYGMENTS_STYLE = "default"
 PLUGIN_PATHS = ['pelican-plugins']
-PLUGINS = ['summary', 'liquid_tags.img', 'liquid_tags.video',
-           'liquid_tags.include_code', 'liquid_tags.notebook',
-           'liquid_tags.literal', 'render_math']
+# PLUGINS = ['summary', 'liquid_tags.img', 'liquid_tags.video',
+#            'liquid_tags.include_code', 'liquid_tags.notebook',
+#            'liquid_tags.literal', 'render_math',
+#            'ipynb.markup', 'ipynb.liquid']
+PLUGINS = ['render_math', #'liquid_tags.include_code', #'liquid_tags.notebook',
+           'ipynb.markup', 'ipynb.liquid']
+
+IGNORE_FILES = ['.ipynb_checkpoints']
+PATH = 'content'
 
 # Theme Extras
 # SITELOGO = 'images/favicon.png'
@@ -61,7 +67,7 @@ DISPLAY_RECENT_POSTS_ON_SIDEBAR = True
 RECENT_POST_COUNT = 5
 HIDE_SIDEBAR = False
 
-EXTRA_HEADER = open('_notebook_header.html').read().decode('utf-8')
+#EXTRA_HEADER = open('_notebook_header.html').read().decode('utf-8')
 
 MENUITEMS = [('Home', '/'),
              ('Vitae', '/vitae'),
