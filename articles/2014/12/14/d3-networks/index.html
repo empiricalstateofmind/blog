@@ -1897,14 +1897,14 @@ AAAAAElFTkSuQmCC
             <span class="p">.</span><span class="nx">links</span><span class="p">(</span><span class="nx">graph</span><span class="p">.</span><span class="nx">links</span><span class="p">)</span>
             <span class="p">.</span><span class="nx">start</span><span class="p">();</span>
 
-        <span class="c1">// We create a <line> SVG element for each link</span>
+        <span class="c1">// We create a < line> SVG element for each link</span>
         <span class="c1">// in the graph.</span>
         <span class="kd">var</span> <span class="nx">link</span> <span class="o">=</span> <span class="nx">svg</span><span class="p">.</span><span class="nx">selectAll</span><span class="p">(</span><span class="s2">".link"</span><span class="p">)</span>
             <span class="p">.</span><span class="nx">data</span><span class="p">(</span><span class="nx">graph</span><span class="p">.</span><span class="nx">links</span><span class="p">)</span>
             <span class="p">.</span><span class="nx">enter</span><span class="p">().</span><span class="nx">append</span><span class="p">(</span><span class="s2">"line"</span><span class="p">)</span>
             <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"class"</span><span class="p">,</span> <span class="s2">"link"</span><span class="p">);</span>
 
-        <span class="c1">// We create a <circle> SVG element for each node</span>
+        <span class="c1">// We create a < circle> SVG element for each node</span>
         <span class="c1">// in the graph, and we specify a few attributes.</span>
         <span class="kd">var</span> <span class="nx">node</span> <span class="o">=</span> <span class="nx">svg</span><span class="p">.</span><span class="nx">selectAll</span><span class="p">(</span><span class="s2">".node"</span><span class="p">)</span>
             <span class="p">.</span><span class="nx">data</span><span class="p">(</span><span class="nx">graph</span><span class="p">.</span><span class="nx">nodes</span><span class="p">)</span>
