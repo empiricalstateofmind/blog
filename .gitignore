@@ -4,3 +4,5 @@ _build
 _nb_header.html
 /cache/
 .ipynb_checkpoints/
+/old
+COMMANDS.md
