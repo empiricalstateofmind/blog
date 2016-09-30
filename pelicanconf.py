@@ -41,10 +41,11 @@ PLUGIN_PATHS = ['pelican-plugins']
 #            'liquid_tags.literal', 'render_math',
 #            'ipynb.markup', 'ipynb.liquid']
 PLUGINS = ['render_math', #'liquid_tags.include_code', #'liquid_tags.notebook',
-           'ipynb.markup', 'ipynb.liquid']
+           'ipynb.markup']#, 'ipynb.liquid']
 
 IGNORE_FILES = ['.ipynb_checkpoints']
 PATH = 'content'
+IPYNB_USE_META_SUMMARY = True
 
 # Theme Extras
 # SITELOGO = 'images/favicon.png'
