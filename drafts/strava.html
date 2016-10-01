@@ -1081,68 +1081,60 @@ h6:hover .anchor-link {
 </style>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[1]:</div>
+<div class="prompt input_prompt">In [1]:</div>
 <div class="inner_cell">
-    <div class="input_area">
+<div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">requests</span> <span class="k">as</span> <span class="nn">rq</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">from</span> <span class="nn">StringIO</span> <span class="k">import</span> <span class="n">StringIO</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 </pre></div>
-
 </div>
 </div>
 </div>
-
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[2]:</div>
+<div class="prompt input_prompt">In [2]:</div>
 <div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">token</span> <span class="o">=</span> <span class="s1">&#39;e2ce375f9642d036ff9362e829d26c273a2522a4&#39;</span>
+<div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">token</span> <span class="o">=</span> <span class="s1">'e2ce375f9642d036ff9362e829d26c273a2522a4'</span>
 
-<span class="n">payload</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;access_token&#39;</span><span class="p">:</span> <span class="n">token</span><span class="p">,</span> <span class="s1">&#39;per_page&#39;</span><span class="p">:</span> <span class="s1">&#39;50&#39;</span><span class="p">}</span>
-<span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;content-type&#39;</span><span class="p">:</span> <span class="s1">&#39;application/json&#39;</span><span class="p">}</span><span class="c1">#, &#39;login&#39;: token}</span>
+<span class="n">payload</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'access_token'</span><span class="p">:</span> <span class="n">token</span><span class="p">,</span> <span class="s1">'per_page'</span><span class="p">:</span> <span class="s1">'50'</span><span class="p">}</span>
+<span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'content-type'</span><span class="p">:</span> <span class="s1">'application/json'</span><span class="p">}</span><span class="c1">#, 'login': token}</span>
 
 <span class="c1"># Segments</span>
 <span class="c1"># Farnley Line Full - 2314277</span>
 
-<span class="n">r</span> <span class="o">=</span> <span class="n">rq</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;https://www.strava.com/api/v3/segments/2314277/leaderboard&#39;</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">payload</span><span class="p">)</span>
+<span class="n">r</span> <span class="o">=</span> <span class="n">rq</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'https://www.strava.com/api/v3/segments/2314277/leaderboard'</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">payload</span><span class="p">)</span>
 </pre></div>
-
 </div>
 </div>
 </div>
-
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[60]:</div>
+<div class="prompt input_prompt">In [60]:</div>
 <div class="inner_cell">
-    <div class="input_area">
+<div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
 <span class="c1">#print json.dumps(data, sort_keys=True, indent=4)</span>
-<span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;entries&#39;</span><span class="p">]</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">'entries'</span><span class="p">]</span>
 
 <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-<span class="n">df</span><span class="p">[</span><span class="s1">&#39;speed&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">3.6</span><span class="o">*</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;distance&#39;</span><span class="p">]</span><span class="o">/</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;elapsed_time&#39;</span><span class="p">]</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">'speed'</span><span class="p">]</span> <span class="o">=</span> <span class="mf">3.6</span><span class="o">*</span><span class="n">df</span><span class="p">[</span><span class="s1">'distance'</span><span class="p">]</span><span class="o">/</span><span class="n">df</span><span class="p">[</span><span class="s1">'elapsed_time'</span><span class="p">]</span>
 <span class="nb">print</span> <span class="n">df</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
 <span class="nb">print</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span>
 </pre></div>
-
 </div>
 </div>
 </div>
-
 <div class="output_wrapper">
 <div class="output">
-
-
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+<pre><class &#x27;pandas.core.frame.dataframe&#x27;>
 Int64Index: 50 entries, 0 to 49
 Data columns (total 15 columns):
 activity_id         50  non-null values
@@ -1161,53 +1153,41 @@ start_date          50  non-null values
 start_date_local    50  non-null values
 speed               50  non-null values
 dtypes: float64(4), int64(6), object(5)None
-Index([u&#39;activity_id&#39;, u&#39;athlete_gender&#39;, u&#39;athlete_id&#39;, u&#39;athlete_name&#39;, u&#39;athlete_profile&#39;, u&#39;average_hr&#39;, u&#39;average_watts&#39;, u&#39;distance&#39;, u&#39;effort_id&#39;, u&#39;elapsed_time&#39;, u&#39;moving_time&#39;, u&#39;rank&#39;, u&#39;start_date&#39;, u&#39;start_date_local&#39;, u&#39;speed&#39;], dtype=object)
+Index([u'activity_id', u'athlete_gender', u'athlete_id', u'athlete_name', u'athlete_profile', u'average_hr', u'average_watts', u'distance', u'effort_id', u'elapsed_time', u'moving_time', u'rank', u'start_date', u'start_date_local', u'speed'], dtype=object)
 </pre>
 </div>
 </div>
-
 </div>
 </div>
-
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[76]:</div>
+<div class="prompt input_prompt">In [76]:</div>
 <div class="inner_cell">
-    <div class="input_area">
+<div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
 
 <span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">211</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;elapsed_time&#39;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;distance&#39;</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;average_watts&#39;</span><span class="p">],</span><span class="n">s</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">'elapsed_time'</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s1">'distance'</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s1">'average_watts'</span><span class="p">],</span><span class="n">s</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
 <span class="c1">#ax1.set_xlim([0,51])</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Distance traveled v Ranking (Power output in colour)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">'Distance traveled v Ranking (Power output in colour)'</span><span class="p">)</span>
 
 <span class="n">ax2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">212</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Distribution of segment times&#39;</span><span class="p">)</span>
-<span class="n">df</span><span class="p">[</span><span class="s1">&#39;elapsed_time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s1">&#39;kde&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">'Distribution of segment times'</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">'elapsed_time'</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s1">'kde'</span><span class="p">)</span>
 </pre></div>
-
 </div>
 </div>
 </div>
-
 <div class="output_wrapper">
 <div class="output">
-
-
 <div class="output_area"><div class="prompt output_prompt">Out[76]:</div>
-
-
 <div class="output_text output_subarea output_execute_result">
-<pre>&lt;matplotlib.axes.AxesSubplot at 0x127163d0&gt;</pre>
+<pre><matplotlib.axes.axessubplot at 0x127163d0></pre>
 </div>
-
 </div>
-
 <div class="output_area"><div class="prompt"></div>
-
-
 <div class="output_png output_subarea ">
 <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAA8UAAAHqCAYAAAAtV+ymAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAALEgAACxIB0t1+/AAAIABJREFUeJzs3XtcVGXiBvDnDCAXuagpaEwqLpQOooMkaHlDVBRXc6u1
@@ -2234,44 +2214,35 @@ q46SQWtra2Pnzp19xtF4/PHHVU/JoPUXU2vXrg1JPWUy+huuS0RERERERGQUGPbNp0VEREREREQG
 S0mxiIiIiIiIjFpKikVERERERGTUUlIsIiIiIiIio5aSYhERERERERm1lBSLiIiIiIjIqKWkWERE
 REREREat/w9uOKuBKJwtmgAAAABJRU5ErkJggg==
 ">
-</div>
-
-</div>
-
+</img></div>
 </div>
 </div>
-
+</div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[69]:</div>
+<div class="prompt input_prompt">In [69]:</div>
 <div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;distance_delta&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;distance&#39;</span><span class="p">]</span><span class="o">-</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;distance&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
-<span class="n">df</span><span class="p">[</span><span class="s1">&#39;true_time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;elapsed_time&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="mf">3.6</span><span class="o">*</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;distance_delta&#39;</span><span class="p">]</span><span class="o">/</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;speed&#39;</span><span class="p">]</span>
+<div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s1">'distance_delta'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">'distance'</span><span class="p">]</span><span class="o">-</span><span class="n">df</span><span class="p">[</span><span class="s1">'distance'</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">'true_time'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">'elapsed_time'</span><span class="p">]</span> <span class="o">-</span> <span class="mf">3.6</span><span class="o">*</span><span class="n">df</span><span class="p">[</span><span class="s1">'distance_delta'</span><span class="p">]</span><span class="o">/</span><span class="n">df</span><span class="p">[</span><span class="s1">'speed'</span><span class="p">]</span>
 </pre></div>
-
 </div>
 </div>
 </div>
-
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[68]:</div>
+<div class="prompt input_prompt">In [68]:</div>
 <div class="inner_cell">
-    <div class="input_area">
+<div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span> <span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
-
 </div>
 </div>
 </div>
-
 <div class="output_wrapper">
 <div class="output">
-
-
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>   activity_id athlete_gender  athlete_id      athlete_name  \
@@ -2311,27 +2282,21 @@ REREREat/w9uOKuBKJwtmgAAAABJRU5ErkJggg==
 </pre>
 </div>
 </div>
-
 </div>
 </div>
-
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[70]:</div>
+<div class="prompt input_prompt">In [70]:</div>
 <div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;rank&#39;</span><span class="p">]</span><span class="o">==</span><span class="mi">18</span><span class="p">][[</span><span class="s1">&#39;athlete_name&#39;</span><span class="p">,</span><span class="s1">&#39;distance&#39;</span><span class="p">,</span><span class="s1">&#39;elapsed_time&#39;</span><span class="p">,</span><span class="s1">&#39;speed&#39;</span><span class="p">,</span> <span class="s1">&#39;true_time&#39;</span><span class="p">]]</span>
+<div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">'rank'</span><span class="p">]</span><span class="o">==</span><span class="mi">18</span><span class="p">][[</span><span class="s1">'athlete_name'</span><span class="p">,</span><span class="s1">'distance'</span><span class="p">,</span><span class="s1">'elapsed_time'</span><span class="p">,</span><span class="s1">'speed'</span><span class="p">,</span> <span class="s1">'true_time'</span><span class="p">]]</span>
 </pre></div>
-
 </div>
 </div>
 </div>
-
 <div class="output_wrapper">
 <div class="output">
-
-
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>   athlete_name  distance  elapsed_time      speed   true_time
@@ -2340,45 +2305,33 @@ REREREat/w9uOKuBKJwtmgAAAABJRU5ErkJggg==
 </pre>
 </div>
 </div>
-
 </div>
 </div>
-
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[78]:</div>
+<div class="prompt input_prompt">In [78]:</div>
 <div class="inner_cell">
-    <div class="input_area">
+<div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
 
 <span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">211</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;true_time&#39;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;distance&#39;</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;rank&#39;</span><span class="p">],</span><span class="n">s</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">'true_time'</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s1">'distance'</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s1">'rank'</span><span class="p">],</span><span class="n">s</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
-<span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;True Time&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Distance traveled v Ranking (Power output in colour)&#39;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">'True Time'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">'Distance traveled v Ranking (Power output in colour)'</span><span class="p">)</span>
 </pre></div>
-
 </div>
 </div>
 </div>
-
 <div class="output_wrapper">
 <div class="output">
-
-
 <div class="output_area"><div class="prompt output_prompt">Out[78]:</div>
-
-
 <div class="output_text output_subarea output_execute_result">
-<pre>&lt;matplotlib.text.Text at 0x136a9410&gt;</pre>
+<pre><matplotlib.text.text at 0x136a9410></pre>
 </div>
-
 </div>
-
 <div class="output_area"><div class="prompt"></div>
-
-
 <div class="output_png output_subarea ">
 <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAzsAAAEJCAYAAACzAjmgAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAALEgAACxIB0t1+/AAAIABJREFUeJzs3XtYVNXiPvB3DyAXuXphIEjF1AxEQQosbygqCtn1HM1U
@@ -2978,61 +2931,52 @@ EKKeK9+y07lzZ/70pz8xcuRILrvsMoYOHVqmzDPPPEPHjh0ZOHAg0dHRjBo1in379gV9j/LvU/65
 aJAk2RFCCCGEEEI0SJLsCCGEEEIIIRokSXaEEEIIIYQQDZIkO0IIIYQQQogGSZIdIYQQQgghRIMk
 yY4QQgghhBCiQZJkRwghhBBCCNEgSbIjhBBCCCGEaJD+H6mfqw8ALF2cAAAAAElFTkSuQmCC
 ">
-</div>
-
-</div>
-
+</img></div>
 </div>
 </div>
-
+</div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[10]:</div>
+<div class="prompt input_prompt">In [10]:</div>
 <div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">token</span> <span class="o">=</span> <span class="s1">&#39;e2ce375f9642d036ff9362e829d26c273a2522a4&#39;</span>
+<div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">token</span> <span class="o">=</span> <span class="s1">'e2ce375f9642d036ff9362e829d26c273a2522a4'</span>
 
-<span class="n">payload</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;access_token&#39;</span><span class="p">:</span> <span class="n">token</span><span class="p">,</span> <span class="s1">&#39;per_page&#39;</span><span class="p">:</span> <span class="s1">&#39;100&#39;</span><span class="p">}</span>
-<span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;content-type&#39;</span><span class="p">:</span> <span class="s1">&#39;application/json&#39;</span><span class="p">}</span><span class="c1">#, &#39;login&#39;: token}</span>
+<span class="n">payload</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'access_token'</span><span class="p">:</span> <span class="n">token</span><span class="p">,</span> <span class="s1">'per_page'</span><span class="p">:</span> <span class="s1">'100'</span><span class="p">}</span>
+<span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'content-type'</span><span class="p">:</span> <span class="s1">'application/json'</span><span class="p">}</span><span class="c1">#, 'login': token}</span>
 
 <span class="c1"># Segments</span>
 <span class="c1"># Farnley Line Full - 2314277</span>
 
-<span class="n">r</span> <span class="o">=</span> <span class="n">rq</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;https://www.strava.com/api/v3/segments/2314277/leaderboard&#39;</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">payload</span><span class="p">)</span>
+<span class="n">r</span> <span class="o">=</span> <span class="n">rq</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'https://www.strava.com/api/v3/segments/2314277/leaderboard'</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">payload</span><span class="p">)</span>
 </pre></div>
-
 </div>
 </div>
 </div>
-
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[11]:</div>
+<div class="prompt input_prompt">In [11]:</div>
 <div class="inner_cell">
-    <div class="input_area">
+<div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
 <span class="c1">#print json.dumps(data, sort_keys=True, indent=4)</span>
-<span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;entries&#39;</span><span class="p">]</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">'entries'</span><span class="p">]</span>
 
 <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-<span class="n">df</span><span class="p">[</span><span class="s1">&#39;speed&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">3.6</span><span class="o">*</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;distance&#39;</span><span class="p">]</span><span class="o">/</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;elapsed_time&#39;</span><span class="p">]</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">'speed'</span><span class="p">]</span> <span class="o">=</span> <span class="mf">3.6</span><span class="o">*</span><span class="n">df</span><span class="p">[</span><span class="s1">'distance'</span><span class="p">]</span><span class="o">/</span><span class="n">df</span><span class="p">[</span><span class="s1">'elapsed_time'</span><span class="p">]</span>
 <span class="nb">print</span> <span class="n">df</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
 <span class="nb">print</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span>
 </pre></div>
-
 </div>
 </div>
 </div>
-
 <div class="output_wrapper">
 <div class="output">
-
-
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+<pre><class &#x27;pandas.core.frame.dataframe&#x27;>
 Int64Index: 100 entries, 0 to 99
 Data columns (total 15 columns):
 activity_id         100  non-null values
@@ -3051,43 +2995,31 @@ start_date          100  non-null values
 start_date_local    100  non-null values
 speed               100  non-null values
 dtypes: float64(4), int64(6), object(5)None
-Index([u&#39;activity_id&#39;, u&#39;athlete_gender&#39;, u&#39;athlete_id&#39;, u&#39;athlete_name&#39;, u&#39;athlete_profile&#39;, u&#39;average_hr&#39;, u&#39;average_watts&#39;, u&#39;distance&#39;, u&#39;effort_id&#39;, u&#39;elapsed_time&#39;, u&#39;moving_time&#39;, u&#39;rank&#39;, u&#39;start_date&#39;, u&#39;start_date_local&#39;, u&#39;speed&#39;], dtype=object)
+Index([u'activity_id', u'athlete_gender', u'athlete_id', u'athlete_name', u'athlete_profile', u'average_hr', u'average_watts', u'distance', u'effort_id', u'elapsed_time', u'moving_time', u'rank', u'start_date', u'start_date_local', u'speed'], dtype=object)
 </pre>
 </div>
 </div>
-
 </div>
 </div>
-
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[12]:</div>
+<div class="prompt input_prompt">In [12]:</div>
 <div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;elapsed_time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s1">&#39;kde&#39;</span><span class="p">)</span>
+<div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s1">'elapsed_time'</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s1">'kde'</span><span class="p">)</span>
 </pre></div>
-
 </div>
 </div>
 </div>
-
 <div class="output_wrapper">
 <div class="output">
-
-
 <div class="output_area"><div class="prompt output_prompt">Out[12]:</div>
-
-
 <div class="output_text output_subarea output_execute_result">
-<pre>&lt;matplotlib.axes.AxesSubplot at 0x722e710&gt;</pre>
+<pre><matplotlib.axes.axessubplot at 0x722e710></pre>
 </div>
-
 </div>
-
 <div class="output_area"><div class="prompt"></div>
-
-
 <div class="output_png output_subarea ">
 <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZcAAAEACAYAAAB/BTv2AAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAALEgAACxIB0t1+/AAAIABJREFUeJzt3Xl4VPX5///nZF/IRsg+CSEkkAAhgixqXbAIFPoF1KpF
@@ -3367,75 +3299,62 @@ rK2tVeV4NjU1KaGhoUpDQ4PlOTWOZ2851TieW7ZsUSZNmqRMmTJFuffee5WOjg67jadcRCmEEMLu
 NN8WE0IIoT5SXIQQQtidFBchhBB2J8VFCCGE3UlxEUIIYXdSXIQQQtidFBchhBB2J8VFCCGE3f3/
 eVG08dcIn4wAAAAASUVORK5CYII=
 ">
-</div>
-
-</div>
-
+</img></div>
 </div>
 </div>
-
+</div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[22]:</div>
+<div class="prompt input_prompt">In [22]:</div>
 <div class="inner_cell">
-    <div class="input_area">
+<div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">full_df</span> <span class="o">=</span> <span class="p">[]</span>
 
-<span class="n">token</span> <span class="o">=</span> <span class="s1">&#39;e2ce375f9642d036ff9362e829d26c273a2522a4&#39;</span>
+<span class="n">token</span> <span class="o">=</span> <span class="s1">'e2ce375f9642d036ff9362e829d26c273a2522a4'</span>
 
 <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">xrange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">16</span><span class="p">):</span>
-    <span class="n">payload</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;access_token&#39;</span><span class="p">:</span> <span class="n">token</span><span class="p">,</span> <span class="s1">&#39;per_page&#39;</span><span class="p">:</span> <span class="s1">&#39;200&#39;</span><span class="p">,</span> <span class="s1">&#39;page&#39;</span><span class="p">:</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="p">)}</span>
-    <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;content-type&#39;</span><span class="p">:</span> <span class="s1">&#39;application/json&#39;</span><span class="p">}</span>
+    <span class="n">payload</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'access_token'</span><span class="p">:</span> <span class="n">token</span><span class="p">,</span> <span class="s1">'per_page'</span><span class="p">:</span> <span class="s1">'200'</span><span class="p">,</span> <span class="s1">'page'</span><span class="p">:</span><span class="s1">'</span><span class="si">{}</span><span class="s1">'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="p">)}</span>
+    <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'content-type'</span><span class="p">:</span> <span class="s1">'application/json'</span><span class="p">}</span>
 
-    <span class="n">r</span> <span class="o">=</span> <span class="n">rq</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;https://www.strava.com/api/v3/segments/2521267/leaderboard&#39;</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">payload</span><span class="p">)</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">rq</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'https://www.strava.com/api/v3/segments/2521267/leaderboard'</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">payload</span><span class="p">)</span>
 
     <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;entries&#39;</span><span class="p">]</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">'entries'</span><span class="p">]</span>
     <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
     
     <span class="n">full_df</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
 </pre></div>
-
 </div>
 </div>
 </div>
-
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[23]:</div>
+<div class="prompt input_prompt">In [23]:</div>
 <div class="inner_cell">
-    <div class="input_area">
+<div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">full_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">full_df</span><span class="p">)</span>
 </pre></div>
-
 </div>
 </div>
 </div>
-
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[24]:</div>
+<div class="prompt input_prompt">In [24]:</div>
 <div class="inner_cell">
-    <div class="input_area">
+<div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">full_df</span><span class="o">.</span><span class="n">info</span>
 </pre></div>
-
 </div>
 </div>
 </div>
-
 <div class="output_wrapper">
 <div class="output">
-
-
 <div class="output_area"><div class="prompt output_prompt">Out[24]:</div>
-
-
 <div class="output_text output_subarea output_execute_result">
-<pre>&lt;bound method DataFrame.info of &lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+<pre><bound method dataframe.info of &lt;class &#x27;pandas.core.frame.dataframe&#x27;>
 Int64Index: 3070 entries, 0 to 204
 Data columns (total 14 columns):
 activity_id         3070  non-null values
@@ -3452,43 +3371,30 @@ moving_time         3070  non-null values
 rank                3070  non-null values
 start_date          3070  non-null values
 start_date_local    3070  non-null values
-dtypes: float64(3), int64(6), object(5)&gt;</pre>
-</div>
-
-</div>
-
+dtypes: float64(3), int64(6), object(5)></pre>
 </div>
 </div>
-
+</div>
+</div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[25]:</div>
+<div class="prompt input_prompt">In [25]:</div>
 <div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">full_df</span><span class="p">[</span><span class="s1">&#39;elapsed_time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s1">&#39;kde&#39;</span><span class="p">)</span>
+<div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">full_df</span><span class="p">[</span><span class="s1">'elapsed_time'</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s1">'kde'</span><span class="p">)</span>
 </pre></div>
-
 </div>
 </div>
 </div>
-
 <div class="output_wrapper">
 <div class="output">
-
-
 <div class="output_area"><div class="prompt output_prompt">Out[25]:</div>
-
-
 <div class="output_text output_subarea output_execute_result">
-<pre>&lt;matplotlib.axes.AxesSubplot at 0x740f410&gt;</pre>
+<pre><matplotlib.axes.axessubplot at 0x740f410></pre>
 </div>
-
 </div>
-
 <div class="output_area"><div class="prompt"></div>
-
-
 <div class="output_png output_subarea ">
 <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaAAAAEACAYAAAD1KqK3AAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAALEgAACxIB0t1+/AAAIABJREFUeJzt3Xt8VPWd+P/XTDK5khuXBMiFEGZCEoghCKZaqsEUMFEj
@@ -3786,33 +3692,24 @@ blEefPBBpaGhQTXxrVu3TklJSVGmTp2qfPvb31ba29u9Ora8vDxl3Lhxik6nU2JiYpSXX355UPF8
 hPAMkoCEEEK4hSQgIYQQbiEJSAghhFtIAhJCCOEWkoCEEEK4hSQgIYQQbiEJSAghhFv8P98GJQxD
 LZwbAAAAAElFTkSuQmCC
 ">
-</div>
-
-</div>
-
+</img></div>
 </div>
 </div>
-
+</div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[34]:</div>
+<div class="prompt input_prompt">In [34]:</div>
 <div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">full_df</span><span class="p">[</span><span class="s1">&#39;elapsed_time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">30</span><span class="p">);</span>
+<div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">full_df</span><span class="p">[</span><span class="s1">'elapsed_time'</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">30</span><span class="p">);</span>
 </pre></div>
-
 </div>
 </div>
 </div>
-
 <div class="output_wrapper">
 <div class="output">
-
-
 <div class="output_area"><div class="prompt"></div>
-
-
 <div class="output_png output_subarea ">
 <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAXsAAAEACAYAAABS29YJAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAALEgAACxIB0t1+/AAAHdZJREFUeJzt3W1QVOfZB/D/IqYfgsHEkQVZmeURFFdXWGPQp6PzjOEl
@@ -3951,33 +3848,24 @@ q6tT8+bNU3PmzFHLly9X3d3dYrIppVRvb6+aNGmS6unp8d4mKd+WLVuUw+FQs2fPVitXrlT9/f2i
 8i1atEg5HA6Vmpqqjhw5opQK3evHD1UREZkAv5aQiMgEWOyJiEyAxZ6IyARY7ImITIDFnojIBFjs
 iYhMgMWeiMgEWOyJiEzg/wGfaSKJczwWwAAAAABJRU5ErkJggg==
 ">
-</div>
-
-</div>
-
+</img></div>
 </div>
 </div>
-
+</div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[33]:</div>
+<div class="prompt input_prompt">In [33]:</div>
 <div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">full_df</span><span class="p">[</span><span class="s1">&#39;distance&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">20</span><span class="p">);</span>
+<div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">full_df</span><span class="p">[</span><span class="s1">'distance'</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">20</span><span class="p">);</span>
 </pre></div>
-
 </div>
 </div>
 </div>
-
 <div class="output_wrapper">
 <div class="output">
-
-
 <div class="output_area"><div class="prompt"></div>
-
-
 <div class="output_png output_subarea ">
 <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAYUAAAEACAYAAABcXmojAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAALEgAACxIB0t1+/AAAIABJREFUeJzt3X9slfXd//HnYa33svBjaOQUe6hltlgKpRT0YBbNbEpr
@@ -4128,42 +4016,29 @@ m5vr3XPQ/IhsAAAAf0lEQVTPPd7u3bsTNv/f//53LxQKebm5uf73+6ZNm7wvvvjCKygo8DIzM73C
 wkLvyy+/TLhjuFj2jRs3mjl/L5X/fIl8/l7qe6c/zl99eE1ERHz6c5wiIuJTKYiIiE+lICIiPpWC
 iIj4VAoiIuJTKYiIiE+lICIiPpWCiIj4/hf7qrCWVhpqtwAAAABJRU5ErkJggg==
 ">
-</div>
-
-</div>
-
+</img></div>
 </div>
 </div>
-
+</div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[37]:</div>
+<div class="prompt input_prompt">In [37]:</div>
 <div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">full_df</span><span class="p">[</span><span class="s1">&#39;elapsed_time&#39;</span><span class="p">],</span> <span class="n">full_df</span><span class="p">[</span><span class="s1">&#39;average_watts&#39;</span><span class="p">])</span>
+<div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">full_df</span><span class="p">[</span><span class="s1">'elapsed_time'</span><span class="p">],</span> <span class="n">full_df</span><span class="p">[</span><span class="s1">'average_watts'</span><span class="p">])</span>
 </pre></div>
-
 </div>
 </div>
 </div>
-
 <div class="output_wrapper">
 <div class="output">
-
-
 <div class="output_area"><div class="prompt output_prompt">Out[37]:</div>
-
-
 <div class="output_text output_subarea output_execute_result">
-<pre>&lt;matplotlib.collections.PathCollection at 0xf3c5ab0&gt;</pre>
+<pre><matplotlib.collections.pathcollection at 0xf3c5ab0></pre>
 </div>
-
 </div>
-
 <div class="output_area"><div class="prompt"></div>
-
-
 <div class="output_png output_subarea ">
 <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAYYAAAEACAYAAAC3adEgAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAALEgAACxIB0t1+/AAAIABJREFUeJzsnWdgVGXahq9TZjIzadQEQgihSjGAVEFQQaoKKAIK+gn2
@@ -4811,65 +4686,54 @@ VUVEYqzP1atX0/Tp08nPz4/UajWVlJSMqqu+vp50Oh1FRkbSm2+++Z/vyye4McYYc8O39mSMMeaG
 BwNjjDE3PBgYY4y54cHAGGPMDQ8GxhhjbngwMMYYc8ODgTHGmBseDIwxxtz8D0wmQbFQILVGAAAA
 AElFTkSuQmCC
 ">
-</div>
-
-</div>
-
+</img></div>
 </div>
 </div>
-
+</div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[39]:</div>
+<div class="prompt input_prompt">In [39]:</div>
 <div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">full_df</span><span class="p">[</span><span class="s1">&#39;start_date&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s1">&#39;hist&#39;</span><span class="p">)</span>
+<div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">full_df</span><span class="p">[</span><span class="s1">'start_date'</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s1">'hist'</span><span class="p">)</span>
 </pre></div>
-
 </div>
 </div>
 </div>
-
 <div class="output_wrapper">
 <div class="output">
-
-
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_text output_error">
 <pre>
 <span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
 <span class="ansi-red-intense-fg ansi-bold">ValueError</span>                                Traceback (most recent call last)
-<span class="ansi-green-intense-fg ansi-bold">&lt;ipython-input-39-53ba63b4b6f7&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-intense-fg ansi-bold">()</span>
-<span class="ansi-green-intense-fg ansi-bold">----&gt; 1</span><span class="ansi-yellow-intense-fg ansi-bold"> </span>full_df<span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-blue-intense-fg ansi-bold">&#39;start_date&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">.</span>plot<span class="ansi-yellow-intense-fg ansi-bold">(</span>kind<span class="ansi-yellow-intense-fg ansi-bold">=</span><span class="ansi-blue-intense-fg ansi-bold">&#39;hist&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-intense-fg ansi-bold"><ipython-input-39-53ba63b4b6f7></span> in <span class="ansi-cyan-fg"><module></span><span class="ansi-blue-intense-fg ansi-bold">()</span>
+<span class="ansi-green-intense-fg ansi-bold">----> 1</span><span class="ansi-yellow-intense-fg ansi-bold"> </span>full_df<span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-blue-intense-fg ansi-bold">'start_date'</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">.</span>plot<span class="ansi-yellow-intense-fg ansi-bold">(</span>kind<span class="ansi-yellow-intense-fg ansi-bold">=</span><span class="ansi-blue-intense-fg ansi-bold">'hist'</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
 
 <span class="ansi-green-intense-fg ansi-bold">C:\WinPython\python-2.7.5\lib\site-packages\pandas\tools\plotting.pyc</span> in <span class="ansi-cyan-fg">plot_series</span><span class="ansi-blue-intense-fg ansi-bold">(series, label, kind, use_index, rot, xticks, yticks, xlim, ylim, ax, style, grid, legend, logx, logy, secondary_y, **kwds)</span>
 <span class="ansi-green-fg">   1694</span>         klass <span class="ansi-yellow-intense-fg ansi-bold">=</span> KdePlot
 <span class="ansi-green-fg">   1695</span>     <span class="ansi-green-intense-fg ansi-bold">else</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
-<span class="ansi-green-intense-fg ansi-bold">-&gt; 1696</span><span class="ansi-yellow-intense-fg ansi-bold">         </span><span class="ansi-green-intense-fg ansi-bold">raise</span> ValueError<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-blue-intense-fg ansi-bold">&#39;Invalid chart type given %s&#39;</span> <span class="ansi-yellow-intense-fg ansi-bold">%</span> kind<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-intense-fg ansi-bold">-> 1696</span><span class="ansi-yellow-intense-fg ansi-bold">         </span><span class="ansi-green-intense-fg ansi-bold">raise</span> ValueError<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-blue-intense-fg ansi-bold">'Invalid chart type given %s'</span> <span class="ansi-yellow-intense-fg ansi-bold">%</span> kind<span class="ansi-yellow-intense-fg ansi-bold">)</span>
 <span class="ansi-green-fg">   1697</span> 
-<span class="ansi-green-fg">   1698</span>     &#34;&#34;&#34;
+<span class="ansi-green-fg">   1698</span>     """
 
 <span class="ansi-red-intense-fg ansi-bold">ValueError</span>: Invalid chart type given hist</pre>
 </div>
 </div>
-
 </div>
 </div>
-
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In [ ]:</div>
 <div class="inner_cell">
-    <div class="input_area">
+<div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span> 
 </pre></div>
-
 </div>
 </div>
 </div>
-
 </div>
 <script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
     var mathjaxscript = document.createElement('script');
