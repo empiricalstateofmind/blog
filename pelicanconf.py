@@ -25,7 +25,7 @@ NEWEST_FIRST_ARCHIVES = True
 DISPLAY_CATEGORIES_ON_MENU = False
 PAGE_ORDER_BY = 'order'
 
-STATIC_PATHS = ['images', 'figures', 'code', 'notebooks', 'pdfs', 'favicon.png', 'extra/CNAME', 'data']
+STATIC_PATHS = ['images', 'figures', 'code', 'notebooks', 'pdfs', 'favicon.png', 'extra/CNAME', 'data', 'extra/custom.css']
 EXTRA_PATH_METADATA = {'extra/CNAME': {'path': 'CNAME'},}
 CODE_DIR = 'code'
 NOTEBOOK_DIR = 'notebooks'
@@ -81,6 +81,12 @@ MENUITEMS = [('Home', '/'),
 # GOOGLE_ANALYTICS = 'UA-49010624-3'
 # GOOGLE_ANALYTICS_UNIVERSAL = 'UA-49010624-3'
 # GOOGLE_ANALYTICS_UNIVERSAL_PROPERTY = 'Empirical State of Mind'
+
+CUSTOM_CSS = 'static/custom.css'
+# Tell Pelican to change the path to 'static/custom.css' in the output dir
+EXTRA_PATH_METADATA = {
+    'extra/custom.css': {'path': 'static/custom.css'}
+}
 
 # DISQUS_NO_ID = True
 DISQUS_DISPLAY_COUNTS = True
