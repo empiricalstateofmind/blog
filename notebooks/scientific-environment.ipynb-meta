@@ -2,7 +2,7 @@ Title: Finding a Scientific Working Environment In Python
 Date: 27-07-2016
 Author: Andy Mellor
 Slug: scientific-env
-Tags: Python, Docker, Conda
+Tags: Python, Docker, Conda, Anaconda, virtualenv, Academia, Reproducibility
 Category: General
-Status: Draft
-Summary: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+Status: Published
+Summary: Over the course of my studies I've worked on multiple different machines, with different operating systems, different hardware, and different security privileges. It can be a nightmare to ensure a smooth and consistent experience, but when done right, makes working with code and data a pleasure and makes academic reproducibility that much easier. In this article we will look at how the right choice of Python distribution, environment, and IDE can go along way to avoiding technological headaches.
