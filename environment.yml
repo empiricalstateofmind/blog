@@ -2,9 +2,17 @@ name: blog
 dependencies:
 - colorama=0.3.7=py35_0
 - decorator=4.0.10=py35_0
+- entrypoints=0.2.2=py35_0
 - ipython=5.1.0=py35_0
 - ipython_genutils=0.1.0=py35_0
+- jinja2=2.8=py35_1
+- jsonschema=2.5.1=py35_0
+- jupyter_core=4.2.0=py35_0
 - markdown=2.6.6=py35_0
+- markupsafe=0.23=py35_2
+- mistune=0.7.3=py35_0
+- nbconvert=4.2.0=py35_0
+- nbformat=4.1.0=py35_0
 - path.py=8.2.1=py35_0
 - pickleshare=0.7.4=py35_0
 - pip=8.1.2=py35_0
@@ -20,13 +28,14 @@ dependencies:
 - wheel=0.29.0=py35_0
 - win_unicode_console=0.5=py35_0
 - pip:
+  - beautifulsoup4==4.5.1
   - blinker==1.4
+  - bs4==0.0.1
   - docutils==0.12
   - feedgenerator==1.9
   - ghp-import==0.4.1
   - ipython-genutils==0.1.0
-  - jinja2==2.8
-  - markupsafe==0.23
+  - jupyter-core==4.2.0
   - pelican==3.6.3
   - prompt-toolkit==1.0.3
   - python-dateutil==2.5.3
