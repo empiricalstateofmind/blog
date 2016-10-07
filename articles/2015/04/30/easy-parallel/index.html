@@ -65,6 +65,7 @@ Andrew Mellor            </a>
                     <li><a href="/vitae">Vitae</a></li>
                     <li><a href="/research">Research</a></li>
                     <li><a href="/blog">Blog</a></li>
+                    <li><a href="/projects/projects.html">Projects</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
               <li><a href="../../../../../archives.html"><i class="fa fa-th-list"></i><span class="icon-label">Archives</span></a></li>
@@ -1095,38 +1096,31 @@ you have some computationally intensive program which is not called on a regular
 experience of the programmer), however as we'll see, writing an implementation in IPython can be quick and painless. Of course more tailored parallel implementations require more effort 
 should use a more established MPI such as OpenMPI. Thankfully this can be done within the IPython framework.</p>
 <p>To begin, we will set up the engines that we will use for our computation.</p>
-<h2 id="Basics">Basics<a class="anchor-link" href="#Basics">&#182;</a></h2><p>The client is handler for all of the engines (kernels) on a cluster.</p>
-
+<h2 id="Basics">Basics<a class="anchor-link" href="#Basics">¶</a></h2><p>The client is handler for all of the engines (kernels) on a cluster.</p>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[2]:</div>
+<div class="prompt input_prompt">In [2]:</div>
 <div class="inner_cell">
-    <div class="input_area">
+<div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="kn">from</span> <span class="nn">IPython.parallel</span> <span class="kn">import</span> <span class="n">Client</span>
 <span class="o">%</span><span class="k">pylab</span> inline
 </pre></div>
-
 </div>
 </div>
 </div>
-
 <div class="output_wrapper">
 <div class="output">
-
-
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>Populating the interactive namespace from numpy and matplotlib
 </pre>
 </div>
 </div>
-
 </div>
 </div>
-
 </div>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="prompt input_prompt">
@@ -1134,43 +1128,35 @@ should use a more established MPI such as OpenMPI. Thankfully this can be done w
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Before we start, we first need to assign a number of engines in our cluster. This can be done through the IPython notebook interface or through the command line. The basic syntax is</p>
-
 <pre><code>$ ipcluster start -n 4</code></pre>
 <p>which starts a cluster of 4 engines to compute on. For more help use <code>$ ipcluster -h</code>
 or consult the <a href="https://ipython.org/ipython-doc/dev/parallel/parallel_process.html">documentation</a> to set up engines with specific settings or parameters by creating a profile.</p>
 <p>We begin by calling the Client() function.</p>
-
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[3]:</div>
+<div class="prompt input_prompt">In [3]:</div>
 <div class="inner_cell">
-    <div class="input_area">
+<div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">()</span>
 <span class="n">client</span><span class="o">.</span><span class="n">block</span> <span class="o">=</span> <span class="bp">True</span> <span class="c1"># Computations run synchronously.</span>
 <span class="k">print</span> <span class="n">client</span><span class="o">.</span><span class="n">ids</span>
 </pre></div>
-
 </div>
 </div>
 </div>
-
 <div class="output_wrapper">
 <div class="output">
-
-
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>[0, 1]
 </pre>
 </div>
 </div>
-
 </div>
 </div>
-
 </div>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="prompt input_prompt">
@@ -1179,55 +1165,43 @@ or consult the <a href="https://ipython.org/ipython-doc/dev/parallel/parallel_pr
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>If there are no engines running, or they are incorrectly set up then this will throw an error.</p>
 <p>The way we access the engines is through client <em>views</em>. There are two types of view:</p>
-<h4 id="Direct-Views">Direct Views<a class="anchor-link" href="#Direct-Views">&#182;</a></h4><p>Direct views allows the computation of a task on all of the engines simultaneously:</p>
-
+<h4 id="Direct-Views">Direct Views<a class="anchor-link" href="#Direct-Views">¶</a></h4><p>Direct views allows the computation of a task on all of the engines simultaneously:</p>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[4]:</div>
+<div class="prompt input_prompt">In [4]:</div>
 <div class="inner_cell">
-    <div class="input_area">
+<div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="n">dview</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">direct_view</span><span class="p">()</span>
 </pre></div>
-
 </div>
 </div>
 </div>
-
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[5]:</div>
+<div class="prompt input_prompt">In [5]:</div>
 <div class="inner_cell">
-    <div class="input_area">
+<div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">x</span>
 
-<span class="n">dview</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s2">&quot;Hello World&quot;</span><span class="p">)</span>
+<span class="n">dview</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s2">"Hello World"</span><span class="p">)</span>
 </pre></div>
-
 </div>
 </div>
 </div>
-
 <div class="output_wrapper">
 <div class="output">
-
-
 <div class="output_area"><div class="prompt output_prompt">Out[5]:</div>
-
-
 <div class="output_text output_subarea output_execute_result">
-<pre>[&#39;Hello World&#39;, &#39;Hello World&#39;]</pre>
-</div>
-
-</div>
-
+<pre>['Hello World', 'Hello World']</pre>
 </div>
 </div>
-
+</div>
+</div>
 </div>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="prompt input_prompt">
@@ -1235,119 +1209,92 @@ or consult the <a href="https://ipython.org/ipython-doc/dev/parallel/parallel_pr
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>One can also select a subset of the engines directly using list slicing:</p>
-
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[6]:</div>
+<div class="prompt input_prompt">In [6]:</div>
 <div class="inner_cell">
-    <div class="input_area">
+<div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="n">even_dview</span> <span class="o">=</span> <span class="n">client</span><span class="p">[::</span><span class="mi">2</span><span class="p">]</span>
-<span class="n">even_dview</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s2">&quot;Hello World&quot;</span><span class="p">)</span>
+<span class="n">even_dview</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s2">"Hello World"</span><span class="p">)</span>
 </pre></div>
-
 </div>
 </div>
 </div>
-
 <div class="output_wrapper">
 <div class="output">
-
-
 <div class="output_area"><div class="prompt output_prompt">Out[6]:</div>
-
-
 <div class="output_text output_subarea output_execute_result">
-<pre>[&#39;Hello World&#39;]</pre>
-</div>
-
-</div>
-
+<pre>['Hello World']</pre>
 </div>
 </div>
-
+</div>
+</div>
 </div>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="Load-Balanced-Views">Load Balanced Views<a class="anchor-link" href="#Load-Balanced-Views">&#182;</a></h4><p>A load balanced view allows the computation of a task on any one engine. The engine is chosen by the scheduler using some black box logic.</p>
-
+<h4 id="Load-Balanced-Views">Load Balanced Views<a class="anchor-link" href="#Load-Balanced-Views">¶</a></h4><p>A load balanced view allows the computation of a task on any one engine. The engine is chosen by the scheduler using some black box logic.</p>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[7]:</div>
+<div class="prompt input_prompt">In [7]:</div>
 <div class="inner_cell">
-    <div class="input_area">
+<div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="n">bview</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">load_balanced_view</span><span class="p">()</span>
 
-<span class="n">bview</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s2">&quot;Hello World&quot;</span><span class="p">)</span>
+<span class="n">bview</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s2">"Hello World"</span><span class="p">)</span>
 </pre></div>
-
 </div>
 </div>
 </div>
-
 <div class="output_wrapper">
 <div class="output">
-
-
 <div class="output_area"><div class="prompt output_prompt">Out[7]:</div>
-
-
 <div class="output_text output_subarea output_execute_result">
-<pre>&#39;Hello World&#39;</pre>
-</div>
-
-</div>
-
+<pre>'Hello World'</pre>
 </div>
 </div>
-
+</div>
+</div>
 </div>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="How-do-we-execute-code?">How do we execute code?<a class="anchor-link" href="#How-do-we-execute-code?">&#182;</a></h4><p>There are many ways to execute code in a Direct view. As an example we will get each engine to return its process ID (PID).
+<h4 id="How-do-we-execute-code?">How do we execute code?<a class="anchor-link" href="#How-do-we-execute-code?">¶</a></h4><p>There are many ways to execute code in a Direct view. As an example we will get each engine to return its process ID (PID).
 If we were considering one engine only we would run:</p>
-
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[8]:</div>
+<div class="prompt input_prompt">In [8]:</div>
 <div class="inner_cell">
-    <div class="input_area">
+<div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
 <span class="k">print</span> <span class="n">os</span><span class="o">.</span><span class="n">getpid</span><span class="p">()</span>
 </pre></div>
-
 </div>
 </div>
 </div>
-
 <div class="output_wrapper">
 <div class="output">
-
-
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>28100
 </pre>
 </div>
 </div>
-
 </div>
 </div>
-
 </div>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="prompt input_prompt">
@@ -1355,38 +1302,28 @@ If we were considering one engine only we would run:</p>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>As shown before, we can apply a function (with parameters if needed) to the view, which returns the result for each engine in a list.</p>
-
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[9]:</div>
+<div class="prompt input_prompt">In [9]:</div>
 <div class="inner_cell">
-    <div class="input_area">
+<div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="n">dview</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getpid</span><span class="p">)</span>
 </pre></div>
-
 </div>
 </div>
 </div>
-
 <div class="output_wrapper">
 <div class="output">
-
-
 <div class="output_area"><div class="prompt output_prompt">Out[9]:</div>
-
-
 <div class="output_text output_subarea output_execute_result">
 <pre>[28148, 28154]</pre>
 </div>
-
-</div>
-
 </div>
 </div>
-
+</div>
 </div>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="prompt input_prompt">
@@ -1394,15 +1331,14 @@ If we were considering one engine only we would run:</p>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Alternatively we can apply a function decorator to our function and call it as normal. A function decorator is a wrapper function, or a function which has one or more functions as a parameter.</p>
-
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[10]:</div>
+<div class="prompt input_prompt">In [10]:</div>
 <div class="inner_cell">
-    <div class="input_area">
+<div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="nd">@dview.remote</span><span class="p">(</span><span class="n">block</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">getpid</span><span class="p">():</span>
     <span class="kn">import</span> <span class="nn">os</span>
@@ -1410,27 +1346,18 @@ If we were considering one engine only we would run:</p>
 
 <span class="n">getpid</span><span class="p">()</span>
 </pre></div>
-
 </div>
 </div>
 </div>
-
 <div class="output_wrapper">
 <div class="output">
-
-
 <div class="output_area"><div class="prompt output_prompt">Out[10]:</div>
-
-
 <div class="output_text output_subarea output_execute_result">
 <pre>[28148, 28154]</pre>
 </div>
-
-</div>
-
 </div>
 </div>
-
+</div>
 </div>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="prompt input_prompt">
@@ -1438,28 +1365,23 @@ If we were considering one engine only we would run:</p>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Another method uses the cell magic <code>%%px</code> or line magic <code>%px</code>. This executes the line or cell on a direct view of the current client (specifically its current list of targets).</p>
-
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[11]:</div>
+<div class="prompt input_prompt">In [11]:</div>
 <div class="inner_cell">
-    <div class="input_area">
+<div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="o">%%</span><span class="k">px</span> 
 import os
 print os.getpid()
 </pre></div>
-
 </div>
 </div>
 </div>
-
 <div class="output_wrapper">
 <div class="output">
-
-
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>[stdout:0] 28148
@@ -1467,10 +1389,8 @@ print os.getpid()
 </pre>
 </div>
 </div>
-
 </div>
 </div>
-
 </div>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="prompt input_prompt">
@@ -1478,27 +1398,22 @@ print os.getpid()
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Finally, and most fundamentally, one can excute a string of code using the <em>execute</em> function.</p>
-
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[12]:</div>
+<div class="prompt input_prompt">In [12]:</div>
 <div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="n">res</span> <span class="o">=</span> <span class="n">dview</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s1">&#39;print os.getpid()&#39;</span><span class="p">)</span>
+<div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">res</span> <span class="o">=</span> <span class="n">dview</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s1">'print os.getpid()'</span><span class="p">)</span>
 <span class="n">res</span><span class="o">.</span><span class="n">display_outputs</span><span class="p">()</span>
 </pre></div>
-
 </div>
 </div>
 </div>
-
 <div class="output_wrapper">
 <div class="output">
-
-
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>[stdout:0] 28148
@@ -1506,90 +1421,70 @@ print os.getpid()
 </pre>
 </div>
 </div>
-
 </div>
 </div>
-
 </div>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="Imports-and-Environments">Imports and Environments<a class="anchor-link" href="#Imports-and-Environments">&#182;</a></h4><p>Chances are if one is concerned with computation speed, you will be using numpy and scipy or any number of packages or custom scripts. As with executing code, there are multiple ways to manage imports:</p>
-
+<h4 id="Imports-and-Environments">Imports and Environments<a class="anchor-link" href="#Imports-and-Environments">¶</a></h4><p>Chances are if one is concerned with computation speed, you will be using numpy and scipy or any number of packages or custom scripts. As with executing code, there are multiple ways to manage imports:</p>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[13]:</div>
+<div class="prompt input_prompt">In [13]:</div>
 <div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="n">dview</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s1">&#39;import numpy&#39;</span><span class="p">)</span>
+<div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">dview</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s1">'import numpy'</span><span class="p">)</span>
 </pre></div>
-
 </div>
 </div>
 </div>
-
 <div class="output_wrapper">
 <div class="output">
-
-
 <div class="output_area"><div class="prompt output_prompt">Out[13]:</div>
-
-
 <div class="output_text output_subarea output_execute_result">
-<pre>&lt;AsyncResult: finished&gt;</pre>
-</div>
-
-</div>
-
+<pre><asyncresult: finished></pre>
 </div>
 </div>
-
+</div>
+</div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[14]:</div>
+<div class="prompt input_prompt">In [14]:</div>
 <div class="inner_cell">
-    <div class="input_area">
+<div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="o">%</span><span class="k">px</span> import numpy
 </pre></div>
-
 </div>
 </div>
 </div>
-
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[15]:</div>
+<div class="prompt input_prompt">In [15]:</div>
 <div class="inner_cell">
-    <div class="input_area">
+<div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="k">with</span> <span class="n">dview</span><span class="o">.</span><span class="n">sync_imports</span><span class="p">():</span>
     <span class="kn">import</span> <span class="nn">numpy</span>
 </pre></div>
-
 </div>
 </div>
 </div>
-
 <div class="output_wrapper">
 <div class="output">
-
-
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>importing numpy on engine(s)
 </pre>
 </div>
 </div>
-
 </div>
 </div>
-
 </div>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="prompt input_prompt">
@@ -1598,58 +1493,47 @@ print os.getpid()
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>The later method uses the context manager <code>sync_imports</code> which simultaneously sets the local and remote imports.</p>
 <p>It is also possible for all remote engines to run a centralised script. This could be used for imports, defining application functions, or actual computation.</p>
-
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[16]:</div>
+<div class="prompt input_prompt">In [16]:</div>
 <div class="inner_cell">
-    <div class="input_area">
+<div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="o">%%</span><span class="k">file</span> script.py
 
 def hello_world():
-    print &quot;Hello World&quot;
+    print "Hello World"
 
 hello_world()
 </pre></div>
-
 </div>
 </div>
 </div>
-
 <div class="output_wrapper">
 <div class="output">
-
-
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>Writing script.py
 </pre>
 </div>
 </div>
-
 </div>
 </div>
-
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[17]:</div>
+<div class="prompt input_prompt">In [17]:</div>
 <div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="n">dview</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;script.py&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">display_outputs</span><span class="p">()</span>
+<div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">dview</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">"script.py"</span><span class="p">)</span><span class="o">.</span><span class="n">display_outputs</span><span class="p">()</span>
 </pre></div>
-
 </div>
 </div>
 </div>
-
 <div class="output_wrapper">
 <div class="output">
-
-
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>[stdout:0] Hello World
@@ -1657,10 +1541,8 @@ hello_world()
 </pre>
 </div>
 </div>
-
 </div>
 </div>
-
 </div>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="prompt input_prompt">
@@ -1668,29 +1550,24 @@ hello_world()
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Since the computational engines are all running with IPython, then %magics are supported, as well as inline plotting, for example,</p>
-
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[19]:</div>
+<div class="prompt input_prompt">In [19]:</div>
 <div class="inner_cell">
-    <div class="input_area">
+<div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="o">%%</span><span class="k">px</span> 
 %pylab inline
 z = np.random.random(10)
 hist(z);
 </pre></div>
-
 </div>
 </div>
 </div>
-
 <div class="output_wrapper">
 <div class="output">
-
-
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>[stdout:0] Populating the interactive namespace from numpy and matplotlib
@@ -1698,19 +1575,12 @@ hist(z);
 </pre>
 </div>
 </div>
-
 <div class="output_area"><div class="prompt"></div>
-
-
 <div class="output_text output_subarea ">
 <pre>[output:0]</pre>
 </div>
-
 </div>
-
 <div class="output_area"><div class="prompt"></div>
-
-
 <div class="output_png output_subarea ">
 <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAXcAAAEACAYAAABI5zaHAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAALEgAACxIB0t1+/AAADflJREFUeJzt3X+MZXddxvH3Y7eNIKGlltTYXWwCRShR0iqllBjGH4nb
@@ -1778,22 +1648,14 @@ Bp43dqY1Y3ek3Oc8Vr88HKvbgX9kB35Iz/nZeyOrfzFzB3DFLsn088Bf7sT7Nud7dwbwN0M/3QG8
 ahdkesGw/S5W/3jg1Fn79CYmSWrI/2ZPkhqy3CWpIctdkhqy3CWpIctdkhqy3CWpIctdkhqy3CWp
 of8GktFgSmJpsUoAAAAASUVORK5CYII=
 ">
+</img></div>
 </div>
-
-</div>
-
 <div class="output_area"><div class="prompt"></div>
-
-
 <div class="output_text output_subarea ">
 <pre>[output:1]</pre>
 </div>
-
 </div>
-
 <div class="output_area"><div class="prompt"></div>
-
-
 <div class="output_png output_subarea ">
 <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAXcAAAEACAYAAABI5zaHAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAALEgAACxIB0t1+/AAAEP5JREFUeJzt3X+s3Xddx/Hna+0QCIFJljSwlhRdIcwoVLTUMdhFMdka
@@ -1874,20 +1736,17 @@ BHg7QG+P+bXAf021y9Vh2bk51pV7edPTaV3mAvgr4GeB23or1qerasusep6UjnNxTuj4NfJIks8D
 DwHPAB+vqubCveP74m+ATyQ5wMJi9M+r6vjMmp6QJJ8CLgcuTHIU2MHC9tzIuelNTJLUIP/MniQ1
 yHCXpAYZ7pLUIMNdkhpkuEtSgwx3SWqQ4S5JDTLcJalB/w/CazPRyWse9gAAAABJRU5ErkJggg==
 ">
-</div>
-
-</div>
-
+</img></div>
 </div>
 </div>
-
+</div>
 </div>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="Accessing-and-Setting-Data">Accessing and Setting Data<a class="anchor-link" href="#Accessing-and-Setting-Data">&#182;</a></h4>
+<h4 id="Accessing-and-Setting-Data">Accessing and Setting Data<a class="anchor-link" href="#Accessing-and-Setting-Data">¶</a></h4>
 </div>
 </div>
 </div>
@@ -1897,40 +1756,33 @@ yHCXpAYZ7pLUIMNdkhpkuEtSgwx3SWqQ4S5JDTLcJalB/w/CazPRyWse9gAAAABJRU5ErkJggg==
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Accessing and setting data can be done in multiple ways (spotting a theme here?). All variables and objects on each engine can be accessed like a dictionary using the direct view. We are not limited to accessing purely what we have assigned, anything in the global namespace on the remote engine is fair game.</p>
-
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[20]:</div>
+<div class="prompt input_prompt">In [20]:</div>
 <div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="n">dview</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">5</span>
-<span class="n">dview</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span>
-<span class="k">print</span> <span class="n">dview</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span>
-<span class="k">print</span> <span class="n">dview</span><span class="p">[</span><span class="s1">&#39;os.getpid&#39;</span><span class="p">]</span>
+<div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">dview</span><span class="p">[</span><span class="s1">'a'</span><span class="p">]</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">dview</span><span class="p">[</span><span class="s1">'b'</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="k">print</span> <span class="n">dview</span><span class="p">[</span><span class="s1">'a'</span><span class="p">]</span>
+<span class="k">print</span> <span class="n">dview</span><span class="p">[</span><span class="s1">'os.getpid'</span><span class="p">]</span>
 </pre></div>
-
 </div>
 </div>
 </div>
-
 <div class="output_wrapper">
 <div class="output">
-
-
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>[5, 5]
-[&lt;built-in function getpid&gt;, &lt;built-in function getpid&gt;]
+[<built-in function getpid>, <built-in function getpid>]
 </pre>
 </div>
 </div>
-
 </div>
 </div>
-
 </div>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="prompt input_prompt">
@@ -1938,39 +1790,29 @@ yHCXpAYZ7pLUIMNdkhpkuEtSgwx3SWqQ4S5JDTLcJalB/w/CazPRyWse9gAAAABJRU5ErkJggg==
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Values can be set and retrieved using the more conventional <em>push</em> and <em>pull</em> methods respectively.</p>
-
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[21]:</div>
+<div class="prompt input_prompt">In [21]:</div>
 <div class="inner_cell">
-    <div class="input_area">
+<div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="n">dview</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
-<span class="n">dview</span><span class="o">.</span><span class="n">pull</span><span class="p">((</span><span class="s1">&#39;a&#39;</span><span class="p">,</span><span class="s1">&#39;b&#39;</span><span class="p">))</span>
+<span class="n">dview</span><span class="o">.</span><span class="n">pull</span><span class="p">((</span><span class="s1">'a'</span><span class="p">,</span><span class="s1">'b'</span><span class="p">))</span>
 </pre></div>
-
 </div>
 </div>
 </div>
-
 <div class="output_wrapper">
 <div class="output">
-
-
 <div class="output_area"><div class="prompt output_prompt">Out[21]:</div>
-
-
 <div class="output_text output_subarea output_execute_result">
 <pre>[[1, 2], [1, 2]]</pre>
 </div>
-
-</div>
-
 </div>
 </div>
-
+</div>
 </div>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="prompt input_prompt">
@@ -1978,28 +1820,23 @@ yHCXpAYZ7pLUIMNdkhpkuEtSgwx3SWqQ4S5JDTLcJalB/w/CazPRyWse9gAAAABJRU5ErkJggg==
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Arrays can be distributed evenly over the engines using the <em>scatter</em> method.</p>
-
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[22]:</div>
+<div class="prompt input_prompt">In [22]:</div>
 <div class="inner_cell">
-    <div class="input_area">
+<div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">32</span><span class="p">)</span>
-<span class="n">dview</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
+<span class="n">dview</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="s1">'a'</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
 <span class="o">%</span><span class="k">px</span> print a
 </pre></div>
-
 </div>
 </div>
 </div>
-
 <div class="output_wrapper">
 <div class="output">
-
-
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>[stdout:0] [ 0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15]
@@ -2007,10 +1844,8 @@ yHCXpAYZ7pLUIMNdkhpkuEtSgwx3SWqQ4S5JDTLcJalB/w/CazPRyWse9gAAAABJRU5ErkJggg==
 </pre>
 </div>
 </div>
-
 </div>
 </div>
-
 </div>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="prompt input_prompt">
@@ -2018,60 +1853,49 @@ yHCXpAYZ7pLUIMNdkhpkuEtSgwx3SWqQ4S5JDTLcJalB/w/CazPRyWse9gAAAABJRU5ErkJggg==
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>This allows us to compute the result for each array before using the <em>gather</em> method to piece them back together.</p>
-
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[23]:</div>
+<div class="prompt input_prompt">In [23]:</div>
 <div class="inner_cell">
-    <div class="input_area">
+<div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="o">%</span><span class="k">px</span> a = a**2
-<span class="n">dview</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span>
+<span class="n">dview</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="s1">'a'</span><span class="p">)</span>
 </pre></div>
-
 </div>
 </div>
 </div>
-
 <div class="output_wrapper">
 <div class="output">
-
-
 <div class="output_area"><div class="prompt output_prompt">Out[23]:</div>
-
-
 <div class="output_text output_subarea output_execute_result">
 <pre>array([  0,   1,   4,   9,  16,  25,  36,  49,  64,  81, 100, 121, 144,
        169, 196, 225, 256, 289, 324, 361, 400, 441, 484, 529, 576, 625,
        676, 729, 784, 841, 900, 961])</pre>
 </div>
-
-</div>
-
 </div>
 </div>
-
+</div>
 </div>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="Load-Balanced-Views">Load Balanced Views<a class="anchor-link" href="#Load-Balanced-Views">&#182;</a></h4><p>Direct views are simple to understand and are extremely useful when we know how to split our computation up efficiently. In some cases however there may be a list of computational tasks with undetermined computational runtime which is where a load balanced view becomes useful. The load balanced view was defined earlier as:</p>
+<h4 id="Load-Balanced-Views">Load Balanced Views<a class="anchor-link" href="#Load-Balanced-Views">¶</a></h4><p>Direct views are simple to understand and are extremely useful when we know how to split our computation up efficiently. In some cases however there may be a list of computational tasks with undetermined computational runtime which is where a load balanced view becomes useful. The load balanced view was defined earlier as:</p>
 <div class="highlight"><pre><span></span><span class="n">bview</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">load_balanced_view</span><span class="p">()</span>
 </pre></div>
 <p>Below we have a function which will hopefully illustrate how the view behaves. The function sleeps for a random amount of time before returning the PID of the engine and a random number multiplied by an inputted factor.</p>
-
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[24]:</div>
+<div class="prompt input_prompt">In [24]:</div>
 <div class="inner_cell">
-    <div class="input_area">
+<div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">random_number</span><span class="p">(</span><span class="n">factor</span><span class="p">):</span>
     <span class="kn">import</span> <span class="nn">time</span>
     <span class="kn">import</span> <span class="nn">os</span>
@@ -2080,11 +1904,9 @@ yHCXpAYZ7pLUIMNdkhpkuEtSgwx3SWqQ4S5JDTLcJalB/w/CazPRyWse9gAAAABJRU5ErkJggg==
     <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="o">*</span><span class="n">r</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">getpid</span><span class="p">(),</span> <span class="n">factor</span><span class="o">*</span><span class="n">r</span>
 </pre></div>
-
 </div>
 </div>
 </div>
-
 </div>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="prompt input_prompt">
@@ -2092,39 +1914,29 @@ yHCXpAYZ7pLUIMNdkhpkuEtSgwx3SWqQ4S5JDTLcJalB/w/CazPRyWse9gAAAABJRU5ErkJggg==
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>If we apply a function to the load balanced view we receive only one result as the function has been only been executed once.</p>
-
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[25]:</div>
+<div class="prompt input_prompt">In [25]:</div>
 <div class="inner_cell">
-    <div class="input_area">
+<div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="n">bview</span><span class="o">.</span><span class="n">block</span><span class="o">=</span><span class="bp">True</span>
 <span class="n">bview</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">random_number</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
-
 </div>
 </div>
 </div>
-
 <div class="output_wrapper">
 <div class="output">
-
-
 <div class="output_area"><div class="prompt output_prompt">Out[25]:</div>
-
-
 <div class="output_text output_subarea output_execute_result">
 <pre>(28148, 0.13589479515258984)</pre>
 </div>
-
-</div>
-
 </div>
 </div>
-
+</div>
 </div>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="prompt input_prompt">
@@ -2132,23 +1944,20 @@ yHCXpAYZ7pLUIMNdkhpkuEtSgwx3SWqQ4S5JDTLcJalB/w/CazPRyWse9gAAAABJRU5ErkJggg==
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>To pass in multiple inputs (effectively creating a queue of parameters), we can use the <em>map</em> function. By setting <code>bview.block=False</code> we allow the results to stream in asynchronously.</p>
-
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[26]:</div>
+<div class="prompt input_prompt">In [26]:</div>
 <div class="inner_cell">
-    <div class="input_area">
+<div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="n">bview</span><span class="o">.</span><span class="n">block</span> <span class="o">=</span> <span class="bp">False</span>
 <span class="n">res</span> <span class="o">=</span> <span class="n">bview</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">random_number</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
 </pre></div>
-
 </div>
 </div>
 </div>
-
 </div>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="prompt input_prompt">
@@ -2156,38 +1965,28 @@ yHCXpAYZ7pLUIMNdkhpkuEtSgwx3SWqQ4S5JDTLcJalB/w/CazPRyWse9gAAAABJRU5ErkJggg==
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>The map instantly returns an <em>AsyncResult</em> object which begins empty and collects the results as they are computed. To check whether the computation is complete we run</p>
-
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[27]:</div>
+<div class="prompt input_prompt">In [27]:</div>
 <div class="inner_cell">
-    <div class="input_area">
+<div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="n">res</span><span class="o">.</span><span class="n">ready</span><span class="p">()</span>
 </pre></div>
-
 </div>
 </div>
 </div>
-
 <div class="output_wrapper">
 <div class="output">
-
-
 <div class="output_area"><div class="prompt output_prompt">Out[27]:</div>
-
-
 <div class="output_text output_subarea output_execute_result">
 <pre>False</pre>
 </div>
-
-</div>
-
 </div>
 </div>
-
+</div>
 </div>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="prompt input_prompt">
@@ -2195,27 +1994,22 @@ yHCXpAYZ7pLUIMNdkhpkuEtSgwx3SWqQ4S5JDTLcJalB/w/CazPRyWse9gAAAABJRU5ErkJggg==
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>which in this case is <code>False</code>. After waiting a sufficient amount of time, the complete result becomes available:</p>
-
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[29]:</div>
+<div class="prompt input_prompt">In [29]:</div>
 <div class="inner_cell">
-    <div class="input_area">
+<div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="k">print</span> <span class="n">res</span><span class="o">.</span><span class="n">ready</span><span class="p">()</span>
 <span class="k">print</span> <span class="n">res</span><span class="o">.</span><span class="n">result</span>
 </pre></div>
-
 </div>
 </div>
 </div>
-
 <div class="output_wrapper">
 <div class="output">
-
-
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>True
@@ -2223,10 +2017,8 @@ yHCXpAYZ7pLUIMNdkhpkuEtSgwx3SWqQ4S5JDTLcJalB/w/CazPRyWse9gAAAABJRU5ErkJggg==
 </pre>
 </div>
 </div>
-
 </div>
 </div>
-
 </div>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="prompt input_prompt">
@@ -2234,27 +2026,22 @@ yHCXpAYZ7pLUIMNdkhpkuEtSgwx3SWqQ4S5JDTLcJalB/w/CazPRyWse9gAAAABJRU5ErkJggg==
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>If we call result before the computation is complete then the system will wait until it is. Note that there is no particular ordering to the engine used - the scheduler is picking the next available engine to run the function. The load balanced view map is also iterable which allows for results to be returned as and when they become available.</p>
-
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[30]:</div>
+<div class="prompt input_prompt">In [30]:</div>
 <div class="inner_cell">
-    <div class="input_area">
+<div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">bview</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">random_number</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)):</span>
     <span class="k">print</span> <span class="n">result</span>
 </pre></div>
-
 </div>
 </div>
 </div>
-
 <div class="output_wrapper">
 <div class="output">
-
-
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>(28154, 0.0)
@@ -2270,17 +2057,15 @@ yHCXpAYZ7pLUIMNdkhpkuEtSgwx3SWqQ4S5JDTLcJalB/w/CazPRyWse9gAAAABJRU5ErkJggg==
 </pre>
 </div>
 </div>
-
 </div>
 </div>
-
 </div>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Applying-Parallel-Computing-to-Fractals-(Julia-sets)">Applying Parallel Computing to Fractals (Julia sets)<a class="anchor-link" href="#Applying-Parallel-Computing-to-Fractals-(Julia-sets)">&#182;</a></h2>
+<h2 id="Applying-Parallel-Computing-to-Fractals-(Julia-sets)">Applying Parallel Computing to Fractals (Julia sets)<a class="anchor-link" href="#Applying-Parallel-Computing-to-Fractals-(Julia-sets)">¶</a></h2>
 </div>
 </div>
 </div>
@@ -2290,24 +2075,21 @@ yHCXpAYZ7pLUIMNdkhpkuEtSgwx3SWqQ4S5JDTLcJalB/w/CazPRyWse9gAAAABJRU5ErkJggg==
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Now for an interesting application. Since everyone has <a href="https://www.youtube.com/watch?v=VJTFfIqO4TU">estimated $\pi$</a> a thousand times before we'll avoid that example. Instead we'll look at visualising <a href="http://en.wikipedia.org/wiki/Julia_set">Julia sets</a>, closely following this well written guide to <a href="http://www.researchgate.net/publication/272679245_NumPy__SciPy_Recipes_for_Image_Processing_Creating_Fractal_Images">Numpy/SciPy Recipes for Image Processing</a>.</p>
-<h4 id="Theory-in-Brief">Theory in Brief<a class="anchor-link" href="#Theory-in-Brief">&#182;</a></h4><p>We consider a rational function $f: \mathbb{C} \to \mathbb{C}$. In this example we'll consider the function $f(z) = z^2 + c$ where $c \in \mathbb{C}$. Written in Python this function is:</p>
-
+<h4 id="Theory-in-Brief">Theory in Brief<a class="anchor-link" href="#Theory-in-Brief">¶</a></h4><p>We consider a rational function $f: \mathbb{C} \to \mathbb{C}$. In this example we'll consider the function $f(z) = z^2 + c$ where $c \in \mathbb{C}$. Written in Python this function is:</p>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[31]:</div>
+<div class="prompt input_prompt">In [31]:</div>
 <div class="inner_cell">
-    <div class="input_area">
+<div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">c</span><span class="o">=-.</span><span class="mo">065</span><span class="o">+.</span><span class="mi">66j</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">z</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">c</span>
 </pre></div>
-
 </div>
 </div>
 </div>
-
 </div>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="prompt input_prompt">
@@ -2319,15 +2101,14 @@ yHCXpAYZ7pLUIMNdkhpkuEtSgwx3SWqQ4S5JDTLcJalB/w/CazPRyWse9gAAAABJRU5ErkJggg==
 <p>Points where $f^t(z)$ diverge are called the <em>escape set</em> of $f$, and points which do not diverge are called the <em>prisoner set</em> of $f$. The Julia set of $f$ is then defined to be the boundary of the prisoner set, i.e,</p>
 $$J(f) = \partial  \left\{ z \in \mathbb{C} \left\vert  \frac{}{}\right . \lim_{t \to \infty} |f^t(z)|< \infty \right\} $$<p>The interesting fact about this dynamical system is that it behaves chaotically for almost all $c$, that is to say that two nearby points $z_0$ and $z_0 + \epsilon$ will likely yield very different trajectories in the large $t$ limit.</p>
 <p>To begin with we define the section of the complex plane we want to explore (<code>zmin</code> and <code>zmax</code>) as well as our resolution (<code>m</code> and <code>n</code>). The resolution defines how many inital conditions we are going to sample, which in this case is $mn=1024^2$.</p>
-
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[32]:</div>
+<div class="prompt input_prompt">In [32]:</div>
 <div class="inner_cell">
-    <div class="input_area">
+<div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="n">m</span><span class="o">=</span><span class="mi">1024</span>
 <span class="n">n</span><span class="o">=</span><span class="mi">1024</span>
 <span class="n">zmin</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.3</span> <span class="o">-</span> <span class="mi">1j</span> <span class="o">*</span> <span class="mf">1.3</span>
@@ -2338,11 +2119,9 @@ $$J(f) = \partial  \left\{ z \in \mathbb{C} \left\vert  \frac{}{}\right . \lim_{
 <span class="n">X</span><span class="p">,</span> <span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">)</span>
 <span class="n">Z</span> <span class="o">=</span> <span class="n">X</span> <span class="o">+</span> <span class="mi">1j</span> <span class="o">*</span> <span class="n">Y</span>
 </pre></div>
-
 </div>
 </div>
 </div>
-
 </div>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="prompt input_prompt">
@@ -2350,26 +2129,21 @@ $$J(f) = \partial  \left\{ z \in \mathbb{C} \left\vert  \frac{}{}\right . \lim_{
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Using the <code>meshgrid</code> function we can easily create an array of complex numbers.</p>
-
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[33]:</div>
+<div class="prompt input_prompt">In [33]:</div>
 <div class="inner_cell">
-    <div class="input_area">
+<div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="k">print</span> <span class="n">Z</span><span class="p">[:</span><span class="mi">2</span><span class="p">,:</span><span class="mi">2</span><span class="p">]</span>
 </pre></div>
-
 </div>
 </div>
 </div>
-
 <div class="output_wrapper">
 <div class="output">
-
-
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>[[-1.30000000-1.3j        -1.29745846-1.3j       ]
@@ -2377,40 +2151,35 @@ $$J(f) = \partial  \left\{ z \in \mathbb{C} \left\vert  \frac{}{}\right . \lim_{
 </pre>
 </div>
 </div>
-
 </div>
 </div>
-
 </div>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="Application">Application<a class="anchor-link" href="#Application">&#182;</a></h4><p>The Julia set itself is very difficult to be determined exactly and so we plot the escape set of the function instead.
+<h4 id="Application">Application<a class="anchor-link" href="#Application">¶</a></h4><p>The Julia set itself is very difficult to be determined exactly and so we plot the escape set of the function instead.
 For each initial condition we count the number of iterations until the map escapes a threshold radius, and plot this.</p>
-
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[34]:</div>
+<div class="prompt input_prompt">In [34]:</div>
 <div class="inner_cell">
-    <div class="input_area">
+<div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">julia</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="mi">256</span><span class="p">):</span>
     <span class="n">J</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">Z</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">*</span> <span class="n">tmax</span>
     <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">tmax</span><span class="p">):</span>
-        <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">Z</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mf">2.</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">Z</span><span class="p">)</span> <span class="o"><=</span> <span class="mf">2.</span>
         <span class="n">Z</span><span class="p">[</span> <span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">Z</span><span class="p">[</span><span class="n">mask</span><span class="p">])</span>
         <span class="n">J</span><span class="p">[</span><span class="o">-</span><span class="n">mask</span><span class="p">]</span> <span class="o">-=</span> <span class="mi">1</span>
     <span class="k">return</span> <span class="n">J</span>
 </pre></div>
-
 </div>
 </div>
 </div>
-
 </div>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="prompt input_prompt">
@@ -2420,45 +2189,36 @@ For each initial condition we count the number of iterations until the map escap
 <p>The above function carries out this function in a very succinct fashion. Firstly, we initialise an array with our maximum iteration number. We then check our complex plane array to see if any values have a modulus greater than 2. This creates a <em>boolean index array</em> which we can use to select only the elements in our array <code>Z</code> which satisfy the condition.</p>
 <p>Iterating the process <code>tmax</code> times we then arrive at our array <code>J</code> which distinguishes between escape times for each initial conditions. We can also run the algorithm in the other direction for the same result. The use of the boolean arrays means that if an iteration of the function escapes the threshold radius we do not ever apply the map again to the function - saving valuable computational time!</p>
 <p>Below we first create a copy of <code>Z</code> since our julia function edits the array in-place and we will want to use the original again later.</p>
-
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[78]:</div>
+<div class="prompt input_prompt">In [78]:</div>
 <div class="inner_cell">
-    <div class="input_area">
+<div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="n">ZZ</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">Z</span><span class="p">)</span>
 <span class="n">J</span> <span class="o">=</span> <span class="n">julia</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">ZZ</span><span class="p">)</span>
 </pre></div>
-
 </div>
 </div>
 </div>
-
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[79]:</div>
+<div class="prompt input_prompt">In [79]:</div>
 <div class="inner_cell">
-    <div class="input_area">
+<div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">])</span>
 <span class="n">imshow</span><span class="p">(</span><span class="n">J</span><span class="p">)</span>
-<span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">);</span>
+<span class="n">axis</span><span class="p">(</span><span class="s1">'off'</span><span class="p">);</span>
 </pre></div>
-
 </div>
 </div>
 </div>
-
 <div class="output_wrapper">
 <div class="output">
-
-
 <div class="output_area"><div class="prompt"></div>
-
-
 <div class="output_png output_subarea ">
 <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAJPCAYAAACgtar/AAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAALEgAACxIB0t1+/AAAIABJREFUeJzsnXd4VFX+h9/pmWTSSaMkofcOgvQi2FBAQQUV17WubXfV
@@ -5648,13 +5408,10 @@ EViCIAiCIAghRgSWIAiCIAhCiBGBJQiCIAiCEGJEYAmCIAiCIIQYEViCIAiCIAghRgSWIAiCIAhC
 iBGBJQiCIAiCEGJEYAmCIAiCIIQYEViCIAiCIAghRgSWIAiCIAhCiBGBJQiCIAiCEGJEYAmCIAiC
 IIQYEViCIAiCIAghRgSWIAiCIAhCiPl/1zobZXA9l1cAAAAASUVORK5CYII=
 ">
-</div>
-
-</div>
-
+</img></div>
 </div>
 </div>
-
+</div>
 </div>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="prompt input_prompt">
@@ -5662,15 +5419,14 @@ IIQYEViCIAiCIAghRgSWIAiCIAhCiPl/1zobZXA9l1cAAAAASUVORK5CYII=
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>In parallel we first feed the functions to each engine.</p>
-
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[80]:</div>
+<div class="prompt input_prompt">In [80]:</div>
 <div class="inner_cell">
-    <div class="input_area">
+<div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="o">%%</span><span class="k">px</span>
 
 import numpy as np
@@ -5681,16 +5437,14 @@ def f(z, c=-.065+.66j):
 def julia_parallel(f,Z,tmax=256):
     J = np.ones(Z.shape) * tmax
     for t in xrange(tmax):
-        mask = np.abs(Z) &lt;= 2.
+        mask = np.abs(Z) <= 2.
         Z[mask] = f(Z[mask])
         J[-mask] -= 1
     return J
 </pre></div>
-
 </div>
 </div>
 </div>
-
 </div>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="prompt input_prompt">
@@ -5698,25 +5452,22 @@ def julia_parallel(f,Z,tmax=256):
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>We can then scatter/distribute the array amoungst the different engines. Each engine runs the same number of loops on the same sized array so in theory the load should be evenly distributed. In reality the size of the masks may vary so one would expect some deviation in the workloads.</p>
-
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[81]:</div>
+<div class="prompt input_prompt">In [81]:</div>
 <div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="n">dview</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="s1">&#39;Z&#39;</span><span class="p">,</span> <span class="n">Z</span><span class="p">)</span>
+<div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">dview</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="s1">'Z'</span><span class="p">,</span> <span class="n">Z</span><span class="p">)</span>
 <span class="o">%</span><span class="k">px</span> ZZ = np.copy(Z)
 <span class="o">%</span><span class="k">px</span> J = julia_parallel(f,ZZ)
-<span class="n">PJ</span> <span class="o">=</span> <span class="n">dview</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="s1">&#39;J&#39;</span><span class="p">)</span>
+<span class="n">PJ</span> <span class="o">=</span> <span class="n">dview</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="s1">'J'</span><span class="p">)</span>
 </pre></div>
-
 </div>
 </div>
 </div>
-
 </div>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="prompt input_prompt">
@@ -5724,31 +5475,24 @@ def julia_parallel(f,Z,tmax=256):
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Piecing together all the parts we arrive at the same fractal as before.</p>
-
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[82]:</div>
+<div class="prompt input_prompt">In [82]:</div>
 <div class="inner_cell">
-    <div class="input_area">
+<div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">])</span>
 <span class="n">imshow</span><span class="p">(</span><span class="n">PJ</span><span class="p">)</span>
-<span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">);</span>
+<span class="n">axis</span><span class="p">(</span><span class="s1">'off'</span><span class="p">);</span>
 </pre></div>
-
 </div>
 </div>
 </div>
-
 <div class="output_wrapper">
 <div class="output">
-
-
 <div class="output_area"><div class="prompt"></div>
-
-
 <div class="output_png output_subarea ">
 <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAJPCAYAAACgtar/AAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAALEgAACxIB0t1+/AAAIABJREFUeJzsnXd4VFX+h9/pmWTSSaMkofcOgvQi2FBAQQUV17WubXfV
@@ -8938,13 +8682,10 @@ EViCIAiCIAghRgSWIAiCIAhCiBGBJQiCIAiCEGJEYAmCIAiCIIQYEViCIAiCIAghRgSWIAiCIAhC
 iBGBJQiCIAiCEGJEYAmCIAiCIIQYEViCIAiCIAghRgSWIAiCIAhCiBGBJQiCIAiCEGJEYAmCIAiC
 IIQYEViCIAiCIAghRgSWIAiCIAhCiPl/1zobZXA9l1cAAAAASUVORK5CYII=
 ">
-</div>
-
-</div>
-
+</img></div>
 </div>
 </div>
-
+</div>
 </div>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="prompt input_prompt">
@@ -8952,41 +8693,34 @@ IIQYEViCIAiCIAghRgSWIAiCIAhCiPl/1zobZXA9l1cAAAAASUVORK5CYII=
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>So did we speed it up?</p>
-
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[83]:</div>
+<div class="prompt input_prompt">In [83]:</div>
 <div class="inner_cell">
-    <div class="input_area">
+<div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="n">Z</span> <span class="o">=</span> <span class="n">X</span> <span class="o">+</span> <span class="mi">1j</span> <span class="o">*</span> <span class="n">Y</span>
 </pre></div>
-
 </div>
 </div>
 </div>
-
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[84]:</div>
+<div class="prompt input_prompt">In [84]:</div>
 <div class="inner_cell">
-    <div class="input_area">
+<div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="o">%%</span><span class="k">time</span>
 
 J = julia(f, Z)
 </pre></div>
-
 </div>
 </div>
 </div>
-
 <div class="output_wrapper">
 <div class="output">
-
-
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>CPU times: user 6.88 s, sys: 6 ms, total: 6.88 s
@@ -8994,45 +8728,37 @@ Wall time: 6.87 s
 </pre>
 </div>
 </div>
-
 </div>
 </div>
-
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[85]:</div>
+<div class="prompt input_prompt">In [85]:</div>
 <div class="inner_cell">
-    <div class="input_area">
+<div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="n">Z</span> <span class="o">=</span> <span class="n">X</span> <span class="o">+</span> <span class="mi">1j</span> <span class="o">*</span> <span class="n">Y</span>
 </pre></div>
-
 </div>
 </div>
 </div>
-
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[86]:</div>
+<div class="prompt input_prompt">In [86]:</div>
 <div class="inner_cell">
-    <div class="input_area">
+<div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="o">%%</span><span class="k">time</span> 
 
-dview.scatter(&#39;Z&#39;, Z)
+dview.scatter('Z', Z)
 %px ZZ = np.copy(Z)
 %px J = julia_parallel(f,ZZ)
-PJ = dview.gather(&#39;J&#39;)
+PJ = dview.gather('J')
 </pre></div>
-
 </div>
 </div>
 </div>
-
 <div class="output_wrapper">
 <div class="output">
-
-
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>CPU times: user 287 ms, sys: 0 ns, total: 287 ms
@@ -9040,10 +8766,8 @@ Wall time: 1.97 s
 </pre>
 </div>
 </div>
-
 </div>
 </div>
-
 </div>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="prompt input_prompt">
@@ -9052,38 +8776,28 @@ Wall time: 1.97 s
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>So we see that the computational time has indeed been reduced by a factor of the number of engines we chose at the start (plus some overhead). For this small example the overhead is relatively large, however if we wanted to double or triple the resolution then this overhead would become insignificant.</p>
 <p>Of course no speed test is complete without checking that the answers agree,</p>
-
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[87]:</div>
+<div class="prompt input_prompt">In [87]:</div>
 <div class="inner_cell">
-    <div class="input_area">
+<div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">J</span><span class="p">,</span><span class="n">PJ</span><span class="p">)</span>
 </pre></div>
-
 </div>
 </div>
 </div>
-
 <div class="output_wrapper">
 <div class="output">
-
-
 <div class="output_area"><div class="prompt output_prompt">Out[87]:</div>
-
-
 <div class="output_text output_subarea output_execute_result">
 <pre>True</pre>
 </div>
-
-</div>
-
 </div>
 </div>
-
+</div>
 </div>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="prompt input_prompt">
@@ -9091,9 +8805,8 @@ Wall time: 1.97 s
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>which thankfully they do!</p>
-<h2 id="One-last-thing...">One last thing...<a class="anchor-link" href="#One-last-thing...">&#182;</a></h2><p>My first introduction to parallel computing was a bit of a trial by fire, creating a single script to run on multiple cores, being careful with master/slave logic, and making sure the right result came out of the other end. By contrast, the IPython parallel tools seem intuitive and easy to use and it is quick and easy to get something workable. For areas such as finance or agent-based modelling which require the use of lots of Monte Carlo simulation this is a god-send for early exploration as well as churning out larger results.</p>
+<h2 id="One-last-thing...">One last thing...<a class="anchor-link" href="#One-last-thing...">¶</a></h2><p>My first introduction to parallel computing was a bit of a trial by fire, creating a single script to run on multiple cores, being careful with master/slave logic, and making sure the right result came out of the other end. By contrast, the IPython parallel tools seem intuitive and easy to use and it is quick and easy to get something workable. For areas such as finance or agent-based modelling which require the use of lots of Monte Carlo simulation this is a god-send for early exploration as well as churning out larger results.</p>
 <p>For larger computations one would naturally move out of the notebook environment for a speed up. It is also possible to <a href="https://ipython.org/ipython-doc/dev/parallel/parallel_mpi.html">use MPI with IPython</a> for applications which require a large number of engines or require a substantial number/volume of messages to passed between engines.</p>
-
 </div>
 </div>
 </div>
@@ -9103,12 +8816,11 @@ Wall time: 1.97 s
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <hr>
-<h4 id="References">References<a class="anchor-link" href="#References">&#182;</a></h4><p><a href="http://www.researchgate.net/publication/272679245_NumPy__SciPy_Recipes_for_Image_Processing_Creating_Fractal_Images">Fractals</a> <em>Christian Bauckhage</em></p>
+<h4 id="References">References<a class="anchor-link" href="#References">¶</a></h4><p><a href="http://www.researchgate.net/publication/272679245_NumPy__SciPy_Recipes_for_Image_Processing_Creating_Fractal_Images">Fractals</a> <em>Christian Bauckhage</em></p>
 <p><a href="http://www.astro.washington.edu/users/vanderplas/Astr599/notebooks/21_IPythonParallel">Parallel IPython Notebook 1</a> <em>Jake Vanderplas</em></p>
 <p><a href="http://nbviewer.ipython.org/github/ccwang002/2013-ML-TeamProject/blob/master/parallel_play.ipynb">Parallel IPython Notebook 2</a> <em>Liang Bo Wang</em></p>
 <p><a href="https://ipython.org/ipython-doc/dev/parallel/parallel_mpi.html">Using MPI with IPython</a> <em>Documentation</em></p>
-
-</div>
+</hr></div>
 </div>
 </div>
 <script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {

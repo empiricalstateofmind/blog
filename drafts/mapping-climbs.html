@@ -3,49 +3,48 @@
       xmlns:og="http://ogp.me/ns#"
       xmlns:fb="https://www.facebook.com/2008/fbml">
 <head>
-    <title>Finding a Scientific Working Environment In Python - Andrew Mellor</title>
+    <title>Mapping the Top Cycling Climbs in the UK with Folium - Andrew Mellor</title>
     <!-- Using the latest rendering mode for IE -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 
-    <link href="../../../../../images/favicon.png" rel="icon">
+    <link href="../images/favicon.png" rel="icon">
 
-<link rel="canonical" href="../../../../../articles/2016/07/27/scientific-env/">
+<link rel="canonical" href="../drafts/mapping-climbs.html">
 
         <meta name="author" content="Andy Mellor" />
-        <meta name="keywords" content="Python,Docker,Conda,Anaconda,virtualenv,Academia,Reproducibility" />
-        <meta name="description" content="Over the course of my studies I&#39;ve worked on multiple different machines, with different operating systems, different hardware, and different security privileges. It can be a nightmare to ensure a smooth and consistent experience, but when done right, makes working with code and data a pleasure and makes academic reproducibility that much easier. In this article we will look at how the right choice of Python distribution, environment, and IDE can go along way to avoiding technological headaches." />
+        <meta name="keywords" content="Python,Folium,Cycling,Strava,Javascript,Leaflet,Mapping" />
 
         <meta property="og:site_name" content="Andrew Mellor" />
         <meta property="og:type" content="article"/>
-        <meta property="og:title" content="Finding a Scientific Working Environment In Python"/>
-        <meta property="og:url" content="../../../../../articles/2016/07/27/scientific-env/"/>
-        <meta property="og:description" content="Over the course of my studies I&#39;ve worked on multiple different machines, with different operating systems, different hardware, and different security privileges. It can be a nightmare to ensure a smooth and consistent experience, but when done right, makes working with code and data a pleasure and makes academic reproducibility that much easier. In this article we will look at how the right choice of Python distribution, environment, and IDE can go along way to avoiding technological headaches."/>
-        <meta property="article:published_time" content="2016-07-27" />
+        <meta property="og:title" content="Mapping the Top Cycling Climbs in the UK with Folium"/>
+        <meta property="og:url" content="../drafts/mapping-climbs.html"/>
+        <meta property="og:description" content=""/>
+        <meta property="article:published_time" content="2016-12-10" />
             <meta property="article:section" content="General" />
             <meta property="article:tag" content="Python" />
-            <meta property="article:tag" content="Docker" />
-            <meta property="article:tag" content="Conda" />
-            <meta property="article:tag" content="Anaconda" />
-            <meta property="article:tag" content="virtualenv" />
-            <meta property="article:tag" content="Academia" />
-            <meta property="article:tag" content="Reproducibility" />
+            <meta property="article:tag" content="Folium" />
+            <meta property="article:tag" content="Cycling" />
+            <meta property="article:tag" content="Strava" />
+            <meta property="article:tag" content="Javascript" />
+            <meta property="article:tag" content="Leaflet" />
+            <meta property="article:tag" content="Mapping" />
             <meta property="article:author" content="Andy Mellor" />
 
     <meta name="twitter:card" content="summary">
-    <meta name="twitter:domain" content="../../../../..">
+    <meta name="twitter:domain" content="..">
 
     <!-- Bootstrap -->
-        <link rel="stylesheet" href="../../../../../theme/css/bootstrap.flatly.min.css" type="text/css"/>
-    <link href="../../../../../theme/css/font-awesome.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="../theme/css/bootstrap.flatly.min.css" type="text/css"/>
+    <link href="../theme/css/font-awesome.min.css" rel="stylesheet">
 
-    <link href="../../../../../theme/css/pygments/default.css" rel="stylesheet">
-    <link rel="stylesheet" href="../../../../../theme/css/style.css" type="text/css"/>
-        <link href="../../../../../static/custom.css" rel="stylesheet">
+    <link href="../theme/css/pygments/default.css" rel="stylesheet">
+    <link rel="stylesheet" href="../theme/css/style.css" type="text/css"/>
+        <link href="../static/custom.css" rel="stylesheet">
 
-        <link href="../../../../../feeds/all.atom.xml" type="application/atom+xml" rel="alternate"
+        <link href="../feeds/all.atom.xml" type="application/atom+xml" rel="alternate"
               title="Andrew Mellor ATOM Feed"/>
 
 </head>
@@ -60,7 +59,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a href="../../../../../" class="navbar-brand">
+            <a href="../" class="navbar-brand">
 Andrew Mellor            </a>
         </div>
         <div class="collapse navbar-collapse navbar-ex1-collapse">
@@ -72,7 +71,7 @@ Andrew Mellor            </a>
                     <li><a href="/projects/projects.html">Projects</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-              <li><a href="../../../../../archives.html"><i class="fa fa-th-list"></i><span class="icon-label">Archives</span></a></li>
+              <li><a href="../archives.html"><i class="fa fa-th-list"></i><span class="icon-label">Archives</span></a></li>
             </ul>
         </div>
         <!-- /.navbar-collapse -->
@@ -88,10 +87,10 @@ Andrew Mellor            </a>
         <article>
             <header class="page-header">
                 <h1>
-                    <a href="../../../../../articles/2016/07/27/scientific-env/"
+                    <a href="../drafts/mapping-climbs.html"
                        rel="bookmark"
-                       title="Permalink to Finding a Scientific Working Environment In Python">
-                        Finding a Scientific Working Environment In Python
+                       title="Permalink to Mapping the Top Cycling Climbs in the UK with Folium">
+                        Mapping the Top Cycling Climbs in the UK with Folium
                     </a>
                 </h1>
             </header>
@@ -101,25 +100,25 @@ Andrew Mellor            </a>
 <footer class="post-info">
     <span class="label label-default">Date</span>
     <span class="published">
-        <i class="fa fa-calendar"></i><time datetime="2016-07-27T00:00:00+02:00"> 27 Jul, 2016</time>
+        <i class="fa fa-calendar"></i><time datetime="2016-12-10T00:00:00+01:00"> 10 Dec, 2016</time>
     </span>
 
 
 
 <span class="label label-default">Tags</span>
-	<a href="../../../../../tag/python.html">Python</a>
+	<a href="../tag/python.html">Python</a>
         /
-	<a href="../../../../../tag/docker.html">Docker</a>
+	<a href="../tag/folium.html">Folium</a>
         /
-	<a href="../../../../../tag/conda.html">Conda</a>
+	<a href="../tag/cycling.html">Cycling</a>
         /
-	<a href="../../../../../tag/anaconda.html">Anaconda</a>
+	<a href="../tag/strava.html">Strava</a>
         /
-	<a href="../../../../../tag/virtualenv.html">virtualenv</a>
+	<a href="../tag/javascript.html">Javascript</a>
         /
-	<a href="../../../../../tag/academia.html">Academia</a>
+	<a href="../tag/leaflet.html">Leaflet</a>
         /
-	<a href="../../../../../tag/reproducibility.html">Reproducibility</a>
+	<a href="../tag/mapping.html">Mapping</a>
     
 </footer><!-- /.post-info -->                    </div>
                 </div>
@@ -1095,272 +1094,180 @@ h6:hover .anchor-link {
 
 .ansi-bold { font-weight: bold; }
 </style>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [3]:</div>
 <div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Over the course of my studies I've worked on multiple different machines, with different operating systems, different hardware, and different security privileges. 
-It can be a nightmare to ensure a smooth and consistent experience, but when done right, makes working with code and data a pleasure and makes academic reproducibility that much easier.
-In this article we will look at how the right choice of Python distribution, environment manager, and IDE can go along way to avoiding technological headaches.</p>
-<p>The world of Python is rapidly growing and mutating.
-This is a great thing for the language and it's users, but also poses the challenge of keeping up-to-date whilst maintaining backwards-compatibility.
-Naturally, the Python core evolves at a snails pace.
-This means that if you decide to work with pure Python then you are in a safe place.
-The most commonly used scientific packages such as <code>numpy</code>, <code>scipy</code>, and <code>pandas</code> can be considered stable and safe, but beyond that there is risk of an update breaking something in your code (and even worse, silently breaking your code).</p>
-<p>Below I'll describe my setup which I've reached so far. 
-It is built on the following criteria:</p>
-<ul>
-<li>Usable across multiple machines</li>
-<li>Usable across different operating systems</li>
-<li>Easy to work on different projects/codebases</li>
-<li>Maintain academic reproducibility</li>
-<li>Easy to setup and work with</li>
-</ul>
-<p>These are my preferences and thankfully not everyone will agree, so I've listed some alternatives for each where I can.</p>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Installation/Distributions">Installation/Distributions<a class="anchor-link" href="#Installation/Distributions">¶</a></h2><p>The most common question for someone first picking up Python is "which Python?".
-The fundamental Python experience will be the same whichever you use (or if you just use the built-in system Python - although this is not recommended).
-The difference lies in the ease of installation, the default bundled packages, and some added bonus features.</p>
-<h4 id="Anaconda--(link)"><strong>Anaconda</strong> <a href="https://www.continuum.io/downloads">(link)</a><a class="anchor-link" href="#Anaconda--(link)">¶</a></h4><p>Anaconda is the go-to distribution for Python.
-It's the most popular distribution for data science and it's also free and open-source.</p>
-<p>Among the many useful features:</p>
-<ul>
-<li>Simple downloader/installer.</li>
-<li>The ability to create and move between different environments to work in (see below).</li>
-<li>The standard distribution comes with a comprehensive scientific stack - everything from numerics to image processing.</li>
-<li>Manages non-Python packages - some Python libraries utilise libraries from C/FORTRAN which can be difficult to install, however not with Anaconda.</li>
-<li>Almost identical experience across Windows/Linux.</li>
-<li>As of recently, the <a href="https://docs.continuum.io/mkl-optimizations/">Intel MKL Optimisations</a> come as standard in the distribution.
-What this means is that numerical computations in <code>numpy</code> or <code>scipy</code> will automatically be parallelised to use all available CPU power where possible - without having to change a line of code!</li>
-</ul>
-<p>To download, simply visit the link above and follow the instructions.</p>
-<h4 id="Enthought-Canopy--(link)"><strong>Enthought Canopy</strong> <a href="https://www.enthought.com/products/canopy/">(link)</a><a class="anchor-link" href="#Enthought-Canopy--(link)">¶</a></h4><p>Canopy is the second largest distribution, and has a more 'MATLAB' feel to it. 
-There is a graphical package manager so managing packages is a doddle.
-Addition features and add-ons are available through subscriptions and purchases, similar to MATLAB's toolboxes.</p>
-<h4 id="WinPython-(Windows)-(link)"><strong>WinPython (Windows)</strong> <a href="https://winpython.github.io/">(link)</a><a class="anchor-link" href="#WinPython-(Windows)-(link)">¶</a></h4><p>WinPython is a purely Windows installation of Python. Before Anaconda it was probably the most stable way of interfacing Python packages with C/FORTRAN on Windows. With Anaconda it has lost that edge to some extent but is still recommended if you plan to use the high performance computing package, <a href="http://deeplearning.net/software/theano/install.html">theano</a>.</p>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Virtual-Environments">Virtual Environments<a class="anchor-link" href="#Virtual-Environments">¶</a></h2><p>A virtual environment creates a folder which contains all the necessary executables to use the packages that a Python project would need and keeps it in isolation.
-To see which version of Python you are using you can call</p>
-<div class="highlight"><pre><span></span>which python
+<div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">folium</span>
 </pre></div>
-<p>from the command line, or in a python terminal call</p>
+</div>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In [1]:</div>
+<div class="prompt input_prompt">In [12]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">prefix</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Basic Example </span>
+
+<span class="n">map_osm</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">Map</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="p">[</span><span class="mf">40.7128</span><span class="p">,</span> <span class="o">-</span><span class="mf">74.0059</span><span class="p">],</span>
+                     <span class="n">tiles</span><span class="o">=</span><span class="s1">'Open Street Map'</span><span class="p">,</span>
+                     <span class="n">zoom_start</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+
+<span class="n">marker</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">Marker</span><span class="p">([</span><span class="mf">40.7484</span><span class="p">,</span> <span class="o">-</span><span class="mf">73.9857</span><span class="p">],</span> <span class="n">popup</span><span class="o">=</span><span class="s1">'Empire State Building'</span><span class="p">,</span> <span class="n">icon</span><span class="o">=</span><span class="n">folium</span><span class="o">.</span><span class="n">Icon</span><span class="p">())</span>
+
+<span class="n">map_osm</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">marker</span><span class="p">)</span>
+
+<span class="n">map_osm</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="output_wrapper">
 <div class="output">
-<div class="output_area"><div class="prompt output_prompt">Out[1]:</div>
-<div class="output_text output_subarea output_execute_result">
-<pre>'C:\\Users\\Andy\\Anaconda\\envs\\python3'</pre>
+<div class="output_area"><div class="prompt output_prompt">Out[12]:</div>
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div style="width:100%;"><div style="position:relative;width:100%;height:0;padding-bottom:60%;"><iframe src="data:text/html;base64,CiAgICAgICAgPCFET0NUWVBFIGh0bWw+CiAgICAgICAgPGhlYWQ+CiAgICAgICAgICAgIAogICAgICAgIAogICAgICAgICAgICA8bWV0YSBodHRwLWVxdWl2PSJjb250ZW50LXR5cGUiIGNvbnRlbnQ9InRleHQvaHRtbDsgY2hhcnNldD1VVEYtOCIgLz4KICAgICAgICAKICAgICAgICAgICAgCiAgICAgICAgCiAgICAgICAgICAgIDxzY3JpcHQgc3JjPSJodHRwczovL2NkbmpzLmNsb3VkZmxhcmUuY29tL2FqYXgvbGlicy9sZWFmbGV0LzAuNy4zL2xlYWZsZXQuanMiPjwvc2NyaXB0PgogICAgICAgIAogICAgICAgIAogICAgICAgIAogICAgICAgICAgICAKICAgICAgICAKICAgICAgICAgICAgPHNjcmlwdCBzcmM9Imh0dHBzOi8vYWpheC5nb29nbGVhcGlzLmNvbS9hamF4L2xpYnMvanF1ZXJ5LzEuMTEuMS9qcXVlcnkubWluLmpzIj48L3NjcmlwdD4KICAgICAgICAKICAgICAgICAKICAgICAgICAKICAgICAgICAgICAgCiAgICAgICAgCiAgICAgICAgICAgIDxzY3JpcHQgc3JjPSJodHRwczovL21heGNkbi5ib290c3RyYXBjZG4uY29tL2Jvb3RzdHJhcC8zLjIuMC9qcy9ib290c3RyYXAubWluLmpzIj48L3NjcmlwdD4KICAgICAgICAKICAgICAgICAKICAgICAgICAKICAgICAgICAgICAgCiAgICAgICAgCiAgICAgICAgICAgIDxzY3JpcHQgc3JjPSJodHRwczovL2NkbmpzLmNsb3VkZmxhcmUuY29tL2FqYXgvbGlicy9MZWFmbGV0LmF3ZXNvbWUtbWFya2Vycy8yLjAuMi9sZWFmbGV0LmF3ZXNvbWUtbWFya2Vycy5taW4uanMiPjwvc2NyaXB0PgogICAgICAgIAogICAgICAgIAogICAgICAgIAogICAgICAgICAgICAKICAgICAgICAKICAgICAgICAgICAgPHNjcmlwdCBzcmM9Imh0dHBzOi8vY2RuanMuY2xvdWRmbGFyZS5jb20vYWpheC9saWJzL2xlYWZsZXQubWFya2VyY2x1c3Rlci8wLjQuMC9sZWFmbGV0Lm1hcmtlcmNsdXN0ZXItc3JjLmpzIj48L3NjcmlwdD4KICAgICAgICAKICAgICAgICAKICAgICAgICAKICAgICAgICAgICAgCiAgICAgICAgCiAgICAgICAgICAgIDxzY3JpcHQgc3JjPSJodHRwczovL2NkbmpzLmNsb3VkZmxhcmUuY29tL2FqYXgvbGlicy9sZWFmbGV0Lm1hcmtlcmNsdXN0ZXIvMC40LjAvbGVhZmxldC5tYXJrZXJjbHVzdGVyLmpzIj48L3NjcmlwdD4KICAgICAgICAKICAgICAgICAKICAgICAgICAKICAgICAgICAgICAgCiAgICAgICAgCiAgICAgICAgICAgIDxsaW5rIHJlbD0ic3R5bGVzaGVldCIgaHJlZj0iaHR0cHM6Ly9jZG5qcy5jbG91ZGZsYXJlLmNvbS9hamF4L2xpYnMvbGVhZmxldC8wLjcuMy9sZWFmbGV0LmNzcyIgLz4KICAgICAgICAKICAgICAgICAKICAgICAgICAKICAgICAgICAgICAgCiAgICAgICAgCiAgICAgICAgICAgIDxsaW5rIHJlbD0ic3R5bGVzaGVldCIgaHJlZj0iaHR0cHM6Ly9tYXhjZG4uYm9vdHN0cmFwY2RuLmNvbS9ib290c3RyYXAvMy4yLjAvY3NzL2Jvb3RzdHJhcC5taW4uY3NzIiAvPgogICAgICAgIAogICAgICAgIAogICAgICAgIAogICAgICAgICAgICAKICAgICAgICAKICAgICAgICAgICAgPGxpbmsgcmVsPSJzdHlsZXNoZWV0IiBocmVmPSJodHRwczovL21heGNkbi5ib290c3RyYXBjZG4uY29tL2Jvb3RzdHJhcC8zLjIuMC9jc3MvYm9vdHN0cmFwLXRoZW1lLm1pbi5jc3MiIC8+CiAgICAgICAgCiAgICAgICAgCiAgICAgICAgCiAgICAgICAgICAgIAogICAgICAgIAogICAgICAgICAgICA8bGluayByZWw9InN0eWxlc2hlZXQiIGhyZWY9Imh0dHBzOi8vbWF4Y2RuLmJvb3RzdHJhcGNkbi5jb20vZm9udC1hd2Vzb21lLzQuMS4wL2Nzcy9mb250LWF3ZXNvbWUubWluLmNzcyIgLz4KICAgICAgICAKICAgICAgICAKICAgICAgICAKICAgICAgICAgICAgCiAgICAgICAgCiAgICAgICAgICAgIDxsaW5rIHJlbD0ic3R5bGVzaGVldCIgaHJlZj0iaHR0cHM6Ly9jZG5qcy5jbG91ZGZsYXJlLmNvbS9hamF4L2xpYnMvTGVhZmxldC5hd2Vzb21lLW1hcmtlcnMvMi4wLjIvbGVhZmxldC5hd2Vzb21lLW1hcmtlcnMuY3NzIiAvPgogICAgICAgIAogICAgICAgIAogICAgICAgIAogICAgICAgICAgICAKICAgICAgICAKICAgICAgICAgICAgPGxpbmsgcmVsPSJzdHlsZXNoZWV0IiBocmVmPSJodHRwczovL2NkbmpzLmNsb3VkZmxhcmUuY29tL2FqYXgvbGlicy9sZWFmbGV0Lm1hcmtlcmNsdXN0ZXIvMC40LjAvTWFya2VyQ2x1c3Rlci5EZWZhdWx0LmNzcyIgLz4KICAgICAgICAKICAgICAgICAKICAgICAgICAKICAgICAgICAgICAgCiAgICAgICAgCiAgICAgICAgICAgIDxsaW5rIHJlbD0ic3R5bGVzaGVldCIgaHJlZj0iaHR0cHM6Ly9jZG5qcy5jbG91ZGZsYXJlLmNvbS9hamF4L2xpYnMvbGVhZmxldC5tYXJrZXJjbHVzdGVyLzAuNC4wL01hcmtlckNsdXN0ZXIuY3NzIiAvPgogICAgICAgIAogICAgICAgIAogICAgICAgIAogICAgICAgICAgICAKICAgICAgICAKICAgICAgICAgICAgPGxpbmsgcmVsPSJzdHlsZXNoZWV0IiBocmVmPSJodHRwczovL3Jhdy5naXRodWJ1c2VyY29udGVudC5jb20vcHl0aG9uLXZpc3VhbGl6YXRpb24vZm9saXVtL21hc3Rlci9mb2xpdW0vdGVtcGxhdGVzL2xlYWZsZXQuYXdlc29tZS5yb3RhdGUuY3NzIiAvPgogICAgICAgIAogICAgICAgIAogICAgICAgIAogICAgICAgICAgICAKICAgICAgICAgICAgPHN0eWxlPgoKICAgICAgICAgICAgaHRtbCwgYm9keSB7CiAgICAgICAgICAgICAgICB3aWR0aDogMTAwJTsKICAgICAgICAgICAgICAgIGhlaWdodDogMTAwJTsKICAgICAgICAgICAgICAgIG1hcmdpbjogMDsKICAgICAgICAgICAgICAgIHBhZGRpbmc6IDA7CiAgICAgICAgICAgICAgICB9CgogICAgICAgICAgICAjbWFwIHsKICAgICAgICAgICAgICAgIHBvc2l0aW9uOmFic29sdXRlOwogICAgICAgICAgICAgICAgdG9wOjA7CiAgICAgICAgICAgICAgICBib3R0b206MDsKICAgICAgICAgICAgICAgIHJpZ2h0OjA7CiAgICAgICAgICAgICAgICBsZWZ0OjA7CiAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgIDwvc3R5bGU+CiAgICAgICAgICAgIAogICAgICAgIAogICAgICAgICAgICAKICAgICAgICAgICAgPHN0eWxlPiAjbWFwX2U3NDdiZTNiZTU5YzQxYWFiZGQ2NjE2MWQ4NTE3NDY5IHsKICAgICAgICAgICAgICAgIHBvc2l0aW9uIDogcmVsYXRpdmU7CiAgICAgICAgICAgICAgICB3aWR0aCA6IDEwMC4wJTsKICAgICAgICAgICAgICAgIGhlaWdodDogMTAwLjAlOwogICAgICAgICAgICAgICAgbGVmdDogMC4wJTsKICAgICAgICAgICAgICAgIHRvcDogMC4wJTsKICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgPC9zdHlsZT4KICAgICAgICAKICAgICAgICAKICAgICAgICAKICAgICAgICA8L2hlYWQ+CiAgICAgICAgPGJvZHk+CiAgICAgICAgICAgIAogICAgICAgIAogICAgICAgICAgICAKICAgICAgICAgICAgPGRpdiBjbGFzcz0iZm9saXVtLW1hcCIgaWQ9Im1hcF9lNzQ3YmUzYmU1OWM0MWFhYmRkNjYxNjFkODUxNzQ2OSIgPjwvZGl2PgogICAgICAgIAogICAgICAgIAogICAgICAgIAogICAgICAgIDwvYm9keT4KICAgICAgICA8c2NyaXB0PgogICAgICAgICAgICAKICAgICAgICAKICAgICAgICAgICAgCgogICAgICAgICAgICB2YXIgc291dGhXZXN0ID0gTC5sYXRMbmcoLTkwLCAtMTgwKTsKICAgICAgICAgICAgdmFyIG5vcnRoRWFzdCA9IEwubGF0TG5nKDkwLCAxODApOwogICAgICAgICAgICB2YXIgYm91bmRzID0gTC5sYXRMbmdCb3VuZHMoc291dGhXZXN0LCBub3J0aEVhc3QpOwoKICAgICAgICAgICAgdmFyIG1hcF9lNzQ3YmUzYmU1OWM0MWFhYmRkNjYxNjFkODUxNzQ2OSA9IEwubWFwKCdtYXBfZTc0N2JlM2JlNTljNDFhYWJkZDY2MTYxZDg1MTc0NjknLCB7CiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBjZW50ZXI6WzQwLjcxMjgsLTc0LjAwNTldLAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgem9vbTogMTIsCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBtYXhCb3VuZHM6IGJvdW5kcywKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGxheWVyczogW10sCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBjcnM6IEwuQ1JTLkVQU0czODU3CiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfSk7CiAgICAgICAgICAgIAogICAgICAgIAogICAgICAgIAogICAgICAgICAgICAKICAgICAgICAgICAgdmFyIHRpbGVfbGF5ZXJfY2ZiM2VmODRlMjAyNDRlM2E4MzBjMDMxMDg5OWY3OWQgPSBMLnRpbGVMYXllcigKICAgICAgICAgICAgICAgICdodHRwczovL3tzfS50aWxlLm9wZW5zdHJlZXRtYXAub3JnL3t6fS97eH0ve3l9LnBuZycsCiAgICAgICAgICAgICAgICB7CiAgICAgICAgICAgICAgICAgICAgbWF4Wm9vbTogMTgsCiAgICAgICAgICAgICAgICAgICAgbWluWm9vbTogMSwKICAgICAgICAgICAgICAgICAgICBhdHRyaWJ1dGlvbjogJ0RhdGEgYnkgPGEgaHJlZj0iaHR0cDovL29wZW5zdHJlZXRtYXAub3JnIj5PcGVuU3RyZWV0TWFwPC9hPiwgdW5kZXIgPGEgaHJlZj0iaHR0cDovL3d3dy5vcGVuc3RyZWV0bWFwLm9yZy9jb3B5cmlnaHQiPk9EYkw8L2E+LicsCiAgICAgICAgICAgICAgICAgICAgZGV0ZWN0UmV0aW5hOiBmYWxzZQogICAgICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgICAgICkuYWRkVG8obWFwX2U3NDdiZTNiZTU5YzQxYWFiZGQ2NjE2MWQ4NTE3NDY5KTsKCiAgICAgICAgCiAgICAgICAgCiAgICAgICAgICAgIAoKICAgICAgICAgICAgdmFyIG1hcmtlcl9jMjY3MjE5MDcwMTg0ODgwYjk5MjI3MjgxOGQ3NDU2NiA9IEwubWFya2VyKAogICAgICAgICAgICAgICAgWzQwLjc0ODQsLTczLjk4NTddLAogICAgICAgICAgICAgICAgewogICAgICAgICAgICAgICAgICAgIGljb246IG5ldyBMLkljb24uRGVmYXVsdCgpCiAgICAgICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgKQogICAgICAgICAgICAgICAgLmFkZFRvKG1hcF9lNzQ3YmUzYmU1OWM0MWFhYmRkNjYxNjFkODUxNzQ2OSk7CiAgICAgICAgICAgIAogICAgICAgIAogICAgICAgICAgICAKCiAgICAgICAgICAgICAgICB2YXIgaWNvbl9lNGU3MWNkYzExM2U0ZDJiYThiMjBhNmY0NDQ1MGExMiA9IEwuQXdlc29tZU1hcmtlcnMuaWNvbih7CiAgICAgICAgICAgICAgICAgICAgaWNvbjogJ2luZm8tc2lnbicsCiAgICAgICAgICAgICAgICAgICAgaWNvbkNvbG9yOiAnd2hpdGUnLAogICAgICAgICAgICAgICAgICAgIG1hcmtlckNvbG9yOiAnYmx1ZScsCiAgICAgICAgICAgICAgICAgICAgcHJlZml4OiAnZ2x5cGhpY29uJywKICAgICAgICAgICAgICAgICAgICBleHRyYUNsYXNzZXM6ICdmYS1yb3RhdGUtMCcKICAgICAgICAgICAgICAgICAgICB9KTsKICAgICAgICAgICAgICAgIG1hcmtlcl9jMjY3MjE5MDcwMTg0ODgwYjk5MjI3MjgxOGQ3NDU2Ni5zZXRJY29uKGljb25fZTRlNzFjZGMxMTNlNGQyYmE4YjIwYTZmNDQ0NTBhMTIpOwogICAgICAgICAgICAKICAgICAgICAKICAgICAgICAgICAgCiAgICAgICAgICAgIHZhciBwb3B1cF85YWRkMTc0MWE5NjQ0MGJkODE3ZDNiNDFkNDZhMWE2NCA9IEwucG9wdXAoe21heFdpZHRoOiAnMzAwJ30pOwoKICAgICAgICAgICAgCiAgICAgICAgICAgICAgICB2YXIgaHRtbF85M2IzZWNiNDk3OTY0ZmNlYmNlMzYzODcyYjQyNTRlNCA9ICQoJyAgICAgICAgIDxkaXYgaWQ9Imh0bWxfOTNiM2VjYjQ5Nzk2NGZjZWJjZTM2Mzg3MmI0MjU0ZTQiICAgICAgICAgICAgICAgICBzdHlsZT0id2lkdGg6IDEwMC4wJTsgaGVpZ2h0OiAxMDAuMCU7Ij4gICAgICAgICAgICAgICAgIEVtcGlyZSBTdGF0ZSBCdWlsZGluZzwvZGl2PiAgICAgICAgICAgICAgICAgJylbMF07CiAgICAgICAgICAgICAgICBwb3B1cF85YWRkMTc0MWE5NjQ0MGJkODE3ZDNiNDFkNDZhMWE2NC5zZXRDb250ZW50KGh0bWxfOTNiM2VjYjQ5Nzk2NGZjZWJjZTM2Mzg3MmI0MjU0ZTQpOwogICAgICAgICAgICAKCiAgICAgICAgICAgIG1hcmtlcl9jMjY3MjE5MDcwMTg0ODgwYjk5MjI3MjgxOGQ3NDU2Ni5iaW5kUG9wdXAocG9wdXBfOWFkZDE3NDFhOTY0NDBiZDgxN2QzYjQxZDQ2YTFhNjQpOwoKICAgICAgICAgICAgCiAgICAgICAgCiAgICAgICAgCiAgICAgICAgCiAgICAgICAgPC9zY3JpcHQ+CiAgICAgICAg" style="position:absolute;width:100%;height:100%;left:0;top:0;"></iframe></div></div>
 </div>
 </div>
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [ ]:</div>
 <div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>In this case, I'm using a generic environment called <code>python3</code> which I use for non-project work and quick scripting.
-Virtual environments solve many compatibility issues when working on multiple projects which share libraries but might require different versions.</p>
-<p>Another classic question asked by new Python users is "which Python should I used? 2 or 3?".
-My answer is usually "Unless you have been given an explicit reason for using Python2, then use Python3".
-However that is really no longer the case - with virtual environments you can use <em>both</em>!
-If your project requires Python2 then you create a Python2 environment in isolation and use that for that project.</p>
-<h4 id="Conda-environments-(link)"><strong>Conda environments</strong> <a href="http://conda.pydata.org/docs/using/envs.html">(link)</a><a class="anchor-link" href="#Conda-environments-(link)">¶</a></h4><p>The ability to use Conda environments is built-in with the Anaconda installation.
-For example, to create a new environment called <code>envname</code> with <code>Python3</code> call</p>
-<div class="highlight"><pre><span></span>conda create -n <span class="o">[</span>envname<span class="o">]</span> <span class="nv">python</span><span class="o">=</span><span class="m">3</span> <span class="o">[</span>packages<span class="o">]</span>
+<div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Getting Strava Data</span>
+
+<span class="kn">import</span> <span class="nn">requests</span> <span class="k">as</span> <span class="nn">rq</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="n">token</span> <span class="o">=</span> <span class="s1">'e2ce375f9642d036ff9362e829d26c273a2522a4'</span>
+
+<span class="n">segment_payload</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'access_token'</span><span class="p">:</span> <span class="n">token</span><span class="p">,</span> <span class="s1">'per_page'</span><span class="p">:</span> <span class="s1">'200'</span><span class="p">}</span>
+<span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'content-type'</span><span class="p">:</span> <span class="s1">'application/json'</span><span class="p">}</span>
 </pre></div>
-<p>where <code>[packages]</code> is a list of packages you want to install along with it.
-It is recommended that you try and install packages together to avoid potential conflicts between them, however the system is smart enough to recognise when that might happen.
-If you forgot to install something then it can be installed later with</p>
-<div class="highlight"><pre><span></span>conda install --name <span class="o">[</span>envname<span class="o">]</span> <span class="o">[</span>packages<span class="o">]</span>
-</pre></div>
-<p>If you don't specify the environment then packages are installed in the current environment.
-There are also a number of different non-Python programs that can be installed through Anaconda such as the graphing software <code>graphviz</code>, or document converter <code>pandoc</code>.</p>
-<p>If you've downloaded the full Anaconda distribution then most packages you would need for all but the most specialised analysis come pre-installed.</p>
-<p>To activate an environment simply call</p>
-<div class="highlight"><pre><span></span><span class="nb">source</span> activate <span class="o">[</span>envname<span class="o">]</span>
-</pre></div>
-<p>or on windows</p>
-<div class="highlight"><pre><span></span>activate <span class="o">[</span>envname<span class="o">]</span>
-</pre></div>
-<p><a class="thumbnail" href="../../../../../images/scientific-environment/conda.png">
-<img alt="Conda" src="../../../../../images/scientific-environment/conda.png">
-</img></a></p>
-<p>To deactivate, simply reactivate another environment or call</p>
-<div class="highlight"><pre><span></span>deactivate
-</pre></div>
-<p>Conda distributions have images for most packages. 
-However if they don't then all is not lost.
-One can simply use <code>pip</code> as you would normally with</p>
-<div class="highlight"><pre><span></span>pip install <span class="o">[</span>package<span class="o">]</span>
-</pre></div>
-<p>To save an environment, we can export it to a file.</p>
-<div class="highlight"><pre><span></span>conda env <span class="nb">export</span> > environment.yml
-</pre></div>
-<p>This produces a list of all packages used and their version numbers - similar to <code>requirements.txt</code> produced by <code>pip freeze</code>.
-To read in an environment its as simple as</p>
-<div class="highlight"><pre><span></span>conda env create -f environment.yml
-</pre></div>
-<p>I won't list every function here to avoid recreating the official documentation. 
-If you have further questions I suggest you take a look in the documentation linked above.</p>
-<p>Finally there are two recent developments worth mentioning.
-The first is <a href="https://docs.continuum.io/anaconda-cloud/">Anaconda Cloud</a>, a cloud-based solution for all things Anaconda.
-Here you can upload environments, files, packages, and notebooks to ensure consistency across different machines and to allow for collaboration. 
-At the moment I feel like it is a little clunky and superfluous to keeping an <code>environment.yml</code> file, but only time will tell.</p>
-<p>Secondly, a number of IDEs now support Conda environments and offer interfaces for using and maintaining environments.
-If you are a big Jupyter notebook user then the <a href="https://github.com/Anaconda-Platform/nb_conda">nb_conda</a> extension integrates Conda environments into the notebook.
-This allows you to spin up different notebooks with different environment kernels in an instant - something that previously required a lot of manual fixes to do.</p>
-<h4 id="virtualenv-(link)"><strong>virtualenv</strong> <a href="https://virtualenv.pypa.io/en/stable/">(link)</a><a class="anchor-link" href="#virtualenv-(link)">¶</a></h4><p><code>virtualenv</code> has been around for a while (since 2007 in fact) and functions exactly like Conda environments except that it is limited to managing Python packages only.</p>
-<p>Use</p>
-<div class="highlight"><pre><span></span>pip install virtualenv
-</pre></div>
-<p>to install,</p>
-<div class="highlight"><pre><span></span>virtualenv <span class="o">[</span>envname<span class="o">]</span>
-</pre></div>
-<p>to create an environment, and</p>
-<div class="highlight"><pre><span></span><span class="nb">source</span> <span class="o">[</span>envname<span class="o">]</span>/bin/activate
-</pre></div>
-<p>to activate it.</p>
-<p>A recent blog post <a href="https://realpython.com/blog/python/python-virtual-environments-a-primer/">here</a> gives a primer on using <code>virtualenv</code> in far more detail than is given here.</p>
-<p>If you are using Conda, then there is no reason not to use Conda environments, however if you're looking for a Python-only solution for Python-only packages then <code>virtualenv</code> fits the bill nicely.</p>
-<h4 id="Docker-(link)"><strong>Docker</strong> <a href="https://www.docker.com/">(link)</a><a class="anchor-link" href="#Docker-(link)">¶</a></h4><p>Docker is the extreme of code and environment isolation, being more of a virtual machine than a virtual environment.
-Unless you are having system compatibility issues (Windows v. Linux, e.t.c.) or planning to host an application online then chances are you will never need to use Docker.
-It is however a very interesting a powerful tool for ensuring consistency and reproducibility.</p>
-<p>Docker is distinguished from a virtual machine shown in the schematic below.
-Applications and programs are contained in 'containers' which are isolated from each other and speak only to the Docker Engine.
-Containers can be linked to communicate between each other and share data.
-For example, one might have a container carrying out analysis on a dataset and another container hosting a website to display the outcomes.
-This has big repercussions for business, making data and systems safer against attack and easier to diagnose.</p>
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
 </div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [ ]:</div>
 <div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<row>
-<div class="col-sm-6"><img src="../../../../../images/scientific-environment/docker1.png" /></div>
-<div class="col-sm-6"><img src="../../../../../images/scientific-environment/docker2.png" /></div>
-<p><i>Source: <a href="https://www.docker.com/what-docker">https://www.docker.com/what-docker</a></i></p>
-</row>
+<div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">store</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'./top_climbs.csv'</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">'</span><span class="se">\t</span><span class="s1">'</span><span class="p">)</span>
+<span class="n">store</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
 </div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [ ]:</div>
 <div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>A Docker container is described by a <code>DockerFile</code> (similar to the environment export in Anaconda). 
-In short, this details the instructions to create the container - which operating system to install, which packages to install, and what data to read.
-Using multiple containers requires a <code>Docker-Compose</code> file which describes how the containers interact and which ports are accessible.</p>
-<p>But what use is this for a scientist? 
-For one, if you are required to use software not available on your machine then Docker gives a lightweight means of running it.
-However the main draw is that in theory, equipped with a DockerFile, code, and data, anyone would be able to reproduce the same results of your study regardless of their machine and setup (provided they can run Docker).
-This makes Docker potentially the ultimate vessel for academic reproducibility.</p>
+<div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">required_fields</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'athlete_count'</span><span class="p">,</span>  <span class="s1">'average_grade'</span><span class="p">,</span> <span class="s1">'city'</span><span class="p">,</span> <span class="s1">'climb_category'</span><span class="p">,</span>
+                  <span class="s1">'distance'</span><span class="p">,</span> <span class="s1">'effort_count'</span><span class="p">,</span> <span class="s1">'elevation_low'</span><span class="p">,</span> <span class="s1">'end_latlng'</span><span class="p">,</span> <span class="s1">'id'</span><span class="p">,</span>
+                  <span class="s1">'maximum_grade'</span><span class="p">,</span> <span class="s1">'name'</span><span class="p">,</span> <span class="s1">'start_latlng'</span><span class="p">,</span> <span class="s1">'total_elevation_gain'</span><span class="p">,</span> <span class="s1">'updated_at'</span><span class="p">]</span>
+
+<span class="n">full</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">ix</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">store</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">rq</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'https://www.strava.com/api/v3/segments/</span><span class="si">{}</span><span class="s1">'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">segment_id</span><span class="p">),</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">segment_payload</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">val</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">required_fields</span><span class="p">}</span>
+    <span class="n">full</span><span class="p">[</span><span class="n">ix</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span>
+</pre></div>
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
 </div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [ ]:</div>
 <div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="IDEs">IDEs<a class="anchor-link" href="#IDEs">¶</a></h2><p>An Integrated Development Environment (or IDE), is a program to create and run Python code and provide a number of other features.
-The following is by no means an exhaustive list and each one will cater to different personal preferences, requirements, and patience for setting things up. I personally use a mix of all of the following, depending on the use case.
-Used correctly an IDE can speed up the time it takes to develop and test code as well as minimising errors.</p>
-<h4 id="Spyder-(link)"><strong>Spyder</strong> <a href="https://github.com/spyder-ide/spyder">(link)</a><a class="anchor-link" href="#Spyder-(link)">¶</a></h4><p>Spyder comes bundled with Anaconda as the default IDE and is a great place to start using Python.
-It is functional, well maintained, and offers space to code, debug, and run as many Python/IPython terminals as you may require.
-The code is open-source also, meaning if you find a bug or want an extra feature then there's scope for you to fix or add it yourself.</p>
-<p><a class="thumbnail" href="../../../../../images/scientific-environment/spyder.png">
-<img alt="Spyder" src="../../../../../images/scientific-environment/spyder.png">
-</img></a></p>
-<h4 id="Jupyter-Notebook-(link)"><strong>Jupyter Notebook</strong> <a href="http://jupyter.org/">(link)</a><a class="anchor-link" href="#Jupyter-Notebook-(link)">¶</a></h4><p>The Jupyter Notebook (previously know as the IPython Notebook) has revolutionised how exploratory data analysis is carried out.
-The notebook runs in a web browser and can incorporate images, videos, tex, and raw HTML.
-Code is run in 'cells' which can be run independently and repeatably, avoiding the need to run an entire script every time.
-This quick work-flow combined with the inclusion of inline graphs and text has made the Jupyter Notebook the go-to vessel for story telling and interactive write ups. In fact, a number of books and tutorials have been written purely in <a href="http://nbviewer.jupyter.org/">notebook format</a>, and even this blog is written in a notebook!</p>
-<p>Other features include:</p>
-<ul>
-<li>Ability to create slideshows/presentations out of the box.</li>
-<li>Jupyter Notebook servers - run the computation on one machine which can be accessed from any number of others - even if they don't have Python installed.</li>
-<li>Other kernels can be used in the same fashion - R, MATLAB, bash, e.t.c.</li>
-</ul>
-<p><a class="thumbnail" href="../../../../../images/scientific-environment/notebook.png">
-<img alt="Notebook" src="../../../../../images/scientific-environment/notebook.png">
-</img></a></p>
-<h4 id="PyCharm-(link)"><strong>PyCharm</strong> <a href="https://www.jetbrains.com/pycharm/">(link)</a><a class="anchor-link" href="#PyCharm-(link)">¶</a></h4><p>PyCharm is the 'bells and whistles' IDE for Python.
-It includes everything and anything you might need whilst developing code.
-To name a few features there is:</p>
-<ul>
-<li>Version control integration (Git/Mercurial)</li>
-<li>Docker integration</li>
-<li>Virtual Environment integration</li>
-<li>Code analysis</li>
-<li>Code inspection</li>
-<li>Project management</li>
-</ul>
-<p>These features come at a cost.
-PyCharm is a bit of a resource hog meaning it takes a while to boot up and is quite intensive when running.
-There is also an actual cost for using the full edition, but this can be waived with an academic email and the promise not to use it for commercial use.</p>
-<p><a class="thumbnail" href="../../../../../images/scientific-environment/pycharm.png">
-<img alt="PyCharm" src="../../../../../images/scientific-environment/pycharm.png">
-</img></a></p>
-<h4 id="Text-Editor"><strong>Text Editor</strong><a class="anchor-link" href="#Text-Editor">¶</a></h4><p>On the opposite end of the spectrum to PyCharm, a simple text editor offers a quick and easy way to write code.
-With minimal overhead there is no worrying about load times and you can go from blank slate to running code on the command line in a matter of seconds.
-This makes a text editor ideal for small scripts or corrections to big scripts.
-A downside is that you're totally unassisted (without plugins) so you should be on the ball with your syntax.</p>
-<p>My personal favourite is <a href="https://www.sublimetext.com/">Sublime Text</a> which has a free trial version.
-There are plenty of plugins to download which enhance functionality to include Git integration and syntax highlighting amongst other things.</p>
-<p>Other editors of note are <a href="http://www.vim.org/">vim</a>, <a href="https://www.gnu.org/s/emacs">emacs</a>, <a href="https://notepad-plus-plus.org/">notepad++</a>, and <a href="https://atom.io/">Atom</a>.</p>
-<p><a class="thumbnail" href="../../../../../images/scientific-environment/sublime.png">
-<img alt="Sublime Text" src="../../../../../images/scientific-environment/sublime.png">
-</img></a></p>
-<h4 id="Jupyter-Lab-(link)"><strong>Jupyter Lab</strong> <a href="https://github.com/jupyter/jupyterlab">(link)</a><a class="anchor-link" href="#Jupyter-Lab-(link)">¶</a></h4><p>One to watch for the future.
-Currently not available in package management but you can install from the Github repository if you don't mind debugging or it breaking next update.
-This looks to build upon the Jupyter notebook whilst allowing seamless terminal and file exploring integration, turning it into a full web-based IDE.</p>
-<p><a class="thumbnail" href="../../../../../images/scientific-environment/jupyter-lab.gif">
-<img alt="JupyterLab" src="../../../../../images/scientific-environment/jupyter-lab.gif">
-</img></a></p>
+<div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">full_store</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">full</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+<span class="n">full_store</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">full_store</span><span class="o">.</span><span class="n">index</span> <span class="o">+</span> <span class="mi">1</span>
+<span class="n">full_store</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
 </div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [ ]:</div>
 <div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Conclusions">Conclusions<a class="anchor-link" href="#Conclusions">¶</a></h2><p>This is a short, but hopefully useful, summary of the ecosystem of tools available at the moment to help make working with Python easier and make work reproducible. Do you disagree? If so, let me know what you think is better and more importantly <em>why</em> in the comments below. I'm always on the lookout for ways to make my day-to-day workflow easier!</p>
-<p>As for the future, I can see a time when something Docker-esque is used for all applications so we can live in a platform-agnostic world. This is still some way off though. For academic reproducibility we're probably even further off a solution given how little incentive there is currently to publish code and open it up to scrutiny.</p>
+<div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">full_store</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">'./top200climbs-full.csv'</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [ ]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Setting up the map</span>
+
+<span class="n">min_lat</span><span class="p">,</span> <span class="n">max_lat</span> <span class="o">=</span> <span class="mf">48.77</span><span class="p">,</span> <span class="mi">60</span>
+<span class="n">min_lon</span><span class="p">,</span> <span class="n">max_lon</span> <span class="o">=</span> <span class="o">-</span><span class="mf">9.05</span><span class="p">,</span> <span class="mi">5</span>
+
+<span class="n">m</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">Map</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="p">[</span><span class="mf">54.584797</span> <span class="p">,</span> <span class="o">-</span><span class="mf">3.438721</span><span class="p">],</span>
+                     <span class="n">tiles</span><span class="o">=</span><span class="s1">'Stamen Terrain'</span><span class="p">,</span> <span class="n">zoom_start</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+                  <span class="n">min_lat</span><span class="o">=</span><span class="n">min_lat</span><span class="p">,</span> <span class="n">max_lat</span><span class="o">=</span><span class="n">max_lat</span><span class="p">,</span>
+                  <span class="n">min_lon</span><span class="o">=</span><span class="n">min_lon</span><span class="p">,</span> <span class="n">max_lon</span><span class="o">=</span><span class="n">max_lon</span><span class="p">,</span>
+                  <span class="n">max_zoom</span><span class="o">=</span><span class="mi">18</span><span class="p">,</span> <span class="n">min_zoom</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span> <span class="c1">#'Stamen Terrain', Stamen Watercolor, Stamen Toner</span>
+<span class="n">mc</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">MarkerCluster</span><span class="p">()</span>
+
+<span class="n">buffer</span> <span class="o">=</span> <span class="mi">10</span>
+
+<span class="k">for</span> <span class="n">ix</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">full_store</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+    
+    <span class="n">html</span><span class="o">=</span><span class="s2">r"""<center><iframe height="405" width="590" frameborder="0" allowtransparency="true" scrolling="no" src="https://www.strava.com/segments/&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;{}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/embed"></iframe></center>"""</span><span class="o">.</span><span class="n">format</span>
+    <span class="n">html</span> <span class="o">=</span> <span class="n">html</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+    <span class="n">iframe</span> <span class="o">=</span> <span class="n">PopUpIFrame</span><span class="p">(</span><span class="n">html</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">590</span><span class="o">+</span><span class="n">buffer</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">370</span><span class="p">)</span>
+    <span class="n">popup</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">Popup</span><span class="p">(</span><span class="n">iframe</span><span class="p">,</span> <span class="n">max_width</span><span class="o">=</span><span class="mi">2650</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">ix</span> <span class="o"><=</span> <span class="mi">100</span><span class="p">:</span>
+        <span class="n">icon_url</span><span class="o">=</span><span class="s1">'http://andrewmellor.co.uk/static/markerr_post.png'</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">icon_url</span><span class="o">=</span><span class="s1">'http://andrewmellor.co.uk/static/markerb_post.png'</span>
+    <span class="n">icon</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">CustomIcon</span><span class="p">(</span><span class="n">icon_image</span><span class="o">=</span><span class="n">icon_url</span><span class="p">,</span>
+                                      <span class="n">icon_size</span><span class="o">=</span><span class="p">(</span><span class="mi">56</span><span class="p">,</span><span class="mi">56</span><span class="p">),</span>
+                                      <span class="n">icon_anchor</span><span class="o">=</span><span class="p">(</span><span class="mi">28</span><span class="p">,</span><span class="mi">56</span><span class="p">))</span>
+
+    <span class="n">lat</span><span class="p">,</span> <span class="n">lon</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">start_latlng</span>
+    <span class="n">marker</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">Marker</span><span class="p">([</span><span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">],</span> 
+                               <span class="n">icon</span><span class="o">=</span><span class="n">icon</span><span class="p">,</span>
+                               <span class="n">popup</span><span class="o">=</span><span class="n">popup</span><span class="p">)</span>
+    <span class="n">mc</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">marker</span><span class="p">)</span>
+    <span class="c1">#m.add_child(marker)</span>
+    
+<span class="n">m</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">mc</span><span class="p">)</span>
+
+<span class="n">m</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [ ]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">outfile</span><span class="o">=</span><span class="s1">'full-terrain.html'</span><span class="p">)</span>
+</pre></div>
+</div>
 </div>
 </div>
 </div>
@@ -1411,8 +1318,8 @@ This looks to build upon the Jupyter notebook whilst allowing seamless terminal 
             /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
             var disqus_shortname = 'empiricalstateofmind'; // required: replace example with your forum shortname
 
-                    var disqus_identifier = 'scientific-env';
-                var disqus_url = '../../../../../articles/2016/07/27/scientific-env/';
+                    var disqus_identifier = 'mapping-climbs';
+                var disqus_url = '../drafts/mapping-climbs.html';
 
             var disqus_config = function () {
                 this.language = "en";
@@ -1453,22 +1360,22 @@ This looks to build upon the Jupyter notebook whilst allowing seamless terminal 
             <li class="list-group-item"><h4><i class="fa fa-home fa-lg"></i><span class="icon-label">Recent Posts</span></h4>
                 <ul class="list-group" id="recentposts">
                     <li class="list-group-item">
-                        <a href="../../../../../articles/2016/07/27/scientific-env/">
+                        <a href="../articles/2016/07/27/scientific-env/">
                             Finding a Scientific Working Environment In Python
                         </a>
                     </li>
                     <li class="list-group-item">
-                        <a href="../../../../../articles/2015/04/30/easy-parallel/">
+                        <a href="../articles/2015/04/30/easy-parallel/">
                             Easy Parallel Computing with IPython
                         </a>
                     </li>
                     <li class="list-group-item">
-                        <a href="../../../../../articles/2014/12/19/gillespie-epidemics/">
+                        <a href="../articles/2014/12/19/gillespie-epidemics/">
                             Network Dynamics with Python and the Gillespie Algorithm: An Epidemic Example
                         </a>
                     </li>
                     <li class="list-group-item">
-                        <a href="../../../../../articles/2014/12/14/d3-networks/">
+                        <a href="../articles/2014/12/14/d3-networks/">
                             Interactive Networks with Networkx and D3
                         </a>
                     </li>
@@ -1476,7 +1383,7 @@ This looks to build upon the Jupyter notebook whilst allowing seamless terminal 
             </li>
 
 
-            <li class="list-group-item"><a href="../../../../../"><h4><i class="fa fa-tags fa-lg"></i><span class="icon-label">Tags</span></h4></a>
+            <li class="list-group-item"><a href="../"><h4><i class="fa fa-tags fa-lg"></i><span class="icon-label">Tags</span></h4></a>
                 <ul class="list-group " id="tags">
                 </ul>
             </li>
@@ -1498,13 +1405,13 @@ This looks to build upon the Jupyter notebook whilst allowing seamless terminal 
       </div>
    </div>
 </footer>
-<script src="../../../../../theme/js/jquery.min.js"></script>
+<script src="../theme/js/jquery.min.js"></script>
 
 <!-- Include all compiled plugins (below), or include individual files as needed -->
-<script src="../../../../../theme/js/bootstrap.min.js"></script>
+<script src="../theme/js/bootstrap.min.js"></script>
 
 <!-- Enable responsive features in IE8 with Respond.js (https://github.com/scottjehl/Respond) -->
-<script src="../../../../../theme/js/respond.min.js"></script>
+<script src="../theme/js/respond.min.js"></script>
 
     <!-- Disqus -->
     <script type="text/javascript">
