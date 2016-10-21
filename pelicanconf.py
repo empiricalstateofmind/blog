@@ -46,6 +46,8 @@ PLUGINS = ['render_math', #'liquid_tags.include_code', #'liquid_tags.notebook',
 IGNORE_FILES = ['.ipynb_checkpoints']
 PATH = 'content'
 IPYNB_USE_META_SUMMARY = True
+#IPYNB_IGNORE_CSS = True
+
 
 # Theme Extras
 # SITELOGO = 'images/favicon.png'
@@ -73,7 +75,8 @@ HIDE_SIDEBAR = False
 MENUITEMS = [('Home', '/'),
              ('Vitae', '/vitae'),
              ('Research', '/research'),
-             ('Blog', '/blog')]
+             ('Blog', '/blog'),
+             ('Projects', '/projects/projects.html')]
 
 # Social - added with publishing
 # DISQUS_SITENAME = 'empiricalstateofmind'
