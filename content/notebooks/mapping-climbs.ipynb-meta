@@ -1,0 +1,8 @@
+Title: Mapping the Top Cycling Climbs in the UK with Folium
+Date: 10-18-2016
+Author: Andy Mellor
+Slug: mapping-climbs
+Tags: Python, Folium, Cycling, Strava, Javascript, Leaflet, Mapping
+Category: General
+Status: Published
+Summary: I've always been a fan of maps, especially old maps, and the sense of exploration and history that comes with hovering over them and zooming in on the fine details. Despite this I've never really tried to make any maps of my own. I recently discovered the nifty Python package, Folium, which can make visually stunning interactive maps within a matter of minutes. Since my PhD research is concerned more with the digital world than the real world I decided to look to my love of cycling and plot some of the top cycling climbs in the UK.
