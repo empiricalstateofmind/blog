@@ -1108,6 +1108,7 @@ should use a more established MPI such as OpenMPI. Thankfully this can be done w
 <div class=" highlight hl-ipython2"><pre><span></span><span class="kn">from</span> <span class="nn">IPython.parallel</span> <span class="kn">import</span> <span class="n">Client</span>
 <span class="o">%</span><span class="k">pylab</span> inline
 </pre></div>
+
 </div>
 </div>
 </div>
@@ -1144,6 +1145,7 @@ or consult the <a href="https://ipython.org/ipython-doc/dev/parallel/parallel_pr
 <span class="n">client</span><span class="o">.</span><span class="n">block</span> <span class="o">=</span> <span class="bp">True</span> <span class="c1"># Computations run synchronously.</span>
 <span class="k">print</span> <span class="n">client</span><span class="o">.</span><span class="n">ids</span>
 </pre></div>
+
 </div>
 </div>
 </div>
@@ -1176,6 +1178,7 @@ or consult the <a href="https://ipython.org/ipython-doc/dev/parallel/parallel_pr
 <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="n">dview</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">direct_view</span><span class="p">()</span>
 </pre></div>
+
 </div>
 </div>
 </div>
@@ -1188,8 +1191,9 @@ or consult the <a href="https://ipython.org/ipython-doc/dev/parallel/parallel_pr
 <div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">x</span>
 
-<span class="n">dview</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s2">"Hello World"</span><span class="p">)</span>
+<span class="n">dview</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s2">&quot;Hello World&quot;</span><span class="p">)</span>
 </pre></div>
+
 </div>
 </div>
 </div>
@@ -1218,8 +1222,9 @@ or consult the <a href="https://ipython.org/ipython-doc/dev/parallel/parallel_pr
 <div class="inner_cell">
 <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="n">even_dview</span> <span class="o">=</span> <span class="n">client</span><span class="p">[::</span><span class="mi">2</span><span class="p">]</span>
-<span class="n">even_dview</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s2">"Hello World"</span><span class="p">)</span>
+<span class="n">even_dview</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s2">&quot;Hello World&quot;</span><span class="p">)</span>
 </pre></div>
+
 </div>
 </div>
 </div>
@@ -1249,8 +1254,9 @@ or consult the <a href="https://ipython.org/ipython-doc/dev/parallel/parallel_pr
 <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="n">bview</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">load_balanced_view</span><span class="p">()</span>
 
-<span class="n">bview</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s2">"Hello World"</span><span class="p">)</span>
+<span class="n">bview</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s2">&quot;Hello World&quot;</span><span class="p">)</span>
 </pre></div>
+
 </div>
 </div>
 </div>
@@ -1282,6 +1288,7 @@ If we were considering one engine only we would run:</p>
 <div class=" highlight hl-ipython2"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
 <span class="k">print</span> <span class="n">os</span><span class="o">.</span><span class="n">getpid</span><span class="p">()</span>
 </pre></div>
+
 </div>
 </div>
 </div>
@@ -1312,6 +1319,7 @@ If we were considering one engine only we would run:</p>
 <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="n">dview</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getpid</span><span class="p">)</span>
 </pre></div>
+
 </div>
 </div>
 </div>
@@ -1346,6 +1354,7 @@ If we were considering one engine only we would run:</p>
 
 <span class="n">getpid</span><span class="p">()</span>
 </pre></div>
+
 </div>
 </div>
 </div>
@@ -1377,6 +1386,7 @@ If we were considering one engine only we would run:</p>
 import os
 print os.getpid()
 </pre></div>
+
 </div>
 </div>
 </div>
@@ -1406,9 +1416,10 @@ print os.getpid()
 <div class="prompt input_prompt">In [12]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="n">res</span> <span class="o">=</span> <span class="n">dview</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s1">'print os.getpid()'</span><span class="p">)</span>
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">res</span> <span class="o">=</span> <span class="n">dview</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s1">&#39;print os.getpid()&#39;</span><span class="p">)</span>
 <span class="n">res</span><span class="o">.</span><span class="n">display_outputs</span><span class="p">()</span>
 </pre></div>
+
 </div>
 </div>
 </div>
@@ -1438,8 +1449,9 @@ print os.getpid()
 <div class="prompt input_prompt">In [13]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="n">dview</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s1">'import numpy'</span><span class="p">)</span>
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">dview</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s1">&#39;import numpy&#39;</span><span class="p">)</span>
 </pre></div>
+
 </div>
 </div>
 </div>
@@ -1460,6 +1472,7 @@ print os.getpid()
 <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="o">%</span><span class="k">px</span> import numpy
 </pre></div>
+
 </div>
 </div>
 </div>
@@ -1472,6 +1485,7 @@ print os.getpid()
 <div class=" highlight hl-ipython2"><pre><span></span><span class="k">with</span> <span class="n">dview</span><span class="o">.</span><span class="n">sync_imports</span><span class="p">():</span>
     <span class="kn">import</span> <span class="nn">numpy</span>
 </pre></div>
+
 </div>
 </div>
 </div>
@@ -1504,10 +1518,11 @@ print os.getpid()
 <div class=" highlight hl-ipython2"><pre><span></span><span class="o">%%</span><span class="k">file</span> script.py
 
 def hello_world():
-    print "Hello World"
+    print &quot;Hello World&quot;
 
 hello_world()
 </pre></div>
+
 </div>
 </div>
 </div>
@@ -1527,8 +1542,9 @@ hello_world()
 <div class="prompt input_prompt">In [17]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="n">dview</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">"script.py"</span><span class="p">)</span><span class="o">.</span><span class="n">display_outputs</span><span class="p">()</span>
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">dview</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;script.py&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">display_outputs</span><span class="p">()</span>
 </pre></div>
+
 </div>
 </div>
 </div>
@@ -1563,6 +1579,7 @@ hello_world()
 z = np.random.random(10)
 hist(z);
 </pre></div>
+
 </div>
 </div>
 </div>
@@ -1764,11 +1781,12 @@ yHCXpAYZ7pLUIMNdkhpkuEtSgwx3SWqQ4S5JDTLcJalB/w/CazPRyWse9gAAAABJRU5ErkJggg==
 <div class="prompt input_prompt">In [20]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="n">dview</span><span class="p">[</span><span class="s1">'a'</span><span class="p">]</span> <span class="o">=</span> <span class="mi">5</span>
-<span class="n">dview</span><span class="p">[</span><span class="s1">'b'</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span>
-<span class="k">print</span> <span class="n">dview</span><span class="p">[</span><span class="s1">'a'</span><span class="p">]</span>
-<span class="k">print</span> <span class="n">dview</span><span class="p">[</span><span class="s1">'os.getpid'</span><span class="p">]</span>
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">dview</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">dview</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="k">print</span> <span class="n">dview</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span>
+<span class="k">print</span> <span class="n">dview</span><span class="p">[</span><span class="s1">&#39;os.getpid&#39;</span><span class="p">]</span>
 </pre></div>
+
 </div>
 </div>
 </div>
@@ -1799,8 +1817,9 @@ yHCXpAYZ7pLUIMNdkhpkuEtSgwx3SWqQ4S5JDTLcJalB/w/CazPRyWse9gAAAABJRU5ErkJggg==
 <div class="inner_cell">
 <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="n">dview</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
-<span class="n">dview</span><span class="o">.</span><span class="n">pull</span><span class="p">((</span><span class="s1">'a'</span><span class="p">,</span><span class="s1">'b'</span><span class="p">))</span>
+<span class="n">dview</span><span class="o">.</span><span class="n">pull</span><span class="p">((</span><span class="s1">&#39;a&#39;</span><span class="p">,</span><span class="s1">&#39;b&#39;</span><span class="p">))</span>
 </pre></div>
+
 </div>
 </div>
 </div>
@@ -1829,9 +1848,10 @@ yHCXpAYZ7pLUIMNdkhpkuEtSgwx3SWqQ4S5JDTLcJalB/w/CazPRyWse9gAAAABJRU5ErkJggg==
 <div class="inner_cell">
 <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">32</span><span class="p">)</span>
-<span class="n">dview</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="s1">'a'</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
+<span class="n">dview</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
 <span class="o">%</span><span class="k">px</span> print a
 </pre></div>
+
 </div>
 </div>
 </div>
@@ -1862,8 +1882,9 @@ yHCXpAYZ7pLUIMNdkhpkuEtSgwx3SWqQ4S5JDTLcJalB/w/CazPRyWse9gAAAABJRU5ErkJggg==
 <div class="inner_cell">
 <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="o">%</span><span class="k">px</span> a = a**2
-<span class="n">dview</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="s1">'a'</span><span class="p">)</span>
+<span class="n">dview</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span>
 </pre></div>
+
 </div>
 </div>
 </div>
@@ -1904,6 +1925,7 @@ yHCXpAYZ7pLUIMNdkhpkuEtSgwx3SWqQ4S5JDTLcJalB/w/CazPRyWse9gAAAABJRU5ErkJggg==
     <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="o">*</span><span class="n">r</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">getpid</span><span class="p">(),</span> <span class="n">factor</span><span class="o">*</span><span class="n">r</span>
 </pre></div>
+
 </div>
 </div>
 </div>
@@ -1925,6 +1947,7 @@ yHCXpAYZ7pLUIMNdkhpkuEtSgwx3SWqQ4S5JDTLcJalB/w/CazPRyWse9gAAAABJRU5ErkJggg==
 <div class=" highlight hl-ipython2"><pre><span></span><span class="n">bview</span><span class="o">.</span><span class="n">block</span><span class="o">=</span><span class="bp">True</span>
 <span class="n">bview</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">random_number</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
+
 </div>
 </div>
 </div>
@@ -1955,6 +1978,7 @@ yHCXpAYZ7pLUIMNdkhpkuEtSgwx3SWqQ4S5JDTLcJalB/w/CazPRyWse9gAAAABJRU5ErkJggg==
 <div class=" highlight hl-ipython2"><pre><span></span><span class="n">bview</span><span class="o">.</span><span class="n">block</span> <span class="o">=</span> <span class="bp">False</span>
 <span class="n">res</span> <span class="o">=</span> <span class="n">bview</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">random_number</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
 </pre></div>
+
 </div>
 </div>
 </div>
@@ -1975,6 +1999,7 @@ yHCXpAYZ7pLUIMNdkhpkuEtSgwx3SWqQ4S5JDTLcJalB/w/CazPRyWse9gAAAABJRU5ErkJggg==
 <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="n">res</span><span class="o">.</span><span class="n">ready</span><span class="p">()</span>
 </pre></div>
+
 </div>
 </div>
 </div>
@@ -2005,6 +2030,7 @@ yHCXpAYZ7pLUIMNdkhpkuEtSgwx3SWqQ4S5JDTLcJalB/w/CazPRyWse9gAAAABJRU5ErkJggg==
 <div class=" highlight hl-ipython2"><pre><span></span><span class="k">print</span> <span class="n">res</span><span class="o">.</span><span class="n">ready</span><span class="p">()</span>
 <span class="k">print</span> <span class="n">res</span><span class="o">.</span><span class="n">result</span>
 </pre></div>
+
 </div>
 </div>
 </div>
@@ -2037,6 +2063,7 @@ yHCXpAYZ7pLUIMNdkhpkuEtSgwx3SWqQ4S5JDTLcJalB/w/CazPRyWse9gAAAABJRU5ErkJggg==
 <div class=" highlight hl-ipython2"><pre><span></span><span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">bview</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">random_number</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)):</span>
     <span class="k">print</span> <span class="n">result</span>
 </pre></div>
+
 </div>
 </div>
 </div>
@@ -2087,6 +2114,7 @@ yHCXpAYZ7pLUIMNdkhpkuEtSgwx3SWqQ4S5JDTLcJalB/w/CazPRyWse9gAAAABJRU5ErkJggg==
 <div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">c</span><span class="o">=-.</span><span class="mo">065</span><span class="o">+.</span><span class="mi">66j</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">z</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">c</span>
 </pre></div>
+
 </div>
 </div>
 </div>
@@ -2119,6 +2147,7 @@ $$J(f) = \partial  \left\{ z \in \mathbb{C} \left\vert  \frac{}{}\right . \lim_{
 <span class="n">X</span><span class="p">,</span> <span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">)</span>
 <span class="n">Z</span> <span class="o">=</span> <span class="n">X</span> <span class="o">+</span> <span class="mi">1j</span> <span class="o">*</span> <span class="n">Y</span>
 </pre></div>
+
 </div>
 </div>
 </div>
@@ -2139,6 +2168,7 @@ $$J(f) = \partial  \left\{ z \in \mathbb{C} \left\vert  \frac{}{}\right . \lim_{
 <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="k">print</span> <span class="n">Z</span><span class="p">[:</span><span class="mi">2</span><span class="p">,:</span><span class="mi">2</span><span class="p">]</span>
 </pre></div>
+
 </div>
 </div>
 </div>
@@ -2172,11 +2202,12 @@ For each initial condition we count the number of iterations until the map escap
 <div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">julia</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="mi">256</span><span class="p">):</span>
     <span class="n">J</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">Z</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">*</span> <span class="n">tmax</span>
     <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">tmax</span><span class="p">):</span>
-        <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">Z</span><span class="p">)</span> <span class="o"><=</span> <span class="mf">2.</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">Z</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mf">2.</span>
         <span class="n">Z</span><span class="p">[</span> <span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">Z</span><span class="p">[</span><span class="n">mask</span><span class="p">])</span>
         <span class="n">J</span><span class="p">[</span><span class="o">-</span><span class="n">mask</span><span class="p">]</span> <span class="o">-=</span> <span class="mi">1</span>
     <span class="k">return</span> <span class="n">J</span>
 </pre></div>
+
 </div>
 </div>
 </div>
@@ -2200,6 +2231,7 @@ For each initial condition we count the number of iterations until the map escap
 <div class=" highlight hl-ipython2"><pre><span></span><span class="n">ZZ</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">Z</span><span class="p">)</span>
 <span class="n">J</span> <span class="o">=</span> <span class="n">julia</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">ZZ</span><span class="p">)</span>
 </pre></div>
+
 </div>
 </div>
 </div>
@@ -2211,8 +2243,9 @@ For each initial condition we count the number of iterations until the map escap
 <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">])</span>
 <span class="n">imshow</span><span class="p">(</span><span class="n">J</span><span class="p">)</span>
-<span class="n">axis</span><span class="p">(</span><span class="s1">'off'</span><span class="p">);</span>
+<span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">);</span>
 </pre></div>
+
 </div>
 </div>
 </div>
@@ -5437,11 +5470,12 @@ def f(z, c=-.065+.66j):
 def julia_parallel(f,Z,tmax=256):
     J = np.ones(Z.shape) * tmax
     for t in xrange(tmax):
-        mask = np.abs(Z) <= 2.
+        mask = np.abs(Z) &lt;= 2.
         Z[mask] = f(Z[mask])
         J[-mask] -= 1
     return J
 </pre></div>
+
 </div>
 </div>
 </div>
@@ -5460,11 +5494,12 @@ def julia_parallel(f,Z,tmax=256):
 <div class="prompt input_prompt">In [81]:</div>
 <div class="inner_cell">
 <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="n">dview</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="s1">'Z'</span><span class="p">,</span> <span class="n">Z</span><span class="p">)</span>
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">dview</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="s1">&#39;Z&#39;</span><span class="p">,</span> <span class="n">Z</span><span class="p">)</span>
 <span class="o">%</span><span class="k">px</span> ZZ = np.copy(Z)
 <span class="o">%</span><span class="k">px</span> J = julia_parallel(f,ZZ)
-<span class="n">PJ</span> <span class="o">=</span> <span class="n">dview</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="s1">'J'</span><span class="p">)</span>
+<span class="n">PJ</span> <span class="o">=</span> <span class="n">dview</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="s1">&#39;J&#39;</span><span class="p">)</span>
 </pre></div>
+
 </div>
 </div>
 </div>
@@ -5485,8 +5520,9 @@ def julia_parallel(f,Z,tmax=256):
 <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">])</span>
 <span class="n">imshow</span><span class="p">(</span><span class="n">PJ</span><span class="p">)</span>
-<span class="n">axis</span><span class="p">(</span><span class="s1">'off'</span><span class="p">);</span>
+<span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">);</span>
 </pre></div>
+
 </div>
 </div>
 </div>
@@ -8703,6 +8739,7 @@ IIQYEViCIAiCIAghRgSWIAiCIAhCiPl/1zobZXA9l1cAAAAASUVORK5CYII=
 <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="n">Z</span> <span class="o">=</span> <span class="n">X</span> <span class="o">+</span> <span class="mi">1j</span> <span class="o">*</span> <span class="n">Y</span>
 </pre></div>
+
 </div>
 </div>
 </div>
@@ -8716,6 +8753,7 @@ IIQYEViCIAiCIAghRgSWIAiCIAhCiPl/1zobZXA9l1cAAAAASUVORK5CYII=
 
 J = julia(f, Z)
 </pre></div>
+
 </div>
 </div>
 </div>
@@ -8738,6 +8776,7 @@ Wall time: 6.87 s
 <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="n">Z</span> <span class="o">=</span> <span class="n">X</span> <span class="o">+</span> <span class="mi">1j</span> <span class="o">*</span> <span class="n">Y</span>
 </pre></div>
+
 </div>
 </div>
 </div>
@@ -8749,11 +8788,12 @@ Wall time: 6.87 s
 <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="o">%%</span><span class="k">time</span> 
 
-dview.scatter('Z', Z)
+dview.scatter(&#39;Z&#39;, Z)
 %px ZZ = np.copy(Z)
 %px J = julia_parallel(f,ZZ)
-PJ = dview.gather('J')
+PJ = dview.gather(&#39;J&#39;)
 </pre></div>
+
 </div>
 </div>
 </div>
@@ -8786,6 +8826,7 @@ Wall time: 1.97 s
 <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">J</span><span class="p">,</span><span class="n">PJ</span><span class="p">)</span>
 </pre></div>
+
 </div>
 </div>
 </div>
@@ -8911,6 +8952,11 @@ Wall time: 1.97 s
 
             <li class="list-group-item"><h4><i class="fa fa-home fa-lg"></i><span class="icon-label">Recent Posts</span></h4>
                 <ul class="list-group" id="recentposts">
+                    <li class="list-group-item">
+                        <a href="../../../../../articles/2016/10/18/mapping-climbs/">
+                            Mapping the Top Cycling Climbs in the UK with Folium
+                        </a>
+                    </li>
                     <li class="list-group-item">
                         <a href="../../../../../articles/2016/07/27/scientific-env/">
                             Finding a Scientific Working Environment In Python

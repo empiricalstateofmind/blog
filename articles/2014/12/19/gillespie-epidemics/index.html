@@ -1117,6 +1117,7 @@ $$\begin{align}
 <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">simulation</span> <span class="k">import</span> <span class="n">SI_Simulation</span> <span class="c1"># Import the model.</span>
 </pre></div>
+
 </div>
 </div>
 </div>
@@ -1128,6 +1129,7 @@ $$\begin{align}
 <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">G</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">erdos_renyi_graph</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span><span class="mf">0.05</span><span class="p">)</span> <span class="c1"># Use Networkx to generate a random graph.</span>
 </pre></div>
+
 </div>
 </div>
 </div>
@@ -1141,6 +1143,7 @@ $$\begin{align}
 <span class="n">model</span><span class="o">.</span><span class="n">RunToConvergence</span><span class="p">()</span> <span class="c1"># Run the simulation.</span>
 <span class="n">model</span><span class="o">.</span><span class="n">IntegrateSolution</span><span class="p">()</span> <span class="c1"># Numerically integrate the mean field equations.</span>
 </pre></div>
+
 </div>
 </div>
 </div>
@@ -1151,19 +1154,20 @@ $$\begin{align}
 <div class="inner_cell">
 <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Simulation.</span>
-<span class="n">plot</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">times</span><span class="p">,</span><span class="n">model</span><span class="o">.</span><span class="n">S</span><span class="o">/</span><span class="n">model</span><span class="o">.</span><span class="n">N</span><span class="p">,</span> <span class="s1">'g-'</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">'Susceptible (sim)'</span><span class="p">);</span>
-<span class="n">plot</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">times</span><span class="p">,</span><span class="n">model</span><span class="o">.</span><span class="n">I</span><span class="o">/</span><span class="n">model</span><span class="o">.</span><span class="n">N</span><span class="p">,</span> <span class="s1">'r-'</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">'Infected (sim)'</span><span class="p">);</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">times</span><span class="p">,</span><span class="n">model</span><span class="o">.</span><span class="n">S</span><span class="o">/</span><span class="n">model</span><span class="o">.</span><span class="n">N</span><span class="p">,</span> <span class="s1">&#39;g-&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Susceptible (sim)&#39;</span><span class="p">);</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">times</span><span class="p">,</span><span class="n">model</span><span class="o">.</span><span class="n">I</span><span class="o">/</span><span class="n">model</span><span class="o">.</span><span class="n">N</span><span class="p">,</span> <span class="s1">&#39;r-&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Infected (sim)&#39;</span><span class="p">);</span>
 
 <span class="c1"># Numerical Integration.</span>
 <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">model</span><span class="o">.</span><span class="n">times</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="mi">100</span><span class="p">)</span>
-<span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">solution</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="s1">'g--'</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">'Susceptible (approx)'</span><span class="p">);</span>
-<span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">solution</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span><span class="s1">'r--'</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">'Infected  (approx)'</span><span class="p">);</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">solution</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="s1">&#39;g--&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Susceptible (approx)&#39;</span><span class="p">);</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">solution</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span><span class="s1">&#39;r--&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Infected  (approx)&#39;</span><span class="p">);</span>
 
-<span class="n">xlabel</span><span class="p">(</span><span class="s1">'t'</span><span class="p">)</span>
-<span class="n">ylabel</span><span class="p">(</span><span class="s1">'Population Fraction'</span><span class="p">)</span>
+<span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;t&#39;</span><span class="p">)</span>
+<span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Population Fraction&#39;</span><span class="p">)</span>
 
 <span class="n">legend</span><span class="p">(</span><span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">0.7</span><span class="p">));</span>
 </pre></div>
+
 </div>
 </div>
 </div>
@@ -1688,7 +1692,7 @@ r_2 \geq \frac{1}{\alpha_0}\sum_{m=1}^{k-1}\sum_{i=1}^{j-1}\alpha_i^m(t) \hspace
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="k">class</span> <span class="nc">SI_Simulation</span><span class="p">():</span>
-    <span class="sd">"""</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A class to simulate the SI Model.</span>
 <span class="sd">    ===================================================</span>
 <span class="sd">    Input: A - Network adjacency matrix (numpy array) or Networkx graph object.</span>
@@ -1696,9 +1700,9 @@ r_2 \geq \frac{1}{\alpha_0}\sum_{m=1}^{k-1}\sum_{i=1}^{j-1}\alpha_i^m(t) \hspace
 <span class="sd">           gam - Spontaneous infection parameter.</span>
 <span class="sd">           i0 - Initial infected fraction.</span>
 <span class="sd">           prop - Propensity calculation method [ALL,TAKE,FANCY,LOOP,SLICE].</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">lam</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">gam</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">i0</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">prop</span><span class="o">=</span><span class="s1">'ALL'</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">lam</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">gam</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">i0</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">prop</span><span class="o">=</span><span class="s1">&#39;ALL&#39;</span><span class="p">):</span>
 
         <span class="c1"># Network setup.</span>
         <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">A</span><span class="p">)</span><span class="o">==</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
@@ -1706,7 +1710,7 @@ r_2 \geq \frac{1}{\alpha_0}\sum_{m=1}^{k-1}\sum_{i=1}^{j-1}\alpha_i^m(t) \hspace
         <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">A</span><span class="p">)</span><span class="o">==</span><span class="n">nx</span><span class="o">.</span><span class="n">classes</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">Graph</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">A</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">adj_matrix</span><span class="p">(</span><span class="n">A</span><span class="p">)</span><span class="o">.</span><span class="n">A</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">BaseException</span><span class="p">(</span><span class="s2">"Input an adjacency matrix or networkx object only."</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">BaseException</span><span class="p">(</span><span class="s2">&quot;Input an adjacency matrix or networkx object only.&quot;</span><span class="p">)</span>
 
         <span class="c1"># Model Parameters.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -1730,18 +1734,18 @@ r_2 \geq \frac{1}{\alpha_0}\sum_{m=1}^{k-1}\sum_{i=1}^{j-1}\alpha_i^m(t) \hspace
         <span class="bp">self</span><span class="o">.</span><span class="n">UpdatePropensityALL</span><span class="p">()</span> 
         
         <span class="c1"># Select which propensity scheme to use.</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">prop</span> <span class="o">==</span> <span class="s1">'ALL'</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">prop</span> <span class="o">==</span> <span class="s1">&#39;ALL&#39;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">UpdatePropensity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">UpdatePropensityALL</span> 
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">prop</span> <span class="o">==</span> <span class="s1">'FANCY'</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">prop</span> <span class="o">==</span> <span class="s1">&#39;FANCY&#39;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">UpdatePropensity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">UpdatePropensityFANCY</span> 
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">prop</span> <span class="o">==</span> <span class="s1">'TAKE'</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">prop</span> <span class="o">==</span> <span class="s1">&#39;TAKE&#39;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">UpdatePropensity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">UpdatePropensityTAKE</span> 
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">prop</span> <span class="o">==</span> <span class="s1">'SLICE'</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">prop</span> <span class="o">==</span> <span class="s1">&#39;SLICE&#39;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">UpdatePropensity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">UpdatePropensitySLICE</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">prop</span> <span class="o">==</span> <span class="s1">'LOOP'</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">prop</span> <span class="o">==</span> <span class="s1">&#39;LOOP&#39;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">UpdatePropensity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">UpdatePropensityLOOP</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">BaseException</span><span class="p">(</span><span class="s2">"Please specify a propensity scheme [ALL,TAKE,FANCY,LOOP,SLICE]."</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">BaseException</span><span class="p">(</span><span class="s2">&quot;Please specify a propensity scheme [ALL,TAKE,FANCY,LOOP,SLICE].&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span>
         
     <span class="k">def</span> <span class="nf">UpdatePropensityALL</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_nodes</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -1825,6 +1829,7 @@ r_2 \geq \frac{1}{\alpha_0}\sum_{m=1}^{k-1}\sum_{i=1}^{j-1}\alpha_i^m(t) \hspace
         <span class="bp">self</span><span class="o">.</span><span class="n">solution</span> <span class="o">=</span> <span class="n">x</span>
         <span class="k">return</span> <span class="kc">None</span>
 </pre></div>
+
 </div>
 </div>
 </div>
@@ -1875,6 +1880,7 @@ Cons: Not fully efficient, efficiency is variable.</p>
 <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">G</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">erdos_renyi_graph</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span><span class="mf">0.95</span><span class="p">)</span>
 </pre></div>
+
 </div>
 </div>
 </div>
@@ -1885,9 +1891,10 @@ Cons: Not fully efficient, efficiency is variable.</p>
 <div class="inner_cell">
 <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%</span><span class="k">timeit</span>
-model = SI_Simulation(G, lam=0.1, gam=0.05, i0=0.1, prop='TAKE')
+model = SI_Simulation(G, lam=0.1, gam=0.05, i0=0.1, prop=&#39;TAKE&#39;)
 model.RunToConvergence()
 </pre></div>
+
 </div>
 </div>
 </div>
@@ -1908,9 +1915,10 @@ model.RunToConvergence()
 <div class="inner_cell">
 <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%</span><span class="k">timeit</span>
-model = SI_Simulation(G, lam=0.1, gam=0.05, i0=0.1, prop='ALL')
+model = SI_Simulation(G, lam=0.1, gam=0.05, i0=0.1, prop=&#39;ALL&#39;)
 model.RunToConvergence()
 </pre></div>
+
 </div>
 </div>
 </div>
@@ -1931,9 +1939,10 @@ model.RunToConvergence()
 <div class="inner_cell">
 <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%</span><span class="k">timeit</span>
-model = SI_Simulation(G, lam=0.1, gam=0.05, i0=0.1, prop='LOOP')
+model = SI_Simulation(G, lam=0.1, gam=0.05, i0=0.1, prop=&#39;LOOP&#39;)
 model.RunToConvergence()
 </pre></div>
+
 </div>
 </div>
 </div>
@@ -1954,9 +1963,10 @@ model.RunToConvergence()
 <div class="inner_cell">
 <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%</span><span class="k">timeit</span>
-model = SI_Simulation(G, lam=0.1, gam=0.05, i0=0.1, prop='FANCY')
+model = SI_Simulation(G, lam=0.1, gam=0.05, i0=0.1, prop=&#39;FANCY&#39;)
 model.RunToConvergence()
 </pre></div>
+
 </div>
 </div>
 </div>
@@ -1977,9 +1987,10 @@ model.RunToConvergence()
 <div class="inner_cell">
 <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%</span><span class="k">timeit</span>
-model = SI_Simulation(G, lam=0.1, gam=0.05, i0=0.1, prop='SLICE')
+model = SI_Simulation(G, lam=0.1, gam=0.05, i0=0.1, prop=&#39;SLICE&#39;)
 model.RunToConvergence()
 </pre></div>
+
 </div>
 </div>
 </div>
@@ -2010,6 +2021,7 @@ model.RunToConvergence()
 <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">G</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">erdos_renyi_graph</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span><span class="mf">0.05</span><span class="p">)</span>
 </pre></div>
+
 </div>
 </div>
 </div>
@@ -2020,9 +2032,10 @@ model.RunToConvergence()
 <div class="inner_cell">
 <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%</span><span class="k">timeit</span>
-model = SI_Simulation(G, lam=0.1, gam=0.05, i0=0.1, prop='TAKE')
+model = SI_Simulation(G, lam=0.1, gam=0.05, i0=0.1, prop=&#39;TAKE&#39;)
 model.RunToConvergence()
 </pre></div>
+
 </div>
 </div>
 </div>
@@ -2043,9 +2056,10 @@ model.RunToConvergence()
 <div class="inner_cell">
 <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%</span><span class="k">timeit</span>
-model = SI_Simulation(G, lam=0.1, gam=0.05, i0=0.1, prop='ALL')
+model = SI_Simulation(G, lam=0.1, gam=0.05, i0=0.1, prop=&#39;ALL&#39;)
 model.RunToConvergence()
 </pre></div>
+
 </div>
 </div>
 </div>
@@ -2066,9 +2080,10 @@ model.RunToConvergence()
 <div class="inner_cell">
 <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%</span><span class="k">timeit</span>
-model = SI_Simulation(G, lam=0.1, gam=0.05, i0=0.1, prop='LOOP')
+model = SI_Simulation(G, lam=0.1, gam=0.05, i0=0.1, prop=&#39;LOOP&#39;)
 model.RunToConvergence()
 </pre></div>
+
 </div>
 </div>
 </div>
@@ -2089,9 +2104,10 @@ model.RunToConvergence()
 <div class="inner_cell">
 <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%</span><span class="k">timeit</span>
-model = SI_Simulation(G, lam=0.1, gam=0.05, i0=0.1, prop='FANCY')
+model = SI_Simulation(G, lam=0.1, gam=0.05, i0=0.1, prop=&#39;FANCY&#39;)
 model.RunToConvergence()
 </pre></div>
+
 </div>
 </div>
 </div>
@@ -2112,9 +2128,10 @@ model.RunToConvergence()
 <div class="inner_cell">
 <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%</span><span class="k">timeit</span>
-model = SI_Simulation(G, lam=0.1, gam=0.05, i0=0.1, prop='SLICE')
+model = SI_Simulation(G, lam=0.1, gam=0.05, i0=0.1, prop=&#39;SLICE&#39;)
 model.RunToConvergence()
 </pre></div>
+
 </div>
 </div>
 </div>
@@ -2147,31 +2164,109 @@ model.RunToConvergence()
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">timeit</span> <span class="k">import</span> <span class="n">timeit</span>
 <span class="n">num_sims</span> <span class="o">=</span> <span class="mi">10</span>
 
-<span class="n">setup</span> <span class="o">=</span> <span class="s2">"""</span>
+<span class="n">setup</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">from simulation import SI_Simulation</span>
 <span class="s2">import networkx as nx</span>
 <span class="s2">G = nx.erdos_renyi_graph(1000,0.5, seed=50)</span>
-<span class="s2">"""</span>
+<span class="s2">&quot;&quot;&quot;</span>
 
-<span class="n">stmt</span> <span class="o">=</span> <span class="s2">"""</span>
-<span class="s2">model = SI_Simulation(G,lam=0.1, gam=0.05, i0=0.1, prop='TAKE')</span>
+<span class="n">stmt</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">model = SI_Simulation(G,lam=0.1, gam=0.05, i0=0.1, prop=&#39;TAKE&#39;)</span>
 <span class="s2">model.RunToConvergence()</span>
-<span class="s2">"""</span>
+<span class="s2">&quot;&quot;&quot;</span>
 
 <span class="n">timeit</span><span class="p">(</span><span class="n">stmt</span><span class="o">=</span><span class="n">stmt</span><span class="p">,</span> <span class="n">setup</span><span class="o">=</span><span class="n">setup</span><span class="p">,</span> <span class="n">number</span><span class="o">=</span><span class="n">num_sims</span><span class="p">)</span>
 </pre></div>
+
 </div>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [ ]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#ignore</span>
+<span class="kn">from</span> <span class="nn">timeit</span> <span class="k">import</span> <span class="n">timeit</span>
+<span class="n">sims</span> <span class="o">=</span> <span class="mi">5</span>
+
+<span class="n">t_take_store</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">t_all_store</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">N</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mf">3.5</span><span class="p">,</span><span class="mi">10</span><span class="p">):</span>
+    <span class="nb">print</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> </span><span class="si">{:.0f}</span><span class="s2">: &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">N</span><span class="p">),</span>
+    <span class="n">t_take</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">t_all</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">N</span><span class="p">,</span><span class="mi">10</span><span class="p">):</span>
+        <span class="nb">print</span> <span class="s2">&quot;</span><span class="si">{:.2f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">k</span><span class="p">),</span>
+
+        <span class="n">setup</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">from simulation import SI_Simulation</span>
+<span class="s2">import networkx as nx</span>
+<span class="s2">G = nx.erdos_renyi_graph(</span><span class="si">{N:.0f}</span><span class="s2">,</span><span class="si">{p:.4f}</span><span class="s2">, seed=50)</span>
+<span class="s2">&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="n">N</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="o">/</span><span class="n">N</span><span class="p">)</span>
+
+        <span class="n">stmt</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">model = SI_Simulation(G,lam=0.1, gam=0.05, i0=0.1, prop=&#39;TAKE&#39;)</span>
+<span class="s2">model.RunToConvergence()</span>
+<span class="s2">&quot;&quot;&quot;</span>        
+        <span class="n">t_take</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">timeit</span><span class="p">(</span><span class="n">stmt</span><span class="o">=</span><span class="n">stmt</span><span class="p">,</span> <span class="n">setup</span><span class="o">=</span><span class="n">setup</span><span class="p">,</span> <span class="n">number</span><span class="o">=</span><span class="n">sims</span><span class="p">)</span><span class="o">/</span><span class="n">sims</span><span class="p">)</span> 
+    
+        <span class="n">stmt</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">model = SI_Simulation(G,lam=0.1, gam=0.05, i0=0.1, prop=&#39;ALL&#39;)</span>
+<span class="s2">model.RunToConvergence()</span>
+<span class="s2">&quot;&quot;&quot;</span>          
+        <span class="n">t_all</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">timeit</span><span class="p">(</span><span class="n">stmt</span><span class="o">=</span><span class="n">stmt</span><span class="p">,</span> <span class="n">setup</span><span class="o">=</span><span class="n">setup</span><span class="p">,</span> <span class="n">number</span><span class="o">=</span><span class="n">sims</span><span class="p">)</span><span class="o">/</span><span class="n">sims</span><span class="p">)</span> 
+    
+    <span class="n">t_take_store</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t_take</span><span class="p">)</span>
+    <span class="n">t_all_store</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t_all</span><span class="p">)</span>
+    
+<span class="n">t_take_store</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">t_take_store</span><span class="p">)</span>
+<span class="n">t_all_store</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">t_all_store</span><span class="p">)</span>
+</pre></div>
 
 </div>
-<div class="cell border-box-sizing code_cell rendered">
-
+</div>
+</div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [100]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#ignore</span>
+<span class="n">np</span><span class="o">.</span><span class="n">savez</span><span class="p">(</span><span class="s1">&#39;benchmarks.npz&#39;</span><span class="p">,</span><span class="n">t_take</span><span class="o">=</span><span class="n">t_take_store</span><span class="p">,</span> <span class="n">t_all</span><span class="o">=</span><span class="n">t_all_store</span><span class="p">)</span>
+</pre></div>
 
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [ ]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#ignore</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;benchmarks.npz&#39;</span><span class="p">)</span>
+<span class="n">cmap</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">gnuplot</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="mi">7</span><span class="p">,</span><span class="mi">10</span><span class="p">])</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">ix</span><span class="p">,</span><span class="n">N</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mf">3.5</span><span class="p">,</span><span class="mi">10</span><span class="p">)):</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">semilogy</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;t_take&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="p">[:,</span><span class="n">ix</span><span class="p">],</span> <span class="n">color</span> <span class="o">=</span> <span class="n">cmap</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">ix</span><span class="p">)</span><span class="o">/</span><span class="mi">10</span><span class="p">),</span> <span class="n">linestyle</span> <span class="o">=</span> <span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;N = </span><span class="si">{:.0f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">N</span><span class="p">));</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">semilogy</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;t_all&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="p">[:,</span><span class="n">ix</span><span class="p">],</span> <span class="n">color</span> <span class="o">=</span> <span class="n">cmap</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">ix</span><span class="p">)</span><span class="o">/</span><span class="mi">10</span><span class="p">),</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">);</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">1.18</span><span class="p">,</span><span class="mf">1.1</span><span class="p">),</span> <span class="n">ncol</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">r&quot;$\langle k \rangle/N$&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">);</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">r&quot;Average Execution Time (s)&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">);</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;performance.png&#39;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
 </div>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="prompt input_prompt">
@@ -2303,6 +2398,11 @@ implicit tau-leaping method.</em> The Journal of Chemical Physics</p>
 
             <li class="list-group-item"><h4><i class="fa fa-home fa-lg"></i><span class="icon-label">Recent Posts</span></h4>
                 <ul class="list-group" id="recentposts">
+                    <li class="list-group-item">
+                        <a href="../../../../../articles/2016/10/18/mapping-climbs/">
+                            Mapping the Top Cycling Climbs in the UK with Folium
+                        </a>
+                    </li>
                     <li class="list-group-item">
                         <a href="../../../../../articles/2016/07/27/scientific-env/">
                             Finding a Scientific Working Environment In Python
