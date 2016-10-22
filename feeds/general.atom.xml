@@ -1364,17 +1364,7 @@ Thankfully we can query the Strava API for each segement (using the id) and save
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;div class="cell border-box-sizing code_cell rendered"&gt;
-&lt;div class="input"&gt;
-&lt;div class="prompt input_prompt"&gt;In [5]:&lt;/div&gt;
-&lt;div class="inner_cell"&gt;
-&lt;div class="input_area"&gt;
-&lt;div class=" highlight hl-ipython3"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;#ignore&lt;/span&gt;
-&lt;span class="n"&gt;full_segment_info&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;pd&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;read_csv&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;./top200climbs-full.csv&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;index_col&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="c1"&gt;# Remove eventually&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
 
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
 &lt;/div&gt;
 &lt;div class="cell border-box-sizing text_cell rendered"&gt;
 &lt;div class="prompt input_prompt"&gt;
