@@ -1754,7 +1754,7 @@ AAAAAElFTkSuQmCC
 &lt;div class="inner_cell"&gt;
 &lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;// We load the latest version of d3.js from the Web.&lt;/span&gt;
-&lt;span class="nx"&gt;require&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;config&lt;/span&gt;&lt;span class="p"&gt;({&lt;/span&gt;&lt;span class="nx"&gt;paths&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="nx"&gt;d3&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"http://d3js.org/d3.v3.min"&lt;/span&gt;&lt;span class="p"&gt;}});&lt;/span&gt;
+&lt;span class="nx"&gt;require&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;config&lt;/span&gt;&lt;span class="p"&gt;({&lt;/span&gt;&lt;span class="nx"&gt;paths&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="nx"&gt;d3&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"https://d3js.org/d3.v3.min"&lt;/span&gt;&lt;span class="p"&gt;}});&lt;/span&gt;
 &lt;span class="nx"&gt;require&lt;/span&gt;&lt;span class="p"&gt;([&lt;/span&gt;&lt;span class="s2"&gt;"d3"&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;d3&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
 
     &lt;span class="c1"&gt;// Parameter declaration, the height and width of our viz.&lt;/span&gt;
@@ -1937,7 +1937,7 @@ AAAAAElFTkSuQmCC
 .link {stroke: #999; stroke-opacity: .6;}
 div#d3-container-neighbours { margin-left: auto; margin-right: auto; position: relative;}
 div#d3-container-degree { margin-left: auto; margin-right: auto; position: relative;}
-&lt;/style&gt;&lt;script charset="utf-8" src="http://d3js.org/d3.v3.min.js"&gt;&lt;/script&gt;
+&lt;/style&gt;&lt;script charset="utf-8" src="https://d3js.org/d3.v3.min.js"&gt;&lt;/script&gt;
 &lt;script&gt;
     // Parameter declaration, the height and width of our viz.
     var width2 = 600,
@@ -2012,7 +2012,7 @@ div#d3-container-degree { margin-left: auto; margin-right: auto; position: relat
                 .attr("cy", function(d) { return d.y; });
         });
     });
-&lt;/script&gt;&lt;script charset="utf-8" src="http://d3js.org/d3.v3.min.js"&gt;&lt;/script&gt;
+&lt;/script&gt;&lt;script charset="utf-8" src="https://d3js.org/d3.v3.min.js"&gt;&lt;/script&gt;
 &lt;script&gt;
     // Parameter declaration, the height and width of our viz.
     var width = 600,
