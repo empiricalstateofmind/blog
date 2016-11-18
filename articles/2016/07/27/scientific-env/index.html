@@ -1417,15 +1417,19 @@ This looks to build upon the Jupyter notebook whilst allowing seamless terminal 
 
             var disqus_config = function () {
                 this.language = "en";
+                this.page.identifier = 'empiricalstateofmind';
             };
 
             /* * * DON'T EDIT BELOW THIS LINE * * */
             (function () {
+                var d = document;
                 var dsq = document.createElement('script');
                 dsq.type = 'text/javascript';
-                dsq.async = true;
+                /* * *  dsq.async = true; * * */
                 dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                dsq.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(dsq);
+                /* * * (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq); * * */
             })();
         </script>
         <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
@@ -1485,38 +1489,13 @@ This looks to build upon the Jupyter notebook whilst allowing seamless terminal 
             <li class="list-group-item"><a href="../../../../../"><h4><i class="fa fa-tags fa-lg"></i><span class="icon-label">Tags</span></h4></a>
                 <ul class="list-group " id="tags">
                     <li class="list-group-item tag-1">
-                        <a href="../../../../../tag/ipython.html">
-                            IPython
-                        </a>
-                    </li>
-                    <li class="list-group-item tag-1">
                         <a href="../../../../../tag/python.html">
                             Python
                         </a>
                     </li>
-                    <li class="list-group-item tag-4">
-                        <a href="../../../../../tag/parallel.html">
-                            Parallel
-                        </a>
-                    </li>
-                    <li class="list-group-item tag-4">
-                        <a href="../../../../../tag/folium.html">
-                            Folium
-                        </a>
-                    </li>
-                    <li class="list-group-item tag-4">
-                        <a href="../../../../../tag/leaflet.html">
-                            Leaflet
-                        </a>
-                    </li>
-                    <li class="list-group-item tag-4">
-                        <a href="../../../../../tag/academia.html">
-                            Academia
-                        </a>
-                    </li>
-                    <li class="list-group-item tag-4">
-                        <a href="../../../../../tag/docker.html">
-                            Docker
+                    <li class="list-group-item tag-1">
+                        <a href="../../../../../tag/ipython.html">
+                            IPython
                         </a>
                     </li>
                     <li class="list-group-item tag-4">
@@ -1525,13 +1504,38 @@ This looks to build upon the Jupyter notebook whilst allowing seamless terminal 
                         </a>
                     </li>
                     <li class="list-group-item tag-4">
-                        <a href="../../../../../tag/cycling.html">
-                            Cycling
+                        <a href="../../../../../tag/simulation.html">
+                            Simulation
                         </a>
                     </li>
                     <li class="list-group-item tag-4">
-                        <a href="../../../../../tag/simulation.html">
-                            Simulation
+                        <a href="../../../../../tag/fractals.html">
+                            Fractals
+                        </a>
+                    </li>
+                    <li class="list-group-item tag-4">
+                        <a href="../../../../../tag/reproducibility.html">
+                            Reproducibility
+                        </a>
+                    </li>
+                    <li class="list-group-item tag-4">
+                        <a href="../../../../../tag/conda.html">
+                            Conda
+                        </a>
+                    </li>
+                    <li class="list-group-item tag-4">
+                        <a href="../../../../../tag/folium.html">
+                            Folium
+                        </a>
+                    </li>
+                    <li class="list-group-item tag-4">
+                        <a href="../../../../../tag/mapping.html">
+                            Mapping
+                        </a>
+                    </li>
+                    <li class="list-group-item tag-4">
+                        <a href="../../../../../tag/strava.html">
+                            Strava
                         </a>
                     </li>
                 </ul>
