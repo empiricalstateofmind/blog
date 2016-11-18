@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>Andrew Mellor</title><link href="http://empiricalstateofmind.github.io/blog/" rel="alternate"></link><link href="http://empiricalstateofmind.github.io/blog/feeds/dynamical-proccesses.atom.xml" rel="self"></link><id>http://empiricalstateofmind.github.io/blog/</id><updated>2014-12-19T00:00:00+01:00</updated><entry><title>Network Dynamics with Python and the Gillespie Algorithm: An Epidemic Example</title><link href="http://empiricalstateofmind.github.io/blog/articles/2014/12/19/gillespie-epidemics/" rel="alternate"></link><published>2014-12-19T00:00:00+01:00</published><updated>2014-12-19T00:00:00+01:00</updated><author><name>Andy Mellor</name></author><id>tag:empiricalstateofmind.github.io,2014-12-19:blog/articles/2014/12/19/gillespie-epidemics/</id><summary type="html">&lt;style type="text/css"&gt;/*!
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Andrew Mellor</title><link href="https://andrewmellor.co.uk/blog/" rel="alternate"></link><link href="https://andrewmellor.co.uk/blog/feeds/dynamical-proccesses.atom.xml" rel="self"></link><id>https://andrewmellor.co.uk/blog/</id><updated>2014-12-19T00:00:00+01:00</updated><entry><title>Network Dynamics with Python and the Gillespie Algorithm: An Epidemic Example</title><link href="https://andrewmellor.co.uk/blog/articles/2014/12/19/gillespie-epidemics/" rel="alternate"></link><published>2014-12-19T00:00:00+01:00</published><updated>2014-12-19T00:00:00+01:00</updated><author><name>Andy Mellor</name></author><id>tag:andrewmellor.co.uk,2014-12-19:blog/articles/2014/12/19/gillespie-epidemics/</id><summary type="html">&lt;style type="text/css"&gt;/*!
 *
 * IPython notebook
 *
@@ -2085,7 +2085,7 @@ model.RunToConvergence()
 &lt;div class="inner_cell"&gt;
 &lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
 &lt;p&gt;Now, computing simulation times for across networks of varying size and degree we can see when we should use either method. The dashed lines are for the ALL method and the solid lines represent the TAKE method.&lt;/p&gt;
-&lt;p&gt;&lt;img alt="Performance" src="http://empiricalstateofmind.github.io/blog/images/performance.png" title="Performance" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Performance" src="https://andrewmellor.co.uk/blog/images/performance.png" title="Performance" /&gt;&lt;/p&gt;
 &lt;p&gt;For small networks there is little in terms of performance between the two implementations. As we increase the system size we see that the TAKE method performs significantly faster for small $\langle k \rangle / N$, and significantly slower for large $\langle k \rangle / N$. From this quick study it seems sensible to use TAKE when $\langle k \rangle / N &lt; 0.5$. This figure is dependent the propensity calculation as well as the underlying tradeoff between calculation and array copying and so should not be taken as gospel. For the SI model one would most likely use the TAKE method as most human contact networks are sparse in nature.&lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;

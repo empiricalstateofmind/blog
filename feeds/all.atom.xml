@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>Andrew Mellor</title><link href="http://empiricalstateofmind.github.io/blog/" rel="alternate"></link><link href="http://empiricalstateofmind.github.io/blog/feeds/all.atom.xml" rel="self"></link><id>http://empiricalstateofmind.github.io/blog/</id><updated>2016-10-18T00:00:00+02:00</updated><entry><title>Mapping the Top Cycling Climbs in the UK with Folium</title><link href="http://empiricalstateofmind.github.io/blog/articles/2016/10/18/mapping-climbs/" rel="alternate"></link><published>2016-10-18T00:00:00+02:00</published><updated>2016-10-18T00:00:00+02:00</updated><author><name>Andy Mellor</name></author><id>tag:empiricalstateofmind.github.io,2016-10-18:blog/articles/2016/10/18/mapping-climbs/</id><summary type="html">&lt;style type="text/css"&gt;/*!
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Andrew Mellor</title><link href="https://andrewmellor.co.uk/blog/" rel="alternate"></link><link href="https://andrewmellor.co.uk/blog/feeds/all.atom.xml" rel="self"></link><id>https://andrewmellor.co.uk/blog/</id><updated>2016-10-18T00:00:00+02:00</updated><entry><title>Mapping the Top Cycling Climbs in the UK with Folium</title><link href="https://andrewmellor.co.uk/blog/articles/2016/10/18/mapping-climbs/" rel="alternate"></link><published>2016-10-18T00:00:00+02:00</published><updated>2016-10-18T00:00:00+02:00</updated><author><name>Andy Mellor</name></author><id>tag:andrewmellor.co.uk,2016-10-18:blog/articles/2016/10/18/mapping-climbs/</id><summary type="html">&lt;style type="text/css"&gt;/*!
 *
 * IPython notebook
 *
@@ -1709,7 +1709,7 @@ Folium isn't just limited to markers either, there is support for geojson and ot
     (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
 }
 &lt;/script&gt;
-</summary><category term="Python"></category><category term="Folium"></category><category term="Cycling"></category><category term="Strava"></category><category term="Javascript"></category><category term="Leaflet"></category><category term="Mapping"></category></entry><entry><title>Finding a Scientific Working Environment In Python</title><link href="http://empiricalstateofmind.github.io/blog/articles/2016/07/27/scientific-env/" rel="alternate"></link><published>2016-07-27T00:00:00+02:00</published><updated>2016-07-27T00:00:00+02:00</updated><author><name>Andy Mellor</name></author><id>tag:empiricalstateofmind.github.io,2016-07-27:blog/articles/2016/07/27/scientific-env/</id><summary type="html">&lt;style type="text/css"&gt;/*!
+</summary><category term="Python"></category><category term="Folium"></category><category term="Cycling"></category><category term="Strava"></category><category term="Javascript"></category><category term="Leaflet"></category><category term="Mapping"></category></entry><entry><title>Finding a Scientific Working Environment In Python</title><link href="https://andrewmellor.co.uk/blog/articles/2016/07/27/scientific-env/" rel="alternate"></link><published>2016-07-27T00:00:00+02:00</published><updated>2016-07-27T00:00:00+02:00</updated><author><name>Andy Mellor</name></author><id>tag:andrewmellor.co.uk,2016-07-27:blog/articles/2016/07/27/scientific-env/</id><summary type="html">&lt;style type="text/css"&gt;/*!
 *
 * IPython notebook
 *
@@ -2799,8 +2799,8 @@ There are also a number of different non-Python programs that can be installed t
 &lt;p&gt;or on windows&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;activate &lt;span class="o"&gt;[&lt;/span&gt;envname&lt;span class="o"&gt;]&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;&lt;a class="thumbnail" href="http://empiricalstateofmind.github.io/blog/images/scientific-environment/conda.png"&gt;
-&lt;img alt="Conda" src="http://empiricalstateofmind.github.io/blog/images/scientific-environment/conda.png"&gt;
+&lt;p&gt;&lt;a class="thumbnail" href="https://andrewmellor.co.uk/blog/images/scientific-environment/conda.png"&gt;
+&lt;img alt="Conda" src="https://andrewmellor.co.uk/blog/images/scientific-environment/conda.png"&gt;
 &lt;/img&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;To deactivate, simply reactivate another environment or call&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;deactivate
@@ -2856,8 +2856,8 @@ This has big repercussions for business, making data and systems safer against a
 &lt;div class="inner_cell"&gt;
 &lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
 &lt;row&gt;
-&lt;div class="col-sm-6"&gt;&lt;img src="http://empiricalstateofmind.github.io/blog/images/scientific-environment/docker1.png" /&gt;&lt;/div&gt;
-&lt;div class="col-sm-6"&gt;&lt;img src="http://empiricalstateofmind.github.io/blog/images/scientific-environment/docker2.png" /&gt;&lt;/div&gt;
+&lt;div class="col-sm-6"&gt;&lt;img src="https://andrewmellor.co.uk/blog/images/scientific-environment/docker1.png" /&gt;&lt;/div&gt;
+&lt;div class="col-sm-6"&gt;&lt;img src="https://andrewmellor.co.uk/blog/images/scientific-environment/docker2.png" /&gt;&lt;/div&gt;
 &lt;p&gt;&lt;i&gt;Source: &lt;a href="https://www.docker.com/what-docker"&gt;https://www.docker.com/what-docker&lt;/a&gt;&lt;/i&gt;&lt;/p&gt;
 &lt;/row&gt;
 &lt;/div&gt;
@@ -2889,8 +2889,8 @@ Used correctly an IDE can speed up the time it takes to develop and test code as
 &lt;h4 id="Spyder-(link)"&gt;&lt;strong&gt;Spyder&lt;/strong&gt; &lt;a href="https://github.com/spyder-ide/spyder"&gt;(link)&lt;/a&gt;&lt;a class="anchor-link" href="#Spyder-(link)"&gt;¶&lt;/a&gt;&lt;/h4&gt;&lt;p&gt;Spyder comes bundled with Anaconda as the default IDE and is a great place to start using Python.
 It is functional, well maintained, and offers space to code, debug, and run as many Python/IPython terminals as you may require.
 The code is open-source also, meaning if you find a bug or want an extra feature then there's scope for you to fix or add it yourself.&lt;/p&gt;
-&lt;p&gt;&lt;a class="thumbnail" href="http://empiricalstateofmind.github.io/blog/images/scientific-environment/spyder.png"&gt;
-&lt;img alt="Spyder" src="http://empiricalstateofmind.github.io/blog/images/scientific-environment/spyder.png"&gt;
+&lt;p&gt;&lt;a class="thumbnail" href="https://andrewmellor.co.uk/blog/images/scientific-environment/spyder.png"&gt;
+&lt;img alt="Spyder" src="https://andrewmellor.co.uk/blog/images/scientific-environment/spyder.png"&gt;
 &lt;/img&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;h4 id="Jupyter-Notebook-(link)"&gt;&lt;strong&gt;Jupyter Notebook&lt;/strong&gt; &lt;a href="http://jupyter.org/"&gt;(link)&lt;/a&gt;&lt;a class="anchor-link" href="#Jupyter-Notebook-(link)"&gt;¶&lt;/a&gt;&lt;/h4&gt;&lt;p&gt;The Jupyter Notebook (previously know as the IPython Notebook) has revolutionised how exploratory data analysis is carried out.
 The notebook runs in a web browser and can incorporate images, videos, tex, and raw HTML.
@@ -2902,8 +2902,8 @@ This quick work-flow combined with the inclusion of inline graphs and text has m
 &lt;li&gt;Jupyter Notebook servers - run the computation on one machine which can be accessed from any number of others - even if they don't have Python installed.&lt;/li&gt;
 &lt;li&gt;Other kernels can be used in the same fashion - R, MATLAB, bash, e.t.c.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;a class="thumbnail" href="http://empiricalstateofmind.github.io/blog/images/scientific-environment/notebook.png"&gt;
-&lt;img alt="Notebook" src="http://empiricalstateofmind.github.io/blog/images/scientific-environment/notebook.png"&gt;
+&lt;p&gt;&lt;a class="thumbnail" href="https://andrewmellor.co.uk/blog/images/scientific-environment/notebook.png"&gt;
+&lt;img alt="Notebook" src="https://andrewmellor.co.uk/blog/images/scientific-environment/notebook.png"&gt;
 &lt;/img&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;h4 id="PyCharm-(link)"&gt;&lt;strong&gt;PyCharm&lt;/strong&gt; &lt;a href="https://www.jetbrains.com/pycharm/"&gt;(link)&lt;/a&gt;&lt;a class="anchor-link" href="#PyCharm-(link)"&gt;¶&lt;/a&gt;&lt;/h4&gt;&lt;p&gt;PyCharm is the 'bells and whistles' IDE for Python.
 It includes everything and anything you might need whilst developing code.
@@ -2919,8 +2919,8 @@ To name a few features there is:&lt;/p&gt;
 &lt;p&gt;These features come at a cost.
 PyCharm is a bit of a resource hog meaning it takes a while to boot up and is quite intensive when running.
 There is also an actual cost for using the full edition, but this can be waived with an academic email and the promise not to use it for commercial use.&lt;/p&gt;
-&lt;p&gt;&lt;a class="thumbnail" href="http://empiricalstateofmind.github.io/blog/images/scientific-environment/pycharm.png"&gt;
-&lt;img alt="PyCharm" src="http://empiricalstateofmind.github.io/blog/images/scientific-environment/pycharm.png"&gt;
+&lt;p&gt;&lt;a class="thumbnail" href="https://andrewmellor.co.uk/blog/images/scientific-environment/pycharm.png"&gt;
+&lt;img alt="PyCharm" src="https://andrewmellor.co.uk/blog/images/scientific-environment/pycharm.png"&gt;
 &lt;/img&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;h4 id="Text-Editor"&gt;&lt;strong&gt;Text Editor&lt;/strong&gt;&lt;a class="anchor-link" href="#Text-Editor"&gt;¶&lt;/a&gt;&lt;/h4&gt;&lt;p&gt;On the opposite end of the spectrum to PyCharm, a simple text editor offers a quick and easy way to write code.
 With minimal overhead there is no worrying about load times and you can go from blank slate to running code on the command line in a matter of seconds.
@@ -2929,14 +2929,14 @@ A downside is that you're totally unassisted (without plugins) so you should be 
 &lt;p&gt;My personal favourite is &lt;a href="https://www.sublimetext.com/"&gt;Sublime Text&lt;/a&gt; which has a free trial version.
 There are plenty of plugins to download which enhance functionality to include Git integration and syntax highlighting amongst other things.&lt;/p&gt;
 &lt;p&gt;Other editors of note are &lt;a href="http://www.vim.org/"&gt;vim&lt;/a&gt;, &lt;a href="https://www.gnu.org/s/emacs"&gt;emacs&lt;/a&gt;, &lt;a href="https://notepad-plus-plus.org/"&gt;notepad++&lt;/a&gt;, and &lt;a href="https://atom.io/"&gt;Atom&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;&lt;a class="thumbnail" href="http://empiricalstateofmind.github.io/blog/images/scientific-environment/sublime.png"&gt;
-&lt;img alt="Sublime Text" src="http://empiricalstateofmind.github.io/blog/images/scientific-environment/sublime.png"&gt;
+&lt;p&gt;&lt;a class="thumbnail" href="https://andrewmellor.co.uk/blog/images/scientific-environment/sublime.png"&gt;
+&lt;img alt="Sublime Text" src="https://andrewmellor.co.uk/blog/images/scientific-environment/sublime.png"&gt;
 &lt;/img&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;h4 id="Jupyter-Lab-(link)"&gt;&lt;strong&gt;Jupyter Lab&lt;/strong&gt; &lt;a href="https://github.com/jupyter/jupyterlab"&gt;(link)&lt;/a&gt;&lt;a class="anchor-link" href="#Jupyter-Lab-(link)"&gt;¶&lt;/a&gt;&lt;/h4&gt;&lt;p&gt;One to watch for the future.
 Currently not available in package management but you can install from the Github repository if you don't mind debugging or it breaking next update.
 This looks to build upon the Jupyter notebook whilst allowing seamless terminal and file exploring integration, turning it into a full web-based IDE.&lt;/p&gt;
-&lt;p&gt;&lt;a class="thumbnail" href="http://empiricalstateofmind.github.io/blog/images/scientific-environment/jupyter-lab.gif"&gt;
-&lt;img alt="JupyterLab" src="http://empiricalstateofmind.github.io/blog/images/scientific-environment/jupyter-lab.gif"&gt;
+&lt;p&gt;&lt;a class="thumbnail" href="https://andrewmellor.co.uk/blog/images/scientific-environment/jupyter-lab.gif"&gt;
+&lt;img alt="JupyterLab" src="https://andrewmellor.co.uk/blog/images/scientific-environment/jupyter-lab.gif"&gt;
 &lt;/img&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
@@ -2978,7 +2978,7 @@ This looks to build upon the Jupyter notebook whilst allowing seamless terminal 
     (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
 }
 &lt;/script&gt;
-</summary><category term="Python"></category><category term="Docker"></category><category term="Conda"></category><category term="Anaconda"></category><category term="virtualenv"></category><category term="Academia"></category><category term="Reproducibility"></category></entry><entry><title>Easy Parallel Computing with IPython</title><link href="http://empiricalstateofmind.github.io/blog/articles/2015/04/30/easy-parallel/" rel="alternate"></link><published>2015-04-30T00:00:00+02:00</published><updated>2015-04-30T00:00:00+02:00</updated><author><name>Andy Mellor</name></author><id>tag:empiricalstateofmind.github.io,2015-04-30:blog/articles/2015/04/30/easy-parallel/</id><summary type="html">&lt;style type="text/css"&gt;/*!
+</summary><category term="Python"></category><category term="Docker"></category><category term="Conda"></category><category term="Anaconda"></category><category term="virtualenv"></category><category term="Academia"></category><category term="Reproducibility"></category></entry><entry><title>Easy Parallel Computing with IPython</title><link href="https://andrewmellor.co.uk/blog/articles/2015/04/30/easy-parallel/" rel="alternate"></link><published>2015-04-30T00:00:00+02:00</published><updated>2015-04-30T00:00:00+02:00</updated><author><name>Andy Mellor</name></author><id>tag:andrewmellor.co.uk,2015-04-30:blog/articles/2015/04/30/easy-parallel/</id><summary type="html">&lt;style type="text/css"&gt;/*!
 *
 * IPython notebook
 *
@@ -11758,7 +11758,7 @@ Wall time: 1.97 s
     (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
 }
 &lt;/script&gt;
-</summary><category term="IPython"></category><category term="Parallel"></category><category term="Fractals"></category></entry><entry><title>Network Dynamics with Python and the Gillespie Algorithm: An Epidemic Example</title><link href="http://empiricalstateofmind.github.io/blog/articles/2014/12/19/gillespie-epidemics/" rel="alternate"></link><published>2014-12-19T00:00:00+01:00</published><updated>2014-12-19T00:00:00+01:00</updated><author><name>Andy Mellor</name></author><id>tag:empiricalstateofmind.github.io,2014-12-19:blog/articles/2014/12/19/gillespie-epidemics/</id><summary type="html">&lt;style type="text/css"&gt;/*!
+</summary><category term="IPython"></category><category term="Parallel"></category><category term="Fractals"></category></entry><entry><title>Network Dynamics with Python and the Gillespie Algorithm: An Epidemic Example</title><link href="https://andrewmellor.co.uk/blog/articles/2014/12/19/gillespie-epidemics/" rel="alternate"></link><published>2014-12-19T00:00:00+01:00</published><updated>2014-12-19T00:00:00+01:00</updated><author><name>Andy Mellor</name></author><id>tag:andrewmellor.co.uk,2014-12-19:blog/articles/2014/12/19/gillespie-epidemics/</id><summary type="html">&lt;style type="text/css"&gt;/*!
 *
 * IPython notebook
 *
@@ -13844,7 +13844,7 @@ model.RunToConvergence()
 &lt;div class="inner_cell"&gt;
 &lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
 &lt;p&gt;Now, computing simulation times for across networks of varying size and degree we can see when we should use either method. The dashed lines are for the ALL method and the solid lines represent the TAKE method.&lt;/p&gt;
-&lt;p&gt;&lt;img alt="Performance" src="http://empiricalstateofmind.github.io/blog/images/performance.png" title="Performance" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Performance" src="https://andrewmellor.co.uk/blog/images/performance.png" title="Performance" /&gt;&lt;/p&gt;
 &lt;p&gt;For small networks there is little in terms of performance between the two implementations. As we increase the system size we see that the TAKE method performs significantly faster for small $\langle k \rangle / N$, and significantly slower for large $\langle k \rangle / N$. From this quick study it seems sensible to use TAKE when $\langle k \rangle / N &lt; 0.5$. This figure is dependent the propensity calculation as well as the underlying tradeoff between calculation and array copying and so should not be taken as gospel. For the SI model one would most likely use the TAKE method as most human contact networks are sparse in nature.&lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
@@ -13907,7 +13907,7 @@ implicit tau-leaping method.&lt;/em&gt; The Journal of Chemical Physics&lt;/p&gt
     (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
 }
 &lt;/script&gt;
-</summary><category term="Gillespie"></category><category term="Epidemics"></category><category term="Simulation"></category></entry><entry><title>Interactive Networks with Networkx and D3</title><link href="http://empiricalstateofmind.github.io/blog/articles/2014/12/14/d3-networks/" rel="alternate"></link><published>2014-12-14T00:00:00+01:00</published><updated>2014-12-14T00:00:00+01:00</updated><author><name>Andy Mellor</name></author><id>tag:empiricalstateofmind.github.io,2014-12-14:blog/articles/2014/12/14/d3-networks/</id><summary type="html">&lt;style type="text/css"&gt;/*!
+</summary><category term="Gillespie"></category><category term="Epidemics"></category><category term="Simulation"></category></entry><entry><title>Interactive Networks with Networkx and D3</title><link href="https://andrewmellor.co.uk/blog/articles/2014/12/14/d3-networks/" rel="alternate"></link><published>2014-12-14T00:00:00+01:00</published><updated>2014-12-14T00:00:00+01:00</updated><author><name>Andy Mellor</name></author><id>tag:andrewmellor.co.uk,2014-12-14:blog/articles/2014/12/14/d3-networks/</id><summary type="html">&lt;style type="text/css"&gt;/*!
 *
 * IPython notebook
 *
@@ -16046,7 +16046,7 @@ div#d3-container-degree { margin-left: auto; margin-right: auto; position: relat
 &lt;/div&gt;
 &lt;div class="inner_cell"&gt;
 &lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
-&lt;p&gt;&lt;a href="http://empiricalstateofmind.github.io/blog/articles/2014/12/14/d3-networks/graph.json"&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://andrewmellor.co.uk/blog/articles/2014/12/14/d3-networks/graph.json"&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
