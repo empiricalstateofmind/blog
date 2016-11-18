@@ -41,7 +41,7 @@ PLUGIN_PATHS = ['pelican-plugins']
 #            'liquid_tags.literal', 'render_math',
 #            'ipynb.markup', 'ipynb.liquid']
 PLUGINS = ['render_math', #'liquid_tags.include_code', #'liquid_tags.notebook',
-           'ipynb.markup']#, 'ipynb.liquid']
+           'ipynb.markup', 'tag_cloud']#, 'ipynb.liquid']
 
 IGNORE_FILES = ['.ipynb_checkpoints']
 PATH = 'content'
@@ -91,7 +91,7 @@ EXTRA_PATH_METADATA = {
     'extra/custom.css': {'path': 'static/custom.css'}
 }
 
-# DISQUS_NO_ID = True
+#DISQUS_NO_ID = True
 DISQUS_DISPLAY_COUNTS = True
 USE_OPEN_GRAPH = True
 TWITTER_CARDS = True
