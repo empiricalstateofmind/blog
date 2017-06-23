@@ -977,6 +977,7 @@ h6:hover .anchor-link {
 &lt;div class="inner_cell"&gt;
 &lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
 &lt;p&gt;Visualisation is undoubtably a tricky business. There are many questions to ask before even starting: What do I want to convey?  What tools do I have? Do I have the right data? This is even before considering whether your visualisation might have introduced a bias in some way. We will look at using Networkx and D3 to produce interactive network diagrams to display multiple layers of data. In this brief introduction we will render a simple graph, add some labels and colours and add some basic interaction.&lt;/p&gt;
+
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
@@ -986,6 +987,7 @@ h6:hover .anchor-link {
 &lt;div class="inner_cell"&gt;
 &lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
 &lt;p&gt;&lt;div id="d3-container-neighbours"&gt;&lt;/div&gt;&lt;/p&gt;
+
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
@@ -998,23 +1000,25 @@ h6:hover .anchor-link {
 &lt;p&gt;The &lt;a href="https://networkx.github.io/"&gt;NetworkX package&lt;/a&gt; offers a great way to easily manipulate graph-like data. It is written purely in Python and is limited for large scale analysis of network data, but for moderate size networks can deliver a range of network statistics and metrics with little-to-no work.&lt;/p&gt;
 &lt;p&gt;&lt;a href="http://d3js.org/"&gt;D3.js&lt;/a&gt; (Data Driven Documents) is a Javascript library which does &lt;em&gt;exactly what it says on the tin&lt;/em&gt;, produces web-based content from data. D3.js is created by Mike Bostock and can do far more than just produce network diagrams. In fact I recommend just looking through the plethora of &lt;a href="https://github.com/mbostock/d3/wiki/Gallery"&gt;examples&lt;/a&gt; of what can be done and get inspired. For now we'll look at the force-directed network layout.&lt;/p&gt;
 &lt;p&gt;We begin by importing the packages we need, namely the aforementioned Networkx, and the &lt;a href="https://docs.python.org/2/library/json.html"&gt;json&lt;/a&gt; package which allows us to encode and decode JSON files. JSON, or JavaScript Object Notation, is commonly used for information transfer online such as streaming tweets from the Twitter API. The advantages of JSON are that is it human readable and easily to manipulate at a cost of being very inefficient in terms of storage. Finally we import the plotting functions of &lt;a href="http://matplotlib.org/"&gt;matplotlib&lt;/a&gt; to draw our network.&lt;/p&gt;
+
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;div class="cell border-box-sizing code_cell rendered"&gt;
 &lt;div class="input"&gt;
-&lt;div class="prompt input_prompt"&gt;In [1]:&lt;/div&gt;
+&lt;div class="prompt input_prompt"&gt;In&amp;nbsp;[1]:&lt;/div&gt;
 &lt;div class="inner_cell"&gt;
-&lt;div class="input_area"&gt;
-&lt;div class=" highlight hl-ipython3"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;networkx&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;nx&lt;/span&gt;
-&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;json&lt;/span&gt;
-&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;matplotlib.pyplot&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;plt&lt;/span&gt;
-&lt;span class="o"&gt;%&lt;/span&gt;&lt;span class="k"&gt;matplotlib&lt;/span&gt; inline
-&lt;/pre&gt;&lt;/div&gt;
+    &lt;div class="input_area"&gt;
+&amp;lt;div class=&amp;#34; highlight hl-ipython3&amp;#34;&amp;gt;&amp;lt;pre&amp;gt;&amp;lt;span&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;kn&amp;#34;&amp;gt;import&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;nn&amp;#34;&amp;gt;networkx&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;k&amp;#34;&amp;gt;as&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;nn&amp;#34;&amp;gt;nx&amp;lt;/span&amp;gt;
+&amp;lt;span class=&amp;#34;kn&amp;#34;&amp;gt;import&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;nn&amp;#34;&amp;gt;json&amp;lt;/span&amp;gt;
+&amp;lt;span class=&amp;#34;kn&amp;#34;&amp;gt;import&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;nn&amp;#34;&amp;gt;matplotlib.pyplot&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;k&amp;#34;&amp;gt;as&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;nn&amp;#34;&amp;gt;plt&amp;lt;/span&amp;gt;
+&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;%&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;k&amp;#34;&amp;gt;matplotlib&amp;lt;/span&amp;gt; inline
+&amp;lt;/pre&amp;gt;&amp;lt;/div&amp;gt;
 
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
+
 &lt;/div&gt;
 &lt;div class="cell border-box-sizing text_cell rendered"&gt;
 &lt;div class="prompt input_prompt"&gt;
@@ -1022,27 +1026,33 @@ h6:hover .anchor-link {
 &lt;div class="inner_cell"&gt;
 &lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
 &lt;p&gt;We'll generate a random Erdos-Reyni (ER) graph as a quick example, callable through the in-built Networkx function. ER graphs are generated by creating a set of $N$ nodes, and then for each potential node pairing, a coin is flipped and with probability $p$ and edge is formed. For small ER graphs it is likely (with probability $(1-p)^{(N-1)}$) that a node will have no edges which can be undesirable in some cases, hence we generate graphs untill we find one with a single connected component.&lt;/p&gt;
+
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;div class="cell border-box-sizing code_cell rendered"&gt;
 &lt;div class="input"&gt;
-&lt;div class="prompt input_prompt"&gt;In [2]:&lt;/div&gt;
+&lt;div class="prompt input_prompt"&gt;In&amp;nbsp;[2]:&lt;/div&gt;
 &lt;div class="inner_cell"&gt;
-&lt;div class="input_area"&gt;
-&lt;div class=" highlight hl-ipython3"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;G&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;nx&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;erdos_renyi_graph&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;30&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mf"&gt;4.0&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="mi"&gt;30&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="k"&gt;while&lt;/span&gt; &lt;span class="ow"&gt;not&lt;/span&gt; &lt;span class="n"&gt;nx&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;is_connected&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;G&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
-    &lt;span class="n"&gt;G&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;nx&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;erdos_renyi_graph&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;30&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mf"&gt;4.0&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="mi"&gt;30&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;figure&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;figsize&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;6&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mi"&gt;4&lt;/span&gt;&lt;span class="p"&gt;));&lt;/span&gt;
-&lt;span class="n"&gt;nx&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;draw&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;G&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
+    &lt;div class="input_area"&gt;
+&amp;lt;div class=&amp;#34; highlight hl-ipython3&amp;#34;&amp;gt;&amp;lt;pre&amp;gt;&amp;lt;span&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;G&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;nx&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;erdos_renyi_graph&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;30&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mf&amp;#34;&amp;gt;4.0&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;/&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;30&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;)&amp;lt;/span&amp;gt;
+&amp;lt;span class=&amp;#34;k&amp;#34;&amp;gt;while&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;ow&amp;#34;&amp;gt;not&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;nx&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;is_connected&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;G&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;):&amp;lt;/span&amp;gt;
+    &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;G&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;nx&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;erdos_renyi_graph&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;30&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mf&amp;#34;&amp;gt;4.0&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;/&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;30&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;)&amp;lt;/span&amp;gt;
+&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;plt&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;figure&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;figsize&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;6&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;4&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;));&amp;lt;/span&amp;gt;
+&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;nx&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;draw&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;G&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;)&amp;lt;/span&amp;gt;
+&amp;lt;/pre&amp;gt;&amp;lt;/div&amp;gt;
 
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
+
 &lt;div class="output_wrapper"&gt;
 &lt;div class="output"&gt;
+
+
 &lt;div class="output_area"&gt;&lt;div class="prompt"&gt;&lt;/div&gt;
+
+
 &lt;div class="output_png output_subarea "&gt;
 &lt;img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAd8AAAFBCAYAAAA2bKVrAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAALEgAACxIB0t1+/AAAIABJREFUeJzs3XdYVMfXB/DvAkvdpVfpKhqVCGrsSBCCsdfYE6NGxRZb
@@ -1581,10 +1591,13 @@ zTj4MsYYY2rGwZcxxhhTMw6+jDHGmJpx8GWMMcbUjIMvY4wxpmYcfBljjDE14+DLGGOMqRkHX8YY
 Y0zNOPgyxhhjasbBlzHGGFMzDr6MMcaYmnHwZYwxxtSMgy9jjDGmZhx8GWOMMTX7f6yeyoVlWJjv
 AAAAAElFTkSuQmCC
 "&gt;
-&lt;/img&gt;&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;/div&gt;
+
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;/div&gt;
+
 &lt;/div&gt;
 &lt;div class="cell border-box-sizing text_cell rendered"&gt;
 &lt;div class="prompt input_prompt"&gt;
@@ -1593,40 +1606,49 @@ AAAAAElFTkSuQmCC
 &lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
 &lt;p&gt;The basic plotting functions of matplotlib are easy to use, and there a number of different layouts one can choose (circular, shell, random, spectral, e.t.c.). We can also add labels, colourings, and link weights, and, since we are in the realms of matplotlib, can even add standard plots to the figure such as a degree histogram. Networkx also supports output through the open source &lt;a href="http://www.graphviz.org/"&gt;Graphviz&lt;/a&gt; however I have yet to explore its features and functions.&lt;/p&gt;
 &lt;p&gt;We'll use Networkx to work out two basic metrics, the degree of each node, and its degree parity (whether it's degree is even or odd). Degree parity is an important attribute for Eulerian walk problems such as the &lt;a href="http://en.wikipedia.org/wiki/Seven_Bridges_of_K%C3%B6nigsberg"&gt;Seven Bridges of Konigsberg&lt;/a&gt;. We'll also calculate the Katz centrality of each node, just because we can!&lt;/p&gt;
+
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;div class="cell border-box-sizing code_cell rendered"&gt;
 &lt;div class="input"&gt;
-&lt;div class="prompt input_prompt"&gt;In [3]:&lt;/div&gt;
+&lt;div class="prompt input_prompt"&gt;In&amp;nbsp;[3]:&lt;/div&gt;
 &lt;div class="inner_cell"&gt;
-&lt;div class="input_area"&gt;
-&lt;div class=" highlight hl-ipython3"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;ix&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;deg&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;G&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;degree&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;items&lt;/span&gt;&lt;span class="p"&gt;():&lt;/span&gt;
-    &lt;span class="n"&gt;G&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;node&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;ix&lt;/span&gt;&lt;span class="p"&gt;][&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;degree&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;deg&lt;/span&gt;
-    &lt;span class="n"&gt;G&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;node&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;ix&lt;/span&gt;&lt;span class="p"&gt;][&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;parity&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;deg&lt;/span&gt;&lt;span class="o"&gt;%&lt;/span&gt;&lt;span class="k"&gt;2&lt;/span&gt;)
+    &lt;div class="input_area"&gt;
+&amp;lt;div class=&amp;#34; highlight hl-ipython3&amp;#34;&amp;gt;&amp;lt;pre&amp;gt;&amp;lt;span&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;k&amp;#34;&amp;gt;for&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;ix&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;deg&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;ow&amp;#34;&amp;gt;in&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;G&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;degree&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;()&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;items&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;():&amp;lt;/span&amp;gt;
+    &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;G&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;node&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;[&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;ix&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;][&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;s1&amp;#34;&amp;gt;&amp;amp;#39;degree&amp;amp;#39;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;]&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;deg&amp;lt;/span&amp;gt;
+    &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;G&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;node&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;[&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;ix&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;][&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;s1&amp;#34;&amp;gt;&amp;amp;#39;parity&amp;amp;#39;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;]&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;1&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;-&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;deg&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;%&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;k&amp;#34;&amp;gt;2&amp;lt;/span&amp;gt;)
 
-&lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;ix&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;katz&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;nx&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;katz_centrality&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;G&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;items&lt;/span&gt;&lt;span class="p"&gt;():&lt;/span&gt;
-    &lt;span class="n"&gt;G&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;node&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;ix&lt;/span&gt;&lt;span class="p"&gt;][&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;katz&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;katz&lt;/span&gt;
+&amp;lt;span class=&amp;#34;k&amp;#34;&amp;gt;for&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;ix&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;katz&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;ow&amp;#34;&amp;gt;in&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;nx&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;katz_centrality&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;G&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;)&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;items&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;():&amp;lt;/span&amp;gt;
+    &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;G&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;node&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;[&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;ix&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;][&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;s1&amp;#34;&amp;gt;&amp;amp;#39;katz&amp;amp;#39;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;]&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;katz&amp;lt;/span&amp;gt;
 
-&lt;span class="n"&gt;G&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;nodes&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;data&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="kc"&gt;True&lt;/span&gt;&lt;span class="p"&gt;)[:&lt;/span&gt;&lt;span class="mi"&gt;5&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
+&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;G&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;nodes&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;data&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;kc&amp;#34;&amp;gt;True&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;)[:&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;5&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;]&amp;lt;/span&amp;gt;
+&amp;lt;/pre&amp;gt;&amp;lt;/div&amp;gt;
 
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
+
 &lt;div class="output_wrapper"&gt;
 &lt;div class="output"&gt;
+
+
 &lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[3]:&lt;/div&gt;
+
+
 &lt;div class="output_text output_subarea output_execute_result"&gt;
-&lt;pre&gt;[(0, {'degree': 3, 'katz': 0.1658123856107354, 'parity': 0}),
- (1, {'degree': 2, 'katz': 0.15202714712288246, 'parity': 1}),
- (2, {'degree': 4, 'katz': 0.17512899102690338, 'parity': 1}),
- (3, {'degree': 6, 'katz': 0.22424042638359576, 'parity': 1}),
- (4, {'degree': 2, 'katz': 0.14564302217995662, 'parity': 1})]&lt;/pre&gt;
+&lt;pre&gt;[(0, {&amp;#39;degree&amp;#39;: 3, &amp;#39;katz&amp;#39;: 0.1658123856107354, &amp;#39;parity&amp;#39;: 0}),
+ (1, {&amp;#39;degree&amp;#39;: 2, &amp;#39;katz&amp;#39;: 0.15202714712288246, &amp;#39;parity&amp;#39;: 1}),
+ (2, {&amp;#39;degree&amp;#39;: 4, &amp;#39;katz&amp;#39;: 0.17512899102690338, &amp;#39;parity&amp;#39;: 1}),
+ (3, {&amp;#39;degree&amp;#39;: 6, &amp;#39;katz&amp;#39;: 0.22424042638359576, &amp;#39;parity&amp;#39;: 1}),
+ (4, {&amp;#39;degree&amp;#39;: 2, &amp;#39;katz&amp;#39;: 0.14564302217995662, &amp;#39;parity&amp;#39;: 1})]&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;/div&gt;
+
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
+
 &lt;/div&gt;
 &lt;div class="cell border-box-sizing text_cell rendered"&gt;
 &lt;div class="prompt input_prompt"&gt;
@@ -1635,23 +1657,25 @@ AAAAAElFTkSuQmCC
 &lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
 &lt;p&gt;As you can see, our nodes now have 3 attributes: the degree, the degree parity (1 for even, 0 for odd), and the katz centrality.&lt;/p&gt;
 &lt;p&gt;Once we've calculated everything that we might want from our network we can save it as JSON to use with D3 or to load into Networkx at a later time. Fortunately Networkx a tidy function to do this in &lt;em&gt;.node_link_data()&lt;/em&gt;. When I first started making D3 graphs I ended up writing my own function to do this before discovering the Networkx built-in! We'll save the graph to our working directory as &lt;em&gt;graph.json&lt;/em&gt;.&lt;/p&gt;
+
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;div class="cell border-box-sizing code_cell rendered"&gt;
 &lt;div class="input"&gt;
-&lt;div class="prompt input_prompt"&gt;In [4]:&lt;/div&gt;
+&lt;div class="prompt input_prompt"&gt;In&amp;nbsp;[4]:&lt;/div&gt;
 &lt;div class="inner_cell"&gt;
-&lt;div class="input_area"&gt;
-&lt;div class=" highlight hl-ipython3"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;networkx.readwrite&lt;/span&gt; &lt;span class="k"&gt;import&lt;/span&gt; &lt;span class="n"&gt;json_graph&lt;/span&gt;
-&lt;span class="n"&gt;data&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;json_graph&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;node_link_data&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;G&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="k"&gt;with&lt;/span&gt; &lt;span class="nb"&gt;open&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;graph.json&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;w&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="n"&gt;f&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
-    &lt;span class="n"&gt;json&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;dump&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;data&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;f&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;indent&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;4&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
+    &lt;div class="input_area"&gt;
+&amp;lt;div class=&amp;#34; highlight hl-ipython3&amp;#34;&amp;gt;&amp;lt;pre&amp;gt;&amp;lt;span&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;kn&amp;#34;&amp;gt;from&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;nn&amp;#34;&amp;gt;networkx.readwrite&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;k&amp;#34;&amp;gt;import&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;json_graph&amp;lt;/span&amp;gt;
+&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;data&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;json_graph&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;node_link_data&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;G&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;)&amp;lt;/span&amp;gt;
+&amp;lt;span class=&amp;#34;k&amp;#34;&amp;gt;with&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;nb&amp;#34;&amp;gt;open&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;s1&amp;#34;&amp;gt;&amp;amp;#39;graph.json&amp;amp;#39;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;s1&amp;#34;&amp;gt;&amp;amp;#39;w&amp;amp;#39;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;)&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;k&amp;#34;&amp;gt;as&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;f&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;:&amp;lt;/span&amp;gt;
+    &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;json&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;dump&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;data&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;f&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;indent&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;4&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;)&amp;lt;/span&amp;gt;
+&amp;lt;/pre&amp;gt;&amp;lt;/div&amp;gt;
 
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
+
 &lt;/div&gt;
 &lt;div class="cell border-box-sizing text_cell rendered"&gt;
 &lt;div class="prompt input_prompt"&gt;
@@ -1660,37 +1684,38 @@ AAAAAElFTkSuQmCC
 &lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
 &lt;p&gt;The output looks something like this:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;
-    &lt;span class="s2"&gt;"nodes"&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
+    &lt;span class="s2"&gt;&amp;quot;nodes&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
         &lt;span class="p"&gt;{&lt;/span&gt;
-            &lt;span class="s2"&gt;"parity"&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; 
-            &lt;span class="s2"&gt;"katz"&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mf"&gt;0.22874804284096154&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; 
-            &lt;span class="s2"&gt;"id"&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; 
-            &lt;span class="s2"&gt;"degree"&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;8&lt;/span&gt;
+            &lt;span class="s2"&gt;&amp;quot;parity&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; 
+            &lt;span class="s2"&gt;&amp;quot;katz&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mf"&gt;0.22874804284096154&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; 
+            &lt;span class="s2"&gt;&amp;quot;id&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; 
+            &lt;span class="s2"&gt;&amp;quot;degree&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;8&lt;/span&gt;
         &lt;span class="p"&gt;},&lt;/span&gt; 
         &lt;span class="p"&gt;{&lt;/span&gt;
-            &lt;span class="s2"&gt;"parity"&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; 
-            &lt;span class="s2"&gt;"katz"&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mf"&gt;0.17413026830641998&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; 
-            &lt;span class="s2"&gt;"id"&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; 
-            &lt;span class="s2"&gt;"degree"&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;5&lt;/span&gt;
+            &lt;span class="s2"&gt;&amp;quot;parity&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; 
+            &lt;span class="s2"&gt;&amp;quot;katz&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mf"&gt;0.17413026830641998&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; 
+            &lt;span class="s2"&gt;&amp;quot;id&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; 
+            &lt;span class="s2"&gt;&amp;quot;degree&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;5&lt;/span&gt;
         &lt;span class="p"&gt;}&lt;/span&gt;
     &lt;span class="p"&gt;],&lt;/span&gt;
 
-    &lt;span class="s2"&gt;"links"&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
+    &lt;span class="s2"&gt;&amp;quot;links&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
         &lt;span class="p"&gt;{&lt;/span&gt;
-            &lt;span class="s2"&gt;"source"&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; 
-            &lt;span class="s2"&gt;"target"&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;3&lt;/span&gt;
+            &lt;span class="s2"&gt;&amp;quot;source&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; 
+            &lt;span class="s2"&gt;&amp;quot;target&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;3&lt;/span&gt;
         &lt;span class="p"&gt;},&lt;/span&gt; 
         &lt;span class="p"&gt;{&lt;/span&gt;
-            &lt;span class="s2"&gt;"source"&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; 
-            &lt;span class="s2"&gt;"target"&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;4&lt;/span&gt;
+            &lt;span class="s2"&gt;&amp;quot;source&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; 
+            &lt;span class="s2"&gt;&amp;quot;target&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;4&lt;/span&gt;
         &lt;span class="p"&gt;},&lt;/span&gt; 
         &lt;span class="p"&gt;{&lt;/span&gt;
-            &lt;span class="s2"&gt;"source"&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; 
-            &lt;span class="s2"&gt;"target"&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;6&lt;/span&gt;
+            &lt;span class="s2"&gt;&amp;quot;source&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; 
+            &lt;span class="s2"&gt;&amp;quot;target&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;6&lt;/span&gt;
         &lt;span class="p"&gt;},&lt;/span&gt;
     &lt;span class="p"&gt;]&lt;/span&gt;
 &lt;span class="p"&gt;}&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
+
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
@@ -1709,6 +1734,7 @@ AAAAAElFTkSuQmCC
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;The code below does two things. It first creates a division (&lt;em&gt;div&lt;/em&gt;) which we call &lt;em&gt;"d3-container"&lt;/em&gt;. This essentially creates a box in which we can put our network diagram. The second statement obviously deals with the style of the network. Anything that we declare as a 'node' will have a white outline, and anything declared as a link will be grey. This statement by itself will not give any visible output yet - for that we need Javascript!&lt;/p&gt;
+
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
@@ -1717,15 +1743,16 @@ AAAAAElFTkSuQmCC
 &lt;/div&gt;
 &lt;div class="inner_cell"&gt;
 &lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="p"&gt;&lt;&lt;/span&gt;&lt;span class="nt"&gt;div&lt;/span&gt; &lt;span class="na"&gt;id&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;"d3-container"&lt;/span&gt;&lt;span class="p"&gt;&gt;&lt;&lt;/span&gt; &lt;span class="p"&gt;/&lt;/span&gt;&lt;span class="nt"&gt;div&lt;/span&gt;&lt;span class="p"&gt;&gt;&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;div&lt;/span&gt; &lt;span class="na"&gt;id&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;d3-container&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&amp;lt;&lt;/span&gt; &lt;span class="p"&gt;/&lt;/span&gt;&lt;span class="nt"&gt;div&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
 
-&lt;span class="p"&gt;&lt;&lt;/span&gt;&lt;span class="nt"&gt;style&lt;/span&gt;&lt;span class="p"&gt;&gt;&lt;/span&gt;
+&lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;style&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
 
 &lt;span class="nc"&gt;.node&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="n"&gt;stroke&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="m"&gt;#fff&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="n"&gt;stroke&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="nb"&gt;width&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="m"&gt;1.5px&lt;/span&gt;&lt;span class="p"&gt;;}&lt;/span&gt;
 &lt;span class="nc"&gt;.link&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="n"&gt;stroke&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="m"&gt;#999&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="n"&gt;stroke&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="nb"&gt;opacity&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="m"&gt;6&lt;/span&gt;&lt;span class="p"&gt;;}&lt;/span&gt;
 
-&lt;span class="p"&gt;&lt;&lt;/span&gt; &lt;span class="p"&gt;/&lt;/span&gt;&lt;span class="nt"&gt;style&lt;/span&gt;&lt;span class="p"&gt;&gt;&lt;/span&gt;
+&lt;span class="p"&gt;&amp;lt;&lt;/span&gt; &lt;span class="p"&gt;/&lt;/span&gt;&lt;span class="nt"&gt;style&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
+
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
@@ -1736,6 +1763,7 @@ AAAAAElFTkSuQmCC
 &lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
 &lt;p&gt;To create the visualisation we need to load in the D3 library from source, the data from our json file and then piece it all together. Javascript is, by no means the prettiest of languages to work with, so much so that there exists a sister language &lt;a href="http://coffeescript.org/"&gt;CoffeeScript&lt;/a&gt; which is a direct 1-1 translation of Javascript. The code below looks quite daunting however it is fairly simple once the syntax is understood. Working with the D3 library, the main ideas are to 'select' the HTML elements, append further elements, and then set their attributes as required.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Note&lt;/strong&gt;: There may be some issues with security when running this in a notebook. If the visualisation does not appear then look for a shield in the URL bar at the top of the browser and allow the script to be loaded (usually requires a page refresh). An alternative approach is to embed this HTML and Javascript into it's own HTML document and serve that to the browser using your favourite HTTP server. In practice, it is better to keep everything separate so that you would end up with a &lt;em&gt;index.html&lt;/em&gt; file, a &lt;em&gt;style.css&lt;/em&gt; file, and a &lt;em&gt;script.js&lt;/em&gt; which are all joined through the HTML file.&lt;/p&gt;
+
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
@@ -1745,6 +1773,7 @@ AAAAAElFTkSuQmCC
 &lt;div class="inner_cell"&gt;
 &lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
 &lt;p&gt;&lt;div id="d3-container-degree"&gt;&lt;/div&gt;&lt;/p&gt;
+
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
@@ -1754,8 +1783,8 @@ AAAAAElFTkSuQmCC
 &lt;div class="inner_cell"&gt;
 &lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;// We load the latest version of d3.js from the Web.&lt;/span&gt;
-&lt;span class="nx"&gt;require&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;config&lt;/span&gt;&lt;span class="p"&gt;({&lt;/span&gt;&lt;span class="nx"&gt;paths&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="nx"&gt;d3&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"https://d3js.org/d3.v3.min"&lt;/span&gt;&lt;span class="p"&gt;}});&lt;/span&gt;
-&lt;span class="nx"&gt;require&lt;/span&gt;&lt;span class="p"&gt;([&lt;/span&gt;&lt;span class="s2"&gt;"d3"&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;d3&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;span class="nx"&gt;require&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;config&lt;/span&gt;&lt;span class="p"&gt;({&lt;/span&gt;&lt;span class="nx"&gt;paths&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="nx"&gt;d3&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;https://d3js.org/d3.v3.min&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;}});&lt;/span&gt;
+&lt;span class="nx"&gt;require&lt;/span&gt;&lt;span class="p"&gt;([&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;d3&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;d3&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
 
     &lt;span class="c1"&gt;// Parameter declaration, the height and width of our viz.&lt;/span&gt;
     &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;width&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;300&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
@@ -1771,19 +1800,19 @@ AAAAAElFTkSuQmCC
         &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;linkDistance&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;30&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
         &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;size&lt;/span&gt;&lt;span class="p"&gt;([&lt;/span&gt;&lt;span class="nx"&gt;width&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;height&lt;/span&gt;&lt;span class="p"&gt;]);&lt;/span&gt;
 
-    &lt;span class="c1"&gt;// We select the &lt; div&gt; we created earlier and add an &lt;svg&gt; container.&lt;/span&gt;
+    &lt;span class="c1"&gt;// We select the &amp;lt; div&amp;gt; we created earlier and add an &amp;lt;svg&amp;gt; container.&lt;/span&gt;
     &lt;span class="c1"&gt;// SVG = Scalable Vector Graphics&lt;/span&gt;
-    &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;svg&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;d3&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;select&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"#d3-container"&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;&lt;span class="nx"&gt;select&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"svg"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;svg&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;d3&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;select&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;#d3-container&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;&lt;span class="nx"&gt;select&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;svg&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
     &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;svg&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;empty&lt;/span&gt;&lt;span class="p"&gt;())&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
-        &lt;span class="nx"&gt;svg&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;d3&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;select&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"#d3-container"&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;&lt;span class="nx"&gt;append&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"svg"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-                    &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;attr&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"width"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;width&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-                    &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;attr&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"height"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;height&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+        &lt;span class="nx"&gt;svg&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;d3&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;select&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;#d3-container&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;&lt;span class="nx"&gt;append&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;svg&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+                    &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;attr&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;width&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;width&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+                    &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;attr&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;height&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;height&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
     &lt;span class="p"&gt;}&lt;/span&gt;
 
     &lt;span class="c1"&gt;// We load the JSON network file.&lt;/span&gt;
-    &lt;span class="nx"&gt;d3&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;json&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"graph.json"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;error&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;graph&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="nx"&gt;d3&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;json&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;graph.json&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;error&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;graph&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
         &lt;span class="c1"&gt;// Within this block, the network has been loaded&lt;/span&gt;
-        &lt;span class="c1"&gt;// and stored in the 'graph' object.&lt;/span&gt;
+        &lt;span class="c1"&gt;// and stored in the &amp;#39;graph&amp;#39; object.&lt;/span&gt;
 
         &lt;span class="c1"&gt;// We load the nodes and links into the force-directed&lt;/span&gt;
         &lt;span class="c1"&gt;// graph and initialise the dynamics.&lt;/span&gt;
@@ -1791,28 +1820,28 @@ AAAAAElFTkSuQmCC
             &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;links&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;graph&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;links&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
             &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;start&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
 
-        &lt;span class="c1"&gt;// We create a &lt; line&gt; SVG element for each link&lt;/span&gt;
+        &lt;span class="c1"&gt;// We create a &amp;lt; line&amp;gt; SVG element for each link&lt;/span&gt;
         &lt;span class="c1"&gt;// in the graph.&lt;/span&gt;
-        &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;link&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;svg&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;selectAll&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;".link"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;link&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;svg&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;selectAll&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;.link&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
             &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;data&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;graph&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;links&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-            &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;enter&lt;/span&gt;&lt;span class="p"&gt;().&lt;/span&gt;&lt;span class="nx"&gt;append&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"line"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-            &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;attr&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"class"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;"link"&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+            &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;enter&lt;/span&gt;&lt;span class="p"&gt;().&lt;/span&gt;&lt;span class="nx"&gt;append&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;line&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+            &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;attr&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;class&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;link&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
 
-        &lt;span class="c1"&gt;// We create a &lt; circle&gt; SVG element for each node&lt;/span&gt;
+        &lt;span class="c1"&gt;// We create a &amp;lt; circle&amp;gt; SVG element for each node&lt;/span&gt;
         &lt;span class="c1"&gt;// in the graph, and we specify a few attributes.&lt;/span&gt;
-        &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;node&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;svg&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;selectAll&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;".node"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;node&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;svg&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;selectAll&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;.node&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
             &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;data&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;graph&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;nodes&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-            &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;enter&lt;/span&gt;&lt;span class="p"&gt;().&lt;/span&gt;&lt;span class="nx"&gt;append&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"circle"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-            &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;attr&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"class"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;"node"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-            &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;attr&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"r"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;5&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;  &lt;span class="c1"&gt;// radius&lt;/span&gt;
-            &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;style&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"fill"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;d&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+            &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;enter&lt;/span&gt;&lt;span class="p"&gt;().&lt;/span&gt;&lt;span class="nx"&gt;append&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;circle&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+            &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;attr&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;class&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;node&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+            &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;attr&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;r&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;5&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;  &lt;span class="c1"&gt;// radius&lt;/span&gt;
+            &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;style&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;fill&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;d&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
                 &lt;span class="c1"&gt;// We colour the node depending on the degree.&lt;/span&gt;
                 &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="nx"&gt;color&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;d&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;degree&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt; 
             &lt;span class="p"&gt;})&lt;/span&gt;
             &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;call&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;force&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;drag&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
 
         &lt;span class="c1"&gt;// The label each node its node number from the networkx graph.&lt;/span&gt;
-        &lt;span class="nx"&gt;node&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;append&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"title"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="nx"&gt;node&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;append&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;title&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
             &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;text&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;d&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="nx"&gt;d&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;id&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="p"&gt;});&lt;/span&gt;
 
 
@@ -1820,18 +1849,19 @@ AAAAAElFTkSuQmCC
         &lt;span class="c1"&gt;// We bind the positions of the SVG elements&lt;/span&gt;
         &lt;span class="c1"&gt;// to the positions of the dynamic force-directed graph,&lt;/span&gt;
         &lt;span class="c1"&gt;// at each time step.&lt;/span&gt;
-        &lt;span class="nx"&gt;force&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;on&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"tick"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
-            &lt;span class="nx"&gt;link&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;attr&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"x1"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;d&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="nx"&gt;d&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;source&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;x&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="p"&gt;})&lt;/span&gt;
-                &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;attr&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"y1"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;d&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="nx"&gt;d&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;source&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;y&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="p"&gt;})&lt;/span&gt;
-                &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;attr&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"x2"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;d&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="nx"&gt;d&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;target&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;x&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="p"&gt;})&lt;/span&gt;
-                &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;attr&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"y2"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;d&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="nx"&gt;d&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;target&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;y&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="p"&gt;});&lt;/span&gt;
+        &lt;span class="nx"&gt;force&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;on&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;tick&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+            &lt;span class="nx"&gt;link&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;attr&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;x1&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;d&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="nx"&gt;d&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;source&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;x&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="p"&gt;})&lt;/span&gt;
+                &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;attr&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;y1&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;d&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="nx"&gt;d&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;source&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;y&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="p"&gt;})&lt;/span&gt;
+                &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;attr&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;x2&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;d&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="nx"&gt;d&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;target&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;x&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="p"&gt;})&lt;/span&gt;
+                &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;attr&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;y2&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;d&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="nx"&gt;d&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;target&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;y&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="p"&gt;});&lt;/span&gt;
 
-            &lt;span class="nx"&gt;node&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;attr&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"cx"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;d&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="nx"&gt;d&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;x&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="p"&gt;})&lt;/span&gt;
-                &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;attr&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"cy"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;d&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="nx"&gt;d&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;y&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="p"&gt;});&lt;/span&gt;
+            &lt;span class="nx"&gt;node&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;attr&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;cx&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;d&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="nx"&gt;d&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;x&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="p"&gt;})&lt;/span&gt;
+                &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;attr&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;cy&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;d&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="nx"&gt;d&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;y&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="p"&gt;});&lt;/span&gt;
         &lt;span class="p"&gt;});&lt;/span&gt;
     &lt;span class="p"&gt;});&lt;/span&gt;
 &lt;span class="p"&gt;});&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
+
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
@@ -1844,8 +1874,8 @@ AAAAAElFTkSuQmCC
 &lt;p&gt;&lt;strong&gt;Tooltips&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;For a quick and easy tooltip we make the one line ammendment to our Javascript code. This will display the node ID, degree, and Katz centrality when we hover over the node.&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;// The label each node its node number from the networkx graph.&lt;/span&gt;
-&lt;span class="nx"&gt;node&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;append&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"title"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;text&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;d&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="s2"&gt;"Node: "&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="nx"&gt;d&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;id&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s2"&gt;"\n"&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s2"&gt;"Degree: "&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="nx"&gt;d&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;degree&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s2"&gt;"\n"&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s2"&gt;"Katz: "&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="nx"&gt;d&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;katz&lt;/span&gt;&lt;span class="p"&gt;;});&lt;/span&gt;
+&lt;span class="nx"&gt;node&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;append&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;title&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;text&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;d&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;Node: &amp;quot;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="nx"&gt;d&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;id&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;\n&amp;quot;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;Degree: &amp;quot;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="nx"&gt;d&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;degree&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;\n&amp;quot;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;Katz: &amp;quot;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="nx"&gt;d&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;katz&lt;/span&gt;&lt;span class="p"&gt;;});&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;&lt;strong&gt;Node Highlighting&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;Node highlighting is a more involved process. We first need to identify within the Javascript which nodes are connected to which. In truth, this can be outsourced to Networkx and then passed through to the Javascript through the JSON file with a little work. The following code should be added as the first thing after the graph is loaded. This allows us to double click on a node to highlight its immediate neighbourhood which could be useful if the network is crowded or a node's neighbourhood is of particular importance in the data.&lt;/p&gt;
@@ -1855,49 +1885,50 @@ AAAAAElFTkSuQmCC
 &lt;span class="c1"&gt;//Create an array logging what is connected to what&lt;/span&gt;
 &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;linkedByIndex&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{};&lt;/span&gt;
 
-&lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;i&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="nx"&gt;i&lt;/span&gt; &lt;span class="o"&gt;&lt;&lt;/span&gt; &lt;span class="nx"&gt;graph&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;nodes&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;length&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="nx"&gt;i&lt;/span&gt;&lt;span class="o"&gt;++&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
-    &lt;span class="nx"&gt;linkedByIndex&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nx"&gt;i&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s2"&gt;","&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="nx"&gt;i&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;i&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="nx"&gt;i&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="nx"&gt;graph&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;nodes&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;length&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="nx"&gt;i&lt;/span&gt;&lt;span class="o"&gt;++&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="nx"&gt;linkedByIndex&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nx"&gt;i&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;,&amp;quot;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="nx"&gt;i&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
 &lt;span class="p"&gt;};&lt;/span&gt;
 
 &lt;span class="nx"&gt;graph&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;links&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;forEach&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kd"&gt;function&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;d&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
-    &lt;span class="nx"&gt;linkedByIndex&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nx"&gt;d&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;source&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;index&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s2"&gt;","&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="nx"&gt;d&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;target&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;index&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="nx"&gt;linkedByIndex&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nx"&gt;d&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;source&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;index&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;,&amp;quot;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="nx"&gt;d&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;target&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;index&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
 &lt;span class="p"&gt;});&lt;/span&gt;
 
 &lt;span class="c1"&gt;//Looks up whether a pair of nodes are neighbours.&lt;/span&gt;
 &lt;span class="kd"&gt;function&lt;/span&gt; &lt;span class="nx"&gt;neighboring&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;a&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;b&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
-    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="nx"&gt;linkedByIndex&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nx"&gt;a&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;index&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s2"&gt;","&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="nx"&gt;b&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;index&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="nx"&gt;linkedByIndex&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nx"&gt;a&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;index&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;,&amp;quot;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="nx"&gt;b&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;index&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
 &lt;span class="p"&gt;}&lt;/span&gt;
 
 &lt;span class="kd"&gt;function&lt;/span&gt; &lt;span class="nx"&gt;connectedNodes&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
     &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;toggle&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
         &lt;span class="c1"&gt;//Reduce the opacity of all but the neighbouring nodes to 0.3.&lt;/span&gt;
         &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;d&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;d3&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;select&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;&lt;span class="nx"&gt;node&lt;/span&gt;&lt;span class="p"&gt;().&lt;/span&gt;&lt;span class="nx"&gt;__data__&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
-        &lt;span class="nx"&gt;node&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;style&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"opacity"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;o&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="nx"&gt;node&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;style&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;opacity&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;o&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
             &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="nx"&gt;neighboring&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;d&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;o&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="nx"&gt;neighboring&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;o&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;d&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;?&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt; &lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mf"&gt;0.3&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
         &lt;span class="p"&gt;});&lt;/span&gt;
         &lt;span class="c1"&gt;//Reduce the opacity of all but the neighbouring edges to 0.8.&lt;/span&gt;
-        &lt;span class="nx"&gt;link&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;style&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"opacity"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;o&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="nx"&gt;link&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;style&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;opacity&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;o&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
             &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="nx"&gt;d&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;index&lt;/span&gt;&lt;span class="o"&gt;==&lt;/span&gt;&lt;span class="nx"&gt;o&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;source&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;index&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="nx"&gt;d&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;index&lt;/span&gt;&lt;span class="o"&gt;==&lt;/span&gt;&lt;span class="nx"&gt;o&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;target&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;index&lt;/span&gt; &lt;span class="o"&gt;?&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt; &lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mf"&gt;0.8&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
         &lt;span class="p"&gt;});&lt;/span&gt;
         &lt;span class="c1"&gt;//Increases the stroke width of the neighbouring edges.&lt;/span&gt;
-        &lt;span class="nx"&gt;link&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;style&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"stroke-width"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;o&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="nx"&gt;link&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;style&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;stroke-width&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;o&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
             &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="nx"&gt;d&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;index&lt;/span&gt;&lt;span class="o"&gt;==&lt;/span&gt;&lt;span class="nx"&gt;o&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;source&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;index&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="nx"&gt;d&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;index&lt;/span&gt;&lt;span class="o"&gt;==&lt;/span&gt;&lt;span class="nx"&gt;o&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;target&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;index&lt;/span&gt; &lt;span class="o"&gt;?&lt;/span&gt; &lt;span class="mi"&gt;3&lt;/span&gt; &lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mf"&gt;0.8&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
         &lt;span class="p"&gt;});&lt;/span&gt;
         &lt;span class="c1"&gt;//Reset the toggle.&lt;/span&gt;
         &lt;span class="nx"&gt;toggle&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
     &lt;span class="p"&gt;}&lt;/span&gt; &lt;span class="k"&gt;else&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
         &lt;span class="c1"&gt;//Restore everything back to normal&lt;/span&gt;
-        &lt;span class="nx"&gt;node&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;style&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"opacity"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
-        &lt;span class="nx"&gt;link&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;style&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"opacity"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
-        &lt;span class="nx"&gt;link&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;style&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"stroke-width"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+        &lt;span class="nx"&gt;node&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;style&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;opacity&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+        &lt;span class="nx"&gt;link&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;style&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;opacity&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+        &lt;span class="nx"&gt;link&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;style&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;stroke-width&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
         &lt;span class="nx"&gt;toggle&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
     &lt;span class="p"&gt;}&lt;/span&gt;
 &lt;span class="p"&gt;}&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;and then finally append this to our nodes:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;on&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'dblclick'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;connectedNodes&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;on&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;dblclick&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;connectedNodes&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;This produces the following graph (which featured at the head of the article also). One can definitely argue that it is more informative than the original matplotlib and our first attempt at a D3 visualisation.&lt;/p&gt;
+
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
@@ -1907,6 +1938,7 @@ AAAAAElFTkSuQmCC
 &lt;div class="inner_cell"&gt;
 &lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
 &lt;p&gt;&lt;div id="d3-container-neighbours"&gt;&lt;/div&gt;&lt;/p&gt;
+
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
@@ -1915,7 +1947,7 @@ AAAAAElFTkSuQmCC
 &lt;/div&gt;
 &lt;div class="inner_cell"&gt;
 &lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
-&lt;h2 id="Discussion"&gt;Discussion&lt;a class="anchor-link" href="#Discussion"&gt;¶&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;D3 is a powerful library which can produce exciting and interactive documents/visualisations. I hope I have provided enough content to at least spark interest, and enough links to other content to be helpful. This is indeed a very introductory example of the power of D3 but highlights how interactivity can make even random data interesting. I will hopefully have the time after the holidays to produce some more  in-depth work which should appeal to a wider audience. Currently D3 requires working knowledge of Javascript and general web-based tricks and conventions, which arguably do not feature in the skill set of many data scientists. This is a shame as it offers new ways to communicate science to both academia and to the general public. One approach is to use CoffeeScript. This has a Pythonic syntax and would make the transition slightly smoother, however this does require a some work in preprocessing and it is also not natively supported. You &lt;em&gt;can&lt;/em&gt; translate CoffeeScript in the browser although the creator has actively expressed that this is not a good idea.&lt;/p&gt;
+&lt;h2 id="Discussion"&gt;Discussion&lt;a class="anchor-link" href="#Discussion"&gt;&amp;#182;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;D3 is a powerful library which can produce exciting and interactive documents/visualisations. I hope I have provided enough content to at least spark interest, and enough links to other content to be helpful. This is indeed a very introductory example of the power of D3 but highlights how interactivity can make even random data interesting. I will hopefully have the time after the holidays to produce some more  in-depth work which should appeal to a wider audience. Currently D3 requires working knowledge of Javascript and general web-based tricks and conventions, which arguably do not feature in the skill set of many data scientists. This is a shame as it offers new ways to communicate science to both academia and to the general public. One approach is to use CoffeeScript. This has a Pythonic syntax and would make the transition slightly smoother, however this does require a some work in preprocessing and it is also not natively supported. You &lt;em&gt;can&lt;/em&gt; translate CoffeeScript in the browser although the creator has actively expressed that this is not a good idea.&lt;/p&gt;
 &lt;p&gt;It is my belief that in the near future, as we move away from printed material, all figures will have some degree of interactivity. This can be as subtle as a simple labeling on a line plot, the ability to alter parameters in a model, or going all the way and producing a user-driven dynamic which gives the end result. There is also scope for adaptability and automation of data retrieval and data analysis. For those involved with open data, the workflow is usually of the form; data retrieval through an API, data processing, and data visualisation. The web framework allows this workflow to happen in real-time (or near real-time) giving a useful insight into how the data is evolving, and also giving an opportunity to give reactive outputs. Naturally one should take the same level of care as one does with a static visualisation and not add interactivity purely for interactivities' sake. The main questions still stand; does my visualisation convey what it is supposed to and does it convey the message &lt;em&gt;clearly&lt;/em&gt;?&lt;/p&gt;
 &lt;p&gt;A few other links of interest are listed below:&lt;/p&gt;
 &lt;ul&gt;
@@ -1924,6 +1956,7 @@ AAAAAElFTkSuQmCC
 &lt;li&gt;&lt;a href="http://www.coppelia.io/an-a-to-z-of-extra-features-for-the-d3-force-layout/"&gt;An A to Z of Extra Features for the D3 Force Layout&lt;/a&gt;: A few extensions of the above code to add interactivity.&lt;/li&gt;
 &lt;li&gt;&lt;a href="http://flowingdata.com/2012/08/02/how-to-make-an-interactive-network-visualization/"&gt;How to Make an Interactive Network Visualization&lt;/a&gt;: More interactivity.&lt;/li&gt;
 &lt;/ul&gt;
+
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
@@ -1937,7 +1970,8 @@ AAAAAElFTkSuQmCC
 .link {stroke: #999; stroke-opacity: .6;}
 div#d3-container-neighbours { margin-left: auto; margin-right: auto; position: relative;}
 div#d3-container-degree { margin-left: auto; margin-right: auto; position: relative;}
-&lt;/style&gt;&lt;script charset="utf-8" src="https://d3js.org/d3.v3.min.js"&gt;&lt;/script&gt;
+&lt;/style&gt;&lt;script src="https://d3js.org/d3.v3.min.js" charset="utf-8"&gt;&lt;/script&gt;
+
 &lt;script&gt;
     // Parameter declaration, the height and width of our viz.
     var width2 = 600,
@@ -2012,7 +2046,8 @@ div#d3-container-degree { margin-left: auto; margin-right: auto; position: relat
                 .attr("cy", function(d) { return d.y; });
         });
     });
-&lt;/script&gt;&lt;script charset="utf-8" src="https://d3js.org/d3.v3.min.js"&gt;&lt;/script&gt;
+&lt;/script&gt;&lt;script src="https://d3js.org/d3.v3.min.js" charset="utf-8"&gt;&lt;/script&gt;
+
 &lt;script&gt;
     // Parameter declaration, the height and width of our viz.
     var width = 600,
@@ -2139,6 +2174,7 @@ div#d3-container-degree { margin-left: auto; margin-right: auto; position: relat
 &lt;div class="inner_cell"&gt;
 &lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
 &lt;p&gt;&lt;a href="https://andrewmellor.co.uk/blog/articles/2014/12/14/d3-networks/graph.json"&gt;&lt;/a&gt;&lt;/p&gt;
+
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;

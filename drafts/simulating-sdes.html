@@ -1091,47 +1091,88 @@ h6:hover .anchor-link {
 </style>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In [1]:</div>
+<div class="prompt input_prompt">In&nbsp;[23]:</div>
 <div class="inner_cell">
-<div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="o">%</span><span class="k">pylab</span> inline
-<span class="kn">import</span> <span class="nn">time</span>
-</pre></div>
+    <div class="input_area">
+&lt;div class=&#34; highlight hl-ipython3&#34;&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;%&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;pylab&lt;/span&gt; inline
+&lt;span class=&#34;kn&#34;&gt;import&lt;/span&gt; &lt;span class=&#34;nn&#34;&gt;time&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
 
 </div>
 </div>
 </div>
+
 <div class="output_wrapper">
 <div class="output">
+
+
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>Populating the interactive namespace from numpy and matplotlib
 </pre>
 </div>
 </div>
+
+<div class="output_area"><div class="prompt"></div>
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>C:\Users\Andy\Anaconda\envs\theano3\lib\site-packages\IPython\core\magics\pylab.py:161: UserWarning: pylab import has clobbered these variables: [&#39;f&#39;, &#39;step&#39;]
+`%matplotlib` prevents importing * from pylab and numpy
+  &#34;\n`%matplotlib` prevents importing * from pylab and numpy&#34;
+</pre>
 </div>
 </div>
+
+</div>
+</div>
+
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In [2]:</div>
+<div class="prompt input_prompt">In&nbsp;[24]:</div>
 <div class="inner_cell">
-<div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="kn">import</span> <span class="nn">theano</span>
-<span class="kn">import</span> <span class="nn">theano.tensor</span> <span class="kn">as</span> <span class="nn">T</span>
-<span class="kn">from</span> <span class="nn">theano.tensor.shared_randomstreams</span> <span class="kn">import</span> <span class="n">RandomStreams</span>
-</pre></div>
+    <div class="input_area">
+&lt;div class=&#34; highlight hl-ipython3&#34;&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;class&lt;/span&gt; &lt;span class=&#34;nc&#34;&gt;Timer&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;object&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;):&lt;/span&gt;
+    
+    &lt;span class=&#34;k&#34;&gt;def&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;__init__&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;bp&#34;&gt;self&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;num_samples&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;kc&#34;&gt;None&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;):&lt;/span&gt;
+        &lt;span class=&#34;bp&#34;&gt;self&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;num_samples&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;num_samples&lt;/span&gt;
+    
+    &lt;span class=&#34;k&#34;&gt;def&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;__enter__&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;bp&#34;&gt;self&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;):&lt;/span&gt;
+        &lt;span class=&#34;bp&#34;&gt;self&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;start&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;time&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;clock&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt;
+        &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;bp&#34;&gt;self&lt;/span&gt;
+    
+    &lt;span class=&#34;k&#34;&gt;def&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;__exit__&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;bp&#34;&gt;self&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;args&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;**&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;kwargs&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;):&lt;/span&gt;
+        &lt;span class=&#34;bp&#34;&gt;self&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;end&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;time&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;clock&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt;
+        &lt;span class=&#34;nb&#34;&gt;print&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;quot;The functions took &lt;/span&gt;&lt;span class=&#34;si&#34;&gt;{}&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt; seconds,&amp;quot;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;format&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;bp&#34;&gt;self&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;end&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;bp&#34;&gt;self&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;start&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;))&lt;/span&gt;
+        &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;bp&#34;&gt;self&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;num_samples&lt;/span&gt; &lt;span class=&#34;ow&#34;&gt;is&lt;/span&gt; &lt;span class=&#34;ow&#34;&gt;not&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;None&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+            &lt;span class=&#34;nb&#34;&gt;print&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;quot;equating to &lt;/span&gt;&lt;span class=&#34;si&#34;&gt;{}&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt; seconds per run.&amp;quot;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;format&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;((&lt;/span&gt;&lt;span class=&#34;bp&#34;&gt;self&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;end&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;bp&#34;&gt;self&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;start&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;bp&#34;&gt;self&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;num_samples&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;))&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
 
 </div>
 </div>
 </div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[9]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+&lt;div class=&#34; highlight hl-ipython3&#34;&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&#34;kn&#34;&gt;import&lt;/span&gt; &lt;span class=&#34;nn&#34;&gt;theano&lt;/span&gt;
+&lt;span class=&#34;kn&#34;&gt;import&lt;/span&gt; &lt;span class=&#34;nn&#34;&gt;theano.tensor&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;as&lt;/span&gt; &lt;span class=&#34;nn&#34;&gt;T&lt;/span&gt;
+&lt;span class=&#34;kn&#34;&gt;from&lt;/span&gt; &lt;span class=&#34;nn&#34;&gt;theano.tensor.shared_randomstreams&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;import&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;RandomStreams&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+</div>
+</div>
+</div>
+
 </div>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Basic-Theano">Basic Theano<a class="anchor-link" href="#Basic-Theano">¶</a></h2>
+<h2 id="Basic-Theano">Basic Theano<a class="anchor-link" href="#Basic-Theano">&#182;</a></h2>
 </div>
 </div>
 </div>
@@ -1140,7 +1181,8 @@ h6:hover .anchor-link {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Stochastic-Differential-Equations">Stochastic Differential Equations<a class="anchor-link" href="#Stochastic-Differential-Equations">¶</a></h2><p>Reference Gardiner</p>
+<h2 id="Stochastic-Differential-Equations">Stochastic Differential Equations<a class="anchor-link" href="#Stochastic-Differential-Equations">&#182;</a></h2><p>Reference Gardiner</p>
+
 </div>
 </div>
 </div>
@@ -1158,122 +1200,714 @@ $$ dX_t = f(X,t)dt + g(X,t) dW_t $$$$ X(t+\Delta t) = X(t) + f(X,t) dt + g(X,t) 
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Example-1:-Geometric-Brownian-Motion">Example 1: Geometric Brownian Motion<a class="anchor-link" href="#Example-1:-Geometric-Brownian-Motion">¶</a></h2>
+<h2 id="Example-1:-Geometric-Brownian-Motion">Example 1: Geometric Brownian Motion<a class="anchor-link" href="#Example-1:-Geometric-Brownian-Motion">&#182;</a></h2>
 </div>
 </div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[27]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+&lt;div class=&#34; highlight hl-ipython3&#34;&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;# Drift&lt;/span&gt;
+&lt;span class=&#34;k&#34;&gt;def&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;f&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;mu&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;):&lt;/span&gt;
+    &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;mu&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;x&lt;/span&gt;
+
+&lt;span class=&#34;c1&#34;&gt;# Volatility&lt;/span&gt;
+&lt;span class=&#34;k&#34;&gt;def&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;g&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;sigma&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;):&lt;/span&gt;
+    &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;sigma&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;x&lt;/span&gt;
+
+&lt;span class=&#34;c1&#34;&gt;# Stepping Function&lt;/span&gt;
+&lt;span class=&#34;k&#34;&gt;def&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;python_euler_step&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;mu&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;sigma&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;dt&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;):&lt;/span&gt;
+    &lt;span class=&#34;n&#34;&gt;result&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;x&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;dt&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;f&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;mu&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;np&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;sqrt&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;dt&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;g&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;sigma&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;np&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;random&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;randn&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt;
+    &lt;span class=&#34;n&#34;&gt;result&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;2000&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;result&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;result&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1000&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;else&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;result&lt;/span&gt;
+    &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;result&lt;/span&gt;
+
+&lt;span class=&#34;n&#34;&gt;dt0&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;total_time&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1000&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;total_steps&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;total_time&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;dt0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;x0&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;100&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;mu0&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mf&#34;&gt;0.0&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;sigma0&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mf&#34;&gt;0.1&lt;/span&gt;
+
+&lt;span class=&#34;k&#34;&gt;with&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Timer&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;():&lt;/span&gt;
+    &lt;span class=&#34;n&#34;&gt;xs&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;np&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;empty&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;shape&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;total_steps&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;dtype&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;float&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+    &lt;span class=&#34;n&#34;&gt;xs&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;x0&lt;/span&gt;
+    &lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;step&lt;/span&gt; &lt;span class=&#34;ow&#34;&gt;in&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;range&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;total_steps&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;):&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;xs&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;step&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;python_euler_step&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;xs&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;step&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;],&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;mu0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;sigma0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;dt0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+    
+&lt;span class=&#34;n&#34;&gt;plt&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;plot&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;xs&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt"></div>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>The functions took 0.0032732456306803215 seconds,
+</pre>
+</div>
+</div>
+
+<div class="output_area"><div class="prompt output_prompt">Out[27]:</div>
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>[&lt;matplotlib.lines.Line2D at 0x1c215a00d68&gt;]</pre>
+</div>
+
+</div>
+
+<div class="output_area"><div class="prompt"></div>
+
+
+<div class="output_png output_subarea ">
+<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAh8AAAFkCAYAAACAUFlOAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
+AAAPYQAAD2EBqD+naQAAIABJREFUeJzsnXeY3NT1/t+79vZ1xd2mGJtiwLQF7ITeQyghdJNACCGE
+UAImhJIvyQ9IJwEcOgSIQ4nBkNACIYADhGK6AQOmGFzi3u31rrff3x9nT3SlUZ2RNO18nmcfaTQa
+jWZndO+r95x7rtJaQxAEQRAEIS0q8n0CgiAIgiCUFyI+BEEQBEFIFREfgiAIgiCkiogPQRAEQRBS
+RcSHIAiCIAipIuJDEARBEIRUEfEhCIIgCEKqiPgQBEEQBCFVRHwIgiAIgpAqIj4EQRAEQUiVyOJD
+KbWvUuoJpdRipVS3UuoYl32uUUotUUq1KKWeU0qNdTxfrZS6RSm1SinVpJR6RCk1xLHPAKXUA0qp
+9UqptUqpu5RS9dE/oiAIgiAIhUQ2zkc9gPcAnAsgY2IYpdRlAM4HcDaAvQA0A/iXUqrK2G0KgCMB
+HA9gPwAjAPzNcai/AhgH4OCeffcDcEcW5ysIgiAIQgGhcplYTinVDeBYrfUTxrYlAH6vtb6h53Ff
+AMsBfEdrPb3n8UoAp2itH+3ZZzsAcwBM1Fq/qZQaB+AjAI1a61k9+xwO4CkAo7TWy7I+aUEQBEEQ
+8kqsOR9KqdEAhgGYwdu01hsAvAHgKz2b9gDQ27HPpwAWGvtMBLCWhUcPz4OclglxnrMgCIIgCOnS
+O+bjDQMJhOWO7ct7ngOAoQDae0SJ1z7DAKwwn9Radyml1hj72FBKbQbgcADzAbRmef6CIAiCUI7U
+ANgKwL+01quTfrO4xUc+ORzAA/k+CUEQBEEoYr4FyrlMlLjFxzIACuRumO7HUACzjH2qlFJ9He7H
+0J7neB/n6JdeAAYa+ziZDwD3338/xo0bl8NHENxYtw6YOhW44AKgVy9r++TJk3HDDTfk7bzKEfmf
+p0++/uddXUBbG1BXB7S2AjU1qZ9C3pDfebrMmTMH3/72t4GevjRpYhUfWut5SqlloBEqHwD/Szid
+AOCWnt3eAdDZs4+ZcLoFgJk9+8wE0F8ptZuR93EwSNi84fH2rQAwbtw47L777nF+LAHAJZcA990H
+nHMOsOee1vZ+/frJ/ztl5H+ePvn6n3/728ADDwCzZwONjcCLLwL775/6aeQF+Z3njVTSFrKp81Gv
+lNpFKbVrz6atex5v3vN4CoArlVJHK6XGA7gXwCIAjwP/S0C9G8D1SqkDlFKNAO4B8KrW+s2efT4B
+8C8Af1JK7amU2hvATQCmyUiX/FBXR8umpvyehyCUEw/0BJI//JCW774b7/Hfegv47LN4jykIYcjG
++dgDwAugxFIN4Lqe7X8BcKbW+lqlVB2oJkd/AC8DOEJr3W4cYzKALgCPAKgG8AyA8xzvcyqAm0Gj
+XLp79r0wi/MVcuTDD4Ff/ILWRXwIQvp0dNCysjLe4+61Fy1zqLggCFkRWXxorV9CgGOitb4KwFU+
+z7cBuKDnz2ufdQC+HfX8hPh54glrXcSHICTL0qXARRcB995rbUtKfAhCvpC5XYRAmputdaf4mDRp
+UronI8j/PA+k+T//wx+A6dOBt9+2tnV20rKcxIf8zksbER9CIC0t1voGR3UWaSDSR/7n6ZOP//lD
+D1nr7Hz0LqXiCAHI77y0EfEhBGI6H+vX5+88BKGcWNFTZlEpYOFCWi8n50MobUR8CIGYzocpRARB
+SA52O7QGrr2W1pMSH5s2JXNcQfBCxIcQiCk+pJEShHTgPA+TpMIuznCqICSNiA8hENPtEPEhCOnA
+zodJd3cy79XVlcxxBcELER9CIKbgEPEhCOkg4kMoZUR8CIEoZa23ynzBgpAKbmGXpESCiA8hbUR8
+CIGYE8mJ8yEI6ZCm85HUcQXBCxEfQiAVxq9ExIcgpIM4H0IpI+JDCMQUHxJ2EYR0cBMfkvMhlAoi
+PoRAzAZPnA9BSAe3sIs4H0KpIOJDCETEhyCkT1tb5jZxPoRSQcSHEIjZMIn4EIR0cBMf4nwIpYKI
+DyEQ825Lcj4EIR3a2oCqKvs2ER9CqSDiQwjEGXbROn/nIgjlQlsbUFtr3xZn2MU8logPIW1EfAiB
+OBsmNztYEIR4aWsDamrs2+IUCeZoGqnzIaSNiA8hEGfD1N6en/MQhHLCTXzEKRJMISPOh5A2Ij6E
+QER8CEL6dHbaxYdSyTkfIj6EtBHxIQTibJhEfAhCOpg5H9XV4nwIpYOIDyEQcT4EIT+YzkdVVXE5
+H2efDbz3XvzHFUoDER9CIOJ8CEJ+cIqPYnE+tAb+9CfgzDPjPa5QOoj4EAJxNngy2kUQ0sEMu/Tq
+VTzOBx9PqXiPK5QOIj6EQCTsIgj5wXQ+4hYfSTofPC9NhfQwggfy0xAC6eoCLroImDWLHov4EIR0
+MMVHRUVyYZe463yw+BDnQ/BCxIcQSHc32b/19fRYxIcgpEOSzkeSYZdsnQ+lgJNPBu68M97zEQoP
+ER9CIF1d1IjwPBMiPgQhHZw5H/lKOG1tJVEwf364Y+cSdpk+HfjBD6K/TiguRHwIgXR3U8Mn4kMQ
+4uO554KHojrDLnE6FHfdZa0HHXfGDBIFd98d7tjsqkQJu8icUeWFiA8hkO5uu/Mho10EIXcOOwzY
+bbfM7WYnnKTzcd111nqQ+Hj7bVqOGxfu2A88QMso4oPdEmbJEmC//YCmpvDHEIoHER9CIBJ2EYT0
+MAWGKT7idj5Mgo67dKl1DmG4/PJo+wOZ4uPuu4GXX6Y/ofQQ8SEEwmGX6mp6LOJDEJLDFAKVldZ6
+3M6H13u6wW5M1PfPRXywayLhmNJExIcQCDsf3BCK+BCE5DA7+MpK4OKLgV13za/zEXU/RsSH4IWI
+DyEQdj6UosZQxIcgxEdrq/2x2cH37k25GbNmJet8hD1u1PePkvPhbFdEfJQ2Ij6EQDjhFKC8DxEf
+ghAfp5xif+x0Ppg4nQ+tqXO//XYSOHE6H+Y+uSScivgobUR8CIFw2AUg8SGjXQQhPl5/3f7YFB+9
+e1vrcRYZa26mTr1v33DHZQEQ5v1feMFal7CL4IWIDyEQDrsAIj4EIW5Gj7Y/9ko4Ncurv/wysGJF
+9u/Jw1f79AknPvh9w4RdDj3UWs9FfDAiPkoTER9CIKbzUV8PtLTk93wEoRTgYbS77mrfHsb52G8/
+4MADs39vp/jo7ARWr/ben983zYRTfi8RH6WJiA8hEDPno6EB2Lgxv+cjCKXAsGHu28MOtZ0zJ/v3
+ZveypoaO+5OfAIMGee+frfjIJefDnHtGKD1EfAiBmGGXPn2k4qAgxAELCWcn6+V8OBNOc3EE+D17
+97aubT+ihF1M4hAf4nyUJiI+hEDMsEtDg4gPQYgDL/GRRpGxqOIjn2GXpGqbCPlFxIfgC991mM7H
+7NnA44/n75wEoRTgTtXP+XAbahuHE2CKjzACgc81zQqnfI4SfilNRHwIvnCjw41Inz7A3LnAscfm
+75wEoRTgjtx5Z+8sMsaw8xFHZ+zlfHgJG69zDULEh+BF7+BdhHKltRVYt47WzbCLIAi5Eybnw835
+8BqSGpaVK2m0DJApPsz8LpM0QiDOz8WPc/28QmEizofgyWGHAcOH07oZdhEEIXfC5HyYzkdNDd0Q
+5FpheNEi+/HNpFAvlyHbsEsUseIUGfw5xfkoTUR8CJ6YU1mbYRdBEHKHO/J//QtYvjxzO2B3Pjbb
+jGpx5OoEmGKjd2/7+3mJhbBhF2fYJhfxsWmT+3ahNBDxIYSCnQ8JuwhCPHDH3NJCLqNzO2B3PgYN
+AlatindupV697IIhV+fDL38lCK7YeuSRtOQJ98T5KE1EfAihYOejri6/5yEIpYLZkX/+uft20/lg
+8RG38xEl7BIkJvxCSEH86Ee0vPpqWrL4EOejNBHxIYRCxIcgxIspMsz5kvycj40bc6+z4xQf5ogU
+L7EQVnyYQuHAA7NzLWpqaCnOR2kj4kMIBYddRHwIQjyY4sNc51wHINP5AOyz4Jr7hsXszJ3iw6uj
+D1vh1Hx9bW12o2P4M0vOR2kj4kMIhTmxnCAIuePVkZvOhik+Bgyg5dlnW9seeij6+/qJj1ydD/PY
+NTW5iQ9xPkobER9CKMT5EIR4CSM+zLCLm/D/7nejv282zkca4qOiArj9dnE+yoXYxYdSqkIp9Qul
+1JdKqRal1Fyl1JUu+12jlFrSs89zSqmxjuerlVK3KKVWKaWalFKPKKWGxH2+Qjjccj5kwidByB6v
+jtnL+YhL+JsCoVcvu/hobnZ/TdiwiykUooRdurro2FVVluDiPBhxPkqTJJyPywH8AMC5ALYHcCmA
+S5VS5/MOSqnLAJwP4GwAewFoBvAvpVSVcZwpAI4EcDyA/QCMAPC3BM5XCIGb+IhrkitBKEfcrh+t
+gQ0brMdBzkc2mAJBKbv42Gkn99dEdT5mzCDhFFY48PDhyspM8SHOR2mSRHn1rwB4XGv9TM/jhUqp
+U0Eig7kQwC+01v8AAKXU6QCWAzgWwHSlVF8AZwI4RWv9Us8+3wUwRym1l9b6zQTOW/CB469O8RFm
+RkxBEOx4uYZtbfYO2xyZkoTzAcQ7sRwfu7KS2oawzgeLj6oqq02RnI/SJgnn4zUAByultgEApdQu
+APYG8HTP49EAhgGYwS/QWm8A8AZIuADAHiBhZO7zKYCFxj5CivAcL2YDKFNdC0J2BOV73HgjcPHF
+QP/+1nNO8XHQQdm9t7MzNwWOF2ErnDonrAvbRrC74RZ2EeejNEnC+fgtgL4APlFKdYEEzv9prR/s
+eX4YAA1yOkyW9zwHAEMBtPeIEq99hBRZu5aWpvUr4kMQsiNIfOy4I3DBBfbnzPwPgMTHSy9Ff+8g
+50PrTEESJuwyYwbw4Ye0HlV8mM6H5HyUB0mIj5MBnArgFAAfA9gVwB+VUku01vcl8H42Jk+ejH79
++tm2TZo0CZMmTUr6rUuao46ipdkAivgQhOzwunbWrKFlmDmU6uvpOG5iwQ9nZ+4Mnba10TFvvRWY
+PNmaTRfwD7sccoi13rs3/UXN+TDDLiw+JLcsfqZNm4Zp06bZtq1fvz7Vc0hCfFwL4Dda64d7Hn+k
+lNoKwBUA7gOwDIACuRum+zEUwKye9WUAqpRSfR3ux9Ce5zy54YYbsPvuu+f6GQSD444DxoyhdaWA
+Aw4AXnxRGgVByBava2f6dKrnMW5c8DE4DNPRQZ12WJxhDKfz0dIC3HIL8POfA3vtBey7b/iwC5NL
+zkdvR68k7Uz8uN2Qv/vuu2hsbEztHJLI+agD4PzJdfN7aa3ngQTEwfxkT4LpBFC+CAC8A6DTsc92
+ALYAMDOBcxZc4Lsp550R28HifAhCdrh1qF1dwNy5wIQJ4SZw5H2i5kQEhV1aWuiPz8ltGUS2zkdl
+JZ2P6eSI+ChNknA+ngRwpVJqEYCPAOwOYDKAu4x9pvTsMxfAfAC/ALAIwOMAJaAqpe4GcL1Sai2A
+JgA3AnhVRrqkB9utTvHBj0V8CEJ2uHWoHR3UWTtzO7xgtyNX8eEM2bS0WOfHz4Ud7cL07k2fI+y5
+mc4Hv55fK+KjNEnC+TgfwCMAbgHlfFwL4DYAP+cdtNbXArgJwB2gUS61AI7QWpuTRU8G8I+eY70I
+YAmo5oeQEnzRO21QFh8PPghBELLAT3w4rzcvWKTE7XyYhcac4iOK8xFFfJijXczHgBQzLFViFx9a
+62at9cVa69Fa63qt9TZa6/+nte507HeV1nqE1rpOa3241nqu4/k2rfUFWutBWus+WusTtdYr4j5f
+wRu+6J3OBzdWF16Y7vkIQqngJj7a24PFx7x51nq24sO5v/P6bmmxrn0WH2ErnJrnlovzYSLOR2ki
+c7sIntTW0vLgg+3bpbCYIOSGm4MQRnxstZW1npTzYYoPfi5p50PER/kh4kPwpF8/4LLLgNNOs28X
+8SEIuVFIYZc//hH4ilG60S/nI6z4qKqKR3yMHCnio1QR8SF40tFhr7DIhCnHLAiCN9mGXUziEh+7
+7QY8+aT1eNMmy/lwhlu8RulcdJF9W58+1twuYXI2zNEuJvX1Ij5KFelGBE+8Mu/F+RCE3Min+HDb
+37ymtbYEAwsVP+dj2TJyT5j6eivsYh7DDy/no6ZGxEepIuJD8KSjw70hFPEhCLnBHerUqcDZZ9N6
+vsIugP09u7u9xQeft9bW+zqPx8XPopyfc7QLU10t4qNUEfEheNLRIc6HICQBd+YjRgDnnkvraYdd
+/vxna5t5TZviwyk6+PGf/kRCobU1U3xUV0c/P3E+yg8RH4InXg2h5HwIQm5wh9qrl9XhRhEfjY25
+iY+ttwbOOMPaFtb54OWjj9KypSU+8aFU5o2NOB+lSxIVToUSgBPF3Ia+ifMhCLnBHWpFhb2wVhjx
+sWIF5VUsW2a9Lgpu4VQv52PDBjonpwPCSzfngz9PVPFRVZVZbbW6WioplypyDyu4wkPv3OaYEPEh
+CLlhig/upMM6H4MHU15FLs6H8z1MN7O72zq/U08FTjzRe46XTZsyxcfSpbSMKj7cQrzifJQuIj4E
+V95+m5Z9+2Y+J2EXQcgNN+cjrZwPt/maAGvmamdn/9hjmTkfXs5HYyNw773Rz4+dDyeVlSI+ShXp
+RgRf3MSHOB+CkBu5hF2YuMXH3Ll0PmbYxXm+LDT4sdP5OPdc4Oijo5+fl/hQSsRHqSI5H4Ivffpk
+bhPxIQi5wQ5CNmEXhl/X1hbtvbu7va9hFh9uHX5NTeZMs5s22Z3QdmNq0KhDbd3EB5+PUHqI8yH4
+Is6HIMRPrqNdAMrHGjUK+M9//Pdrbwceesh63NXlHTqtqLAXGTPp08cSOl45H2bbEIfzwecjlB4i
+PoQMzDsNyfkQhPhxSziNGnapqAC+/nXg1Vf995syBTjlFOCtt+ixV9iFj9nd7T7CpKHBEh9uYZcL
+LgC+8x1r/7jEhzgfpYl0I0IGZsMjo10EIX5M8VFRQddUVOcDAAYOBDZupPXvf99e5pxpbaXlihXW
+eweJDzfB0NBghVXcEk4vvdQuIER8CH6I+BAy8LJR/bYJghAeU3wA1PF+/DE5CVHER3090NxM63fd
+lTnBG0CzUwPA+vW0DAq7dHe7l2B3cz6amoAXX6R153nHMdRWxEfpIgmnQgZBRX0k7CIIuWEmnAIk
+Pm66idajig92PrxwEx+5Oh+8/P73ree9xMf77wMHHJBZQMxEnI/yQ7oRIQO+63n4YffnxfkQhNww
+E04B+11/VPHR0uKflMmd+oYN1nv7iY+ODvdr33Q+3EbYeImPyZOBe+7xPj9ARruUIyI+hAz4rsyr
+EXSWYhYEIRp7701L0/lg3MIPXjQ0kPDYtMl7H76ew4ZdXn7Z+73a2uwz2pp4iQ8A+PBD7/MDxPko
+R0R8CBmw8yHiQxCShUMRZscb1fkArLwPN1gosPMRJuziBgudrq7o4sOs/+GGiI/yQ8SHkAGLD78G
+ipFJnwQhe9zCLlFyqlh8+OV98PXc0kLLoLCL17F45Ftbm7uYcIqP2lprPS7x0dwMHHgg8N//+h9P
+KHxEfAgZBIVdzMQxuSsRhOjssw+www7A2LH02Ox4gzpqExYEfs4Hiw8WFUFhlyDx0d7u7nw4BU2U
+z+Qc7bJsGbBgQab4ePNNGl1z663+xxMKHxntImQQ5HyYjYE4H4IQna4uYK+9rMdmwqhf/oaTMGEX
+N/Hh5jIA1Nl7HSvI+XCOZjEfR3U+hg61zsdsb/iGyG0osFBciPMhZBDkfAwYAGy9Na2L8yEI0enq
+sl9fpuDgomBhiBJ24X3ChF3chsWa4iPqZHZB88+EHe0i4qN0EPEhZBCUcKoU8Lvf0bo4H4IQnc5O
+uwAwO9MozkdNDS39Ovdswi5mvgYTFHbxI9ucD+estvw/k3an+BHxIWQQFHYxnxPnQxDCs3SpNXeK
+Ke5N8TFgQPjjcYftJwbcxEeQ81FXl/kcz3A9eXL06z7I+QibcMrhqajiRyg8RHwIGcyaRUu/IX98
+5yR3IIIQjjVrgBEjgFtuyZzDhTvT3/wGOOus8MfkJE0/Z4GPHTbs0t3tLj44xPPUU+HPz3kOXoSd
+1ZaPY47gkRBMcSLiQ8iAZ6YU50MQ4uOTT6ylV9jlm9+MNtSWO2wv8bHPPsBVV9F62LAL4C4+vJJU
+wxBGfISZ24X/T3zTU18PfOtb2Z+XkD9EfAieiPMhCPHx0Ue0HDnSO+zi1un7wYLADGt88IG1/uqr
+1vrGjVaRMK8bC040rasDhg+3PzdqVLRzM8nF+TDFBx/nz3+2iqZNn579eQn5Q8SH4Imf+BDnQxCi
+8cUXtGxvz3Q+uFONKj569SLBwAXEAGCXXdz35TLsQWEXPo8xY+zPbbml/5BeP4JCI2FHu5gi5pZb
+aMlJt0JxIeJD8MQv7CLOhyBEY/VqWjY1xed8ANRpm+LDj7a2cGGX+nrgt7+1P6cUnZ/bSJgg4nI+
+TBHz3nu0zOZ8hPwj4qNM6egAPv3UfTsTJuwizocghMMUH86EUxbx2dzFV1WFH57b3h482gUABg6k
+ye+uvjpzn5Ejw5/bz35Gy7jDLgBVQQVEfBQrIj7KlB//GNh++0znwmzEJOFUEOLDKT7cri+34l5B
+VFaGD4e0tYULu2y2GS0XLszcJ4o7c801wGWX+YsPrbMTH2vW0FLCLsWJiI8yZeZMWvqJD0k4FYT4
+YPGxcWNm2CUXooRd2PkICrsMHEjL+fNpOXq0tY+b08AjatyorPTP+ejqIgESZbQLAKxc6X0+QuEj
+4qNM4aF52YoPcT4EIRphnI9sCBN2YVHBOR9hwi4A8PvfAyecYCXLAu7Ox3nneb93797+zge3RVGd
+j1WraCniozgR8VGG/PGP1nC8bMMu4nwIQjTWrqWlW8Lp669nP1NrZWWw88EFwoLCLiwEWHzsthvw
+8MP2cJCb+PC7UamsjE98sPOx22655ckI+UfERxly0UXWujgfgpA87e3U8ffvTxPHORNOJ0wAfvjD
+7I4dJuzC4iMo7LJ+PS39SrzHLT74uSDxoTXwy1/S+sSJ1j7ifBQnIj7KHHE+BCF5OCF0s83c63zk
+QpiwC4uPc88FPv/c+725WJlfUmk24sMv5yOs87FkiZUAa7odceXOCOki4qPMEedDEJKnqYmWAwda
+eRdpJpyyYOB5m7zEB1/PbsmfzJAhmduycT7mz6dwzosv0uOgWW1Nt6a62r6PUHyI+ChDzItVRrsI
+QvLwvCqbbUZhFyA+58Mr58OckI2dD8Yr7MLXs9+1f9VVwM03A2PHWtv8PotXwunnn9PyiSdoGeR8
+mMcwxYfcABUnIj7KEDNG6rxwuWEEpM6HIMQFi4+BAy2hEKfz4RZ2MTtrZ6gkF+ejro5Gt5g3MX7u
+Q2WlNaeMCbdDS5Z4v6c5q62X+JBZbYsTER9liCk+nA2CeYH7NSjifAhCeJIWH27OhznZnNNVMF0R
+kzDOR1RYVDhFAudtvPIKLYOcD3PmXlN8BFVPFQoTER9liHmRe4mPG2/0P4Y4H4IQHjPswh1/0mEX
+U3w0NNif8+qwwzgfjCkAgs7P7T2dbUe2YRdxPooTER9liHmxeomP88/3P4Y4H4IQHlN8MEmHXfg9
+ARria+LVYUdxPh57LNz5eYkP5zlk63yI+ChORHyUIWYj4BQPPAQwKINcnA9BCE9TE3Wkffta2+Ic
+amvO7cLXLk/qBiTjfIwZ4524asJCJkh8uAkeER+li4iPMiTI+QjT8IjzIQjhaWmhRE2z04zL+XBe
+rxzW4blPgPDiI82cD+djv4RTrb3DLpLzUZyI+ChDOjqAb32L1t2cjzANjzgfghAeFvVmaCFO58MN
+pSwXJKz4YOESVnx89avB+4QJu3z968Dmm2e+lm9yeOZbRpyP4kfERxnS2WldvNk6H9xwyoUvCMHw
+dZWE8+ElPjZssDrvsOKDCdMGAMDTT1v1OoKO5Sc+Jkxwfy2ff3e3JT7eekvERykg4qPM4PH2PMwt
+W+fDq0ERBCETN+cjqbALs2EDMHQorY8aBdx5p/18/Ah7bn362IuN+R3LT3x4jZwxxQe/fvRou5iS
+Nqg4EfFRZvCFmqvzIeJDEMLDoj6NsAuHWjZsAL77XeDxx4FjjgFGjLD2icv5CEOYnA8v98bN+aiq
+ItHjdhyheBDxUWbwhcriw5mzIc6HIMRPks4HH3PgQOCUU2gJkPjo14+Eh1J2sROX8xEGdlmdw4Gz
+FR+VlSI+SoFExIdSaoRS6j6l1CqlVItS6n2l1O6Ofa5RSi3pef45pdRYx/PVSqlbeo7RpJR6RCnl
+MqWREAVudLzCLuJ8CEL8JJlwytdiQwPQ2EjvpTWJD3Noryko0nQ+eCK65cvt28OID3ZxzLCLiI/S
+IHbxoZTqD+BVAG0ADgcwDsCPAaw19rkMwPkAzgawF4BmAP9SSpk/wSkAjgRwPID9AIwA8Le4z7fc
+CBIf4nwIQvy4JZx6dbhR4ePU1tK129lJQ3u7u7MXH2Hqd4RlyBA63tKl9u3ZOB8VFSTazM8lbVBx
+EqO59j8uB7BQa32WsW2BY58LAfxCa/0PAFBKnQ5gOYBjAUxXSvUFcCaAU7TWL/Xs810Ac5RSe2mt
+30zgvMsCZ9glW+dDKWrMzOFvgiC445bzEbY8eRCm+ODp67nomDmhnCk+zjvP/5hxTlPfqxclvvIE
+ckyUhNM33qC2hj+rjHYpfpIIuxwN4G2l1HSl1HKl1LtKqf8JEaXUaADDAMzgbVrrDQDeAPCVnk17
+gISRuc+nABYa+whZEJfzAVgNnSAI/riFXeISH3yzUFNDx+/osPIr+DoHrOt63DjgyCPjee+wjBiR
+m/Nx2GHAj37kvp+Ij+IkCfGxNYAfAvgUwGEAbgNwo1LqtJ7nhwHQIKfDZHnPcwAwFEB7jyjx2kfI
+grhGuwAiPgQhLG5hlyScDw5HrFpFSzfx4TWjbZIMGWKvuAqEEx9mbgfg3ja1teXnMwm5kUTYpQLA
+m1prnlngfaXUTgDOAXBfAu9nY/LkyejXr59t26RJkzBp0qSk37oo4As+Ludj9mzgs8+AbbeN7xwF
+odRg8VHVTNTRAAAgAElEQVRba21LQnwMGEDrnNyZRFGzbOjTB1izxr7NFB9eYR5nDRE38aE15bjU
+1+d2juXEtGnTMG3aNNu29evXp3oOSfwclwKY49g2B8BxPevLACiQu2G6H0MBzDL2qVJK9XW4H0N7
+nvPkhhtuwO677+63S1kT12gXgPa79176kzsPQfCms5OuF9OJiDvs0ru3NXvtsmWZ75FP56NvX2D+
+fPs2U3x4TdPgLLlunvsHHwCvvQaccw5N3CfiIzxuN+TvvvsuGhsbUzuHJMIurwLYzrFtO/QknWqt
+54EExMH8ZE+C6QQAr/VsegdAp2Of7QBsAWBmAudcFixZAuy0E617hV2iOh+CIATT0UHXVdJhF3Y+
+WHy4hV3yQd++wJtv0rKtjbaFER/OczbFx/jxwHY9PU1TU3znKqRDEuLjBgATlVJXKKXGKKVOBXAW
+gJuNfaYAuFIpdbRSajyAewEsAvA48L8E1LsBXK+UOkAp1QjgHgCvykiX7Jk711qPI+cjrqGCglDq
+8HVlhheSGGrL4uOLL2hpChyuK5Iv5wMgkbBiBa37za5t8s9/WuvO2iicEyLio/iIXQtrrd9WSn0T
+wG8B/AzAPAAXaq0fNPa5VilVB+AOAP0BvAzgCK21OXBzMoAuAI8AqAbwDICAAWKCH2a8me+InHcc
+UcMugiAE09Fhv/6A+IazsvioqaGKpgBwzz3WNibfOR8MCw1TfPgVXDNf6/wMpqgRiotEfo5a66cB
+PB2wz1UArvJ5vg3ABT1/QgyYFzvHht3CLmHvyER8CEI4ooj6qPBxuc6HSaEknJpFwbgd6uyk+h+X
+XAIcdZT3a/2qwrIw2eAcFykUPDK3SxnByaZ//Suw1Va0nkvYRZJMBSEcUXKposIdMjsrhx9uPVeI
+4sPM+airI/Hh53yYn8FZeVXCLsWLiI8ygsXHxInWxZ5LwqlzoihBENxJ0vngzpzFxzHHWM9FrfOx
+//7xnhtjio/WVlqGbWv8nI+6OhIkIj6KjzxqYSFtzImZvMRHlEaypSW+cxOEUiZJ8cE3ASw++H0q
+Kuyde5iO/vnnvUee5IKZ7xJVfLglzTJKUZ7LunW5n6OQLuJ8lBFhxEcU54PjrDLqRRC8+eIL4J13
+kgt7cH2LkSNpyeLD2VGHcT6c88/EhSkgWHx0dUV3Ptz2Hzo0c8ZcofAR56OMMMUHx05zcT548qpB
+g+I5P0EoRX7yE1quXp3M8Y84AnjySWu+liDxkQ9MARFn2AUQ8VGsiPgoI0zxAdCFnIvzwQwcmPu5
+CUKpwuLcObdJXChlHy1ihl1M8lnh1M35yCbsMsxlZq9hw6yiakLxIGGXMoKHuPEF7yY+koxNC0I5
+MmQILdO6OzevbxO/ESVJ4yY+2tvDtTWm83H//ZnPi/goTsT5KCOczkdFRTzOh0xpLQjeOOdbeeGF
+ZOtSeIVdnE5Impji48orgS22AKZOBb7+9eDXsvjo1889xDt8OLB4MTk6cRVuE5JHnI8ygsUHN0q9
+euVW4fScc2jpVxpZEModFud33EHLAw6wD4eNG6+wSz4xxcf8+cB++9F6mJBt0OfYemtg/frMWXOF
+wqaAfp5C0jjnl+jVC7j4YuCJJ6x9ojgft90GXH65iA9B8KO9HRgxAjjuuOB948DL+WDykSDuNYke
+u0K5MHYsLXk+G6E4EPFRRjhdDRYNv/oVZeLvvz9Zw1FyPnr3lrCLIPjR3p7ucHQ/5+ORR4DHHkvv
+XBgv8RElTDJ0qPv2MWNoKeKjuJCcjzLCKT448aumhtyP//yHHkfJ+XBLWhUEwaKQxMfxx6d3HiZe
+n59DwUE8+ijQ2Oj+XJ8+9FllfpfiQsRHGdHRYRcWfNdRXW1vHKI4HyI+BMGffImPfI5uceKVt9He
+7r7dybHHej+nFJVZl4rLxYWEXcqIzk67sODGySk+ojgfvXuL+BAEP9IWH15DbQuR88+P5zi1tTLX
+VLEh4qOMcIZduHGqqcnN+ZCcD0HwJmw9i7goROfDjWefBXbbLZ5jifNRfIj4KCO8xEd1td0WlZwP
+QYiPQsr5KCTi/J+I81F8FPjPU4gTp/jgxqmmxp74FXW0i4gPQfBGxIc7cbpB4nwUHwX+8xTixM/5
+MBO/ojofEnYRBG86OiTh1I1icz5uvRWYPTvZ9ygnZLRLGeEUH+ZEU9k6HxJ2EQR/xPlwp9icj/PO
+I5EjDks8FPjPU4gT51DbZ5+l5caNwNq11nYZ7SII8SGjXYhf/5rmdWGKzfkAJK8kTkR8lAmffAL8
+85/2u41ddgH23hu47z7gwgut7VGdD60z54gRBIGQOh/EFVcAJ51kPS4250OIFxEfZUJjI838WF9v
+3+7WKEbN+QDE/RAEL0R8WJiCo5icD62TO3a5IuKjTOC7glGj7Nvd7j6iOh+AiA9B8EJyPizMtqWY
+nI+wZeCF8BTgz1NIghEjaOlsBN0agKg5H4CMeBEEL9IuMtarF7DvvsAf/pDee4YlKeejpiZZ56Ot
+Lbljlysy2qVMGDAAWLIkc3ZJN8dCnA9BiI+2Nu9ZXZNAKWuSyELDvLGJU5A5ywXEjYiP+BHno0zY
+cUdamtnmANDUlLmv5HwIQnxs2kQ5CUJyzkd1dbICQcRH/Ij4KBO0Bg49FBg82L69uTlz36gVTgEJ
+uwiCFyI+LJLK+UhafJiuSpIOSzkh4qNMcBYYY9yStMT5EIT4EPFh4VZhOQ6qqtILu8iQ3ngQ8VEm
+dHa6iw835yNKoyDiQxD82bSJEiKFaDc2UUgz7OLWZgrREfFRJjirmzJuF1KUOwgJuwiCN52dJMzF
++SCSGvVTXU1tXFLFDsX5iB8RH2WCV9jFTXxEuYMQ50MQvOHhnyI+iKRqj3DyalL1OMT5iB8RH2WC
+V9jFvFgHDKDGYdy48McdNIiWixbldn6CUIqI+EgHHsqcVOhlzRprXZyPeBDxUSZ4hV2efhro04fW
+d9+dHIyBA8Mfd4cd6PUzZ8ZznoJQSoj4SIekxcexx1rr4nzEg4iPMsEr7HLEEcDNN9N6NslgvXoB
+48cDc+bkdn6CUIqI+Mjkpz8F3nwz3mMmLT5MxPmIB6lwWiZ4iQ/A2p5tJnr//sD69dm9VhBKGREf
+mfzqV/Efk3M+0qjBIc5HPIjzUSZ0dnqLC96e7bj7fv2ADRuye61QmnR2Am+8ke+zyD8sPmSobbKI
+81F8iPgoE5J0Pvr2FedDsHPNNcDEicCyZfk+k/wizkc6JCk+tKblZZfR+7S2xv8e5YiIjzLBT3zE
+4XyI+BAAYO5cmtjsySfpcbnfJXJHJeIjWZIMu/Axd9qJ2kgpKxAPIj7KBK+htkA8zoeEXQQAeO01
+Wr73Hi35rrFc4Y4rzknUhEySdD5YQNfWiviIExEfZYLXUFugOJyP5cuTPb4QD87fWEcHcPfdwLbb
+lqcQEfGRDmmIj7o6+n2L+IgHER9lQpI5H/36USObVCz000+BYcOARx9N5vhCfDgFbFsbcNNNwOef
+A6++mp9zyidcxE/ER7Kw+Hj77fiPbYqPXr1kKom4EPFRBvz978Dq1cE5H7mEXYDkQi8LF9KSrXyh
+cHGKj9ZWYMcdaX3p0vTPJ9+w85HUnCYCMXgwMHIktXVx4xQf4nzEg4iPMuC002jpJS7icD4ASToV
+KNnUpK3NaqzL8Y6xvZ06rKTmNBGI3r2B008HVq6M/9giPpJBLokyoH9/WgaNPMgl5wMIJz5+9jPg
+hz8Mf+yGButuphxzBooNZ8w9jPh45hngvvuSPa980dEhIZe0GDQIWLUq/uPycGnO+ShHEZ0EIj7K
+ABYfXncF3DmkEXb55S+B228Pd9zOTqomGHZ/If84xUdra7D4OOIIumstRdrbJeSSFoMGARs3xp97
+JqNdkkHERxnA4mDFCvfnuVNI2vmI2ii88EJ25yPkDzfng39f5XjH2N4uzkda8Azbq1fHe1xzxJKI
+j/gQ8VEGsPOx557uz8flfASJD3Na6iDWrQMOOyy78xHyh5v44G3lKD4k7JIeaYgPCbvEh4iPMqCi
+Ath/f+BHP3J/fsIE4IQTgIsuyu74VVU0d0VQ2CWK8/HMM5nbtAYWLSJhIhQmbmGXchYfEnZJD77J
+Wrs23uPycOnKSnE+4kTERxnQ0kLD0JwjEZiaGuDhh4Hhw7N/jzCFxsyO6cEH/fddtMh9++abA3vt
+Fe3chPQI63x89BElH5c6EnZJj6QKjZnDpUV8xIeIjzJg06bk55bo1y/YkTAbhUmT/Pf1s04//zz8
+eQnpElZ8fPOblHxc6kjYJT145uC4xUdHhzVcWsIu8SHio8hpbwdeesn7+UWLaGrzurpkz2PgwGC7
+M0qj4CY+ZDbJwsf5HXmFXfhustSHT0vYJT2SdD5YQIrzER+Jiw+l1OVKqW6l1PWO7dcopZYopVqU
+Us8ppcY6nq9WSt2ilFqllGpSSj2ilBqS9PkWGz//OXDAAd5zn5x5ZjrnMXBgcEJpruKDK50KhUtY
+54Pj6KXekEvYJT2SEh+meyXiIz4SFR9KqT0BnA3gfcf2ywCc3/PcXgCaAfxLKWVeplMAHAngeAD7
+ARgB4G9Jnm8xMn8+LbkQjhMePpt0aevNNgvOMs9VfMybZ62LEClM2tqA8ePtj/3ERxJToBcSEnZJ
+DxYfcTukpnslYZf4SEx8KKUaANwP4CwAzmyACwH8Qmv9D631hwBOB4mLY3te2xfAmQAma61f0lrP
+AvBdAHsrpSTd0IDLNnvZ1yNH0tIrgTMu4nY+3I5lujs//3n4Ywnp0dZm1X0BqOH2C7skNR9QoSBh
+l/SoqKD/tTgfxUGSzsctAJ7UWv/b3KiUGg1gGIAZvE1rvQHAGwC+0rNpDwC9Hft8CmChsY8AawSL
+l/ior6flOeckex6bbRYsPqLckbiNnDHdkCElHIA7/nhg++3zfRbZ0dpKd6BffkkzEXd0+IsPtyTl
+W28FPvww+XNNAwm7pEt1dTI5HywgRXzER5ZlpfxRSp0CYFeQiHAyDIAG4MxSWN7zHAAMBdDeI0q8
+9hFgOR9eVmBLCw1N/c53kj2PgQNJHGjtPaQ3SqPQ3Oy+rVcvYOzY0m4AkpiZMy1aWkjwjh4NjBhB
+DTcLDbewS1NT5jHOO4+ESynMgithl3RJQnyY36GEXeIjdvGhlBoFytc4RGvdEffxg5g8eTL6mb4v
+gEmTJmFS0NjOAuS22yhc8qtfee/DHb1b7FxrYMECy/1Ikvp6uki7u73LtOcqPgCaaK6yUhqAQqW5
+mYQDQA22V9iF1zduzHw9YP+tNDUB111HdUGynQIgX7S3Jz/STLCork4256NUnI9p06Zh2rRptm3r
+U56WPAnnoxHAYADvKvW/e+BeAPZTSp0PYHsACuRumO7HUACzetaXAahSSvV1uB9De57z5IYbbsDu
+u++e+6coAM49l5Z+4oOdDzfxMWUK8NxzNBomabg0e2dn7uKjq8u7AWlokLuPQqalxepsKysprMIh
+QbfvzBQfWgO//a31Wua664CrrwYOPJAq9RYT7e1W5U0heWpqZKhtGNxuyN999100Njamdg5J5Hw8
+D2A8KOyyS8/f26Dk01201l+CBMTB/IKeBNMJAF7r2fQOgE7HPtsB2ALAzATOuWhh8dHh4jG98got
+nXeXScDiw+08GGej0N3tvh/PIunG4sX0Xn7vU8zE3XCmTXOz5bRVVdmThIPEx8svW4XHzFBFMdd3
+kYTTdEkq7GKOdikF8VEIxC4+tNbNWuuPzT/QUNrVWus5PbtNAXClUupopdR4APcCWATg8Z5jbABw
+N4DrlVIHKKUaAdwD4FWt9Ztxn3Mx4xd2aWigZRojCkznw4u2NsoNeeAB67EbbL3zhHVOSjnsEmXy
+vULE6XxEER/mvmaHzSK1oghLIra1WZU3heRJKuxiOh+l2vakTSIJpy7YxmJora9VStUBuANAfwAv
+AzhCa212oZMBdAF4BEA1gGcAnJfO6RYPLD7cnAC+A3VL6osb7iy8LszubuDyy2mdG2Ovsu8sPqZP
+B3bZhUZOfPEFcPrptL2Uwy5+rk8x4HQ+Vqyg9cGD3b8z87dpCmgzdMfioxi/87Y2q/6EkDxJhF1M
+56NUwi6FQCr3Elrrg7TWFzu2XaW1HqG1rtNaH661nut4vk1rfYHWepDWuo/W+kSt9Yo0zreY8HI+
+tAbm9vxHC8H5MO9GWHx43aHw3fCAAZS8+NWvAqedZn+vUg27FLv4cDofLC4GD7a+M7NzMJ0P/j1c
+dZX9N8vioxj/NyI+0iWpobbmaBcRH/GQlvMhJIRXwunUqZRsCgBnn538eQTlfJgVWNnt8BIf7Hw4
+R+kcdBCw5ZaU91GMd8FhMDvY7u7iCjVonel8MIMGWd/ZF19Y203xsWkTfd5Bg2ieIB62zeLDq4pv
+ISPiI12SzvmQsEt8iPgocrwSTpcssdavvx6JE+R8cMcxdWqw8+ElPmb0lJw78sjSbQBM8dHWlvxs
+xHHS3k5CgZ0PFh91dfTH39mnn1qvMcVHSwu9ZsAA+j1zzZBidj5aWyXnI02Syvng71DCLvFRRPdV
+ghteYZehQ9M9j6CcDxYfW21lz/lww0t8MOUSdim2kS/O741/E87h0Waeh5f4AKxZkj/+mJbifAhB
+JJ3zIWGX+BDxUeSYzseKFcDs2fQ47butsDkfNTXZOx+M12iXmTOLf8I5U3wU2xBTPnen81FVZRcf
+plD+29/sr6+utouPN96wHK9idD5EfKRL0jkfEnaJDwm7FAFeJcvvuMMattreDkyYQLPcam018F/7
+WjrnGDbno7Y2nPhQyjvk4DXa5atfpY7PqzpqMVCKzkd1NX1n/Lz5GzE/r5vzYf5GxPkQgkgi7LJg
+AbBHz0QhEnaJDxEfRUB7u3sDZk4W195OwoPhBv7JJxM9tf8RNuejtjZcwmldnfccMX5hl2K8OzYp
+ZueDxYWb82G6VW41aQB38WEWois28dHZSR2ViI/0iNv5+O9/SXzssw89lrBLfEjYpQjwaqxNnJ0x
+J0n1TkleBokPDgeZzodfzofffDSlXGSsmJ0PPncv54O/Mz/h6Ay7mNNN/PKX3rM3FyL8/UnCaXrE
+nfPx0Ue03G03WkrYJT5EfBQBYcSHuU9XV/pTeQclnF5wAS3D5nz4iY9yKTJWSs6HM+fDLaTGzkdl
+JX3/a9fS3DDmxGzFVAGWO0FxPtIjbudj0SJyYEeOpMcSdokPER9FQJiLybyb3GYb4PHH051TIkx5
+dYA6HW6McxEf5TDapdhCSF7OR1UVlcpftYoed3S4f78sPgByP9j56NfPmnCumNwgER/pE3fOx6JF
+VOhQRrvEj4iPIsDM7WCck7I9/7y1Pm8eTdK1enWy52Xil3BqnmttLd1J1NRkLz5KOezS2kpFtgB7
+yKEY8HI+qquBnXai4mKbNnlPM79pk7f44IQ/ER+CH3GHXRYtAkaNsh5L2CU+RHwUAW5Jo86Zal94
+IZ1z8cLP+TAFCQ8NzkV8lHLYpa3NqtGybl1+zyUqLS2WsATszsf48SRC33mHfrtueRCc8wGQ+Fiz
+xhIfvL2YxAfPayM5H+kRZ9ils5OqKZs1k6qqwoXBhWBktEuRUmh3xX45H26NQU2Nf8Ipz8jrRimH
+Xdrb6bPX1VlFtooF5ygl0/ngmPm++9Jyxx0zX9/SYjX01dXAX/9K69/8ZnCeUCEyYQItxflIjzjD
+LhMnklg+8UT78YtJABcy4nwUKEFxxUITH37Oh9udgoRd3OG6EP37F6fzYX5vnFSqVKaYdEuGNnM+
+Fiywtu+9d/E5H+aonGIaoVPsVFdT2xlHXsY779DS/K36tVtCNER8FChB1l6h3RX75Xxwh/HUU9a2
+2lr/WW2jJpw6c2CKFR6lNGBA8YkPdj6Yvn1p2daW+X12dlqNO/92zLDLypXWvkcfXVzio70dGDHC
+erzTTvk7l3KDHbI4fyemcyXOR3yI+ChQuHPddVfKk3B2rmkmk4YhjPMR9g5i3Tq68/d7L+f7lIoT
+ws5Hv34Uby4mnM5Hv360bG3NHHm1apVVz4M7DNP5ePJJ4P/+D1i2DNh22+IKu6xYQecNAJMnuyfX
+CsmQhEh1tltdXaXT3uQTER8FCnfY48aR8DAn4wK8xUdjY7Ln5UWYnA/zDsIv52PtWqtj8nov5/uU
+Sg4IOx9KAY88QhUWi4XFi4EhQ6zH7Hy4CQZzxt6BA639WGTsvTcVFTNzQPh1hcrs2cCZZ1oT4QFA
+nz75O59yJGgYfy7HNNcL+XdYLIj4KFC4Yx42jJbOMMvq1e4N23XXJXteXsTlfGgdLD7cwi6lcifC
+pfQvuYQeF5P4+OwzYLvtrMd+4qO11RIfZohiq63cj10Mjf6ttwJ//jPwl79Y2/wSp4X4cYZdHnnE
+GnWULc6bJqA4HLhCR8RHAXLLLcAWW9A6zynA8XFm9Wr7XSaz+eb27Oy0MGfXdeLlfLh1JBs3kq0Z
+NexSKs5HWxuJtL32osdueR9vv114SYzd3cDnn4cXH21tVjjihz+0to8d6378YhAfzz5LS7MKq9fk
+iEIymM6H1tQWHn98bsc0b5qK4XdYLIj4KEDOP99ab2wEdtgB+NWv7Bncq1cDm20G/PrXJFaYkSOB
+6dPTO1dGKe/6G27Oh9eQOO5sg8IuTrFRKuKDnQ8WX07x8fTTwJ57As89l/65+bF+Pbl1ZkEmzvlw
+a6i7uuh71Bo4/XRr+5gx7sdPwk6Pk3XrgC+/pHVTfEg1zHThId0LFlgVd+fOze2Y4nwkg4iPAmfw
+YEpamzULWLrU2r5hAzXuV1wBnHSStT2fNQW8hsB6OR98Abe1WXfyHF7yEx81NSQ2zIa9VMIu7HzU
+1tL/0xlue/11Whba5+WcJDMUGDR7sRs77+y+vaKC/h+Fesf54x9b62Y+loiPdNlqKwp1ffABtZGA
+VXk3CuZoQ3E+kkHERwFTV0d/229Pj82k09ZW60IolGz6KM6HKT5qaoCrr6Z1vtPnu2Y3+PPOn2/N
+lltqzodS7rU++O660KpmuokPLjb27W8Hv/7cc0lE+32uQh7m+J//0HKnnezOR6GJxFKnooKS9OfM
+yU18mG2tOTO4OB/xIRVOCxi23jlpzSyp3tZmNfRuDfZrr/nXykgCr8qjfjkffGf40EPAVVdZibZ+
+gorvqDk/QOvSER/sfADutT5YfBTa5+XfpjPBsrPTygdaupRyQ9gaNzFDh14UcoGnigpyP157zXKr
+Tj4Z+N738nte5ciAASQeWHxkUwPIa/ZkcT7iQ8RHSnR1USfZO8J/nEWFl/jgCci4cTeP/ZWvZH+u
+2VJfnznnDOCf88FxWQ67hJmMy02YlModJg+1BUh8OsMuhSo+3JwPgCbiYnjkVrYUsvPB9Vn4mq2u
+Bh58ML/nVK7U1VG7wuIDCB5B58RrhIw4H/EhYZeU2HVX/xEcbrCY8BIfzg6ah2fmi0GD3OuP+OV8
+sPjguxO+qP3Eh9sIgkLrjLPF/F7r663/DwC8+y6wfDmtF9rn9XI+3DjiCOB3v4v+HoUsPlg0cudU
+KKHQcsRNfLzySrRjmBV2zZFl4nzEhzgfKfHhh+H2M3/oLD74btIUH5wbwBRCefHNNqPKlU68cj7a
+2rydD7/Yv1vDXmidcbaYzoezs/3ud631Qvu8Xs6HG08/nd17FHLYhUUjC2MRH/nDKT7q6qj9Pfro
+8McwxYeJOB/xIc5HgfHZZ9Y6i4/aWkreM5OgnM6HUlaCX74YNMguPqZOpWG/69bRSAXTgnc6H07x
+4TbxGOPmfJRK2MX8XquqrP9Hezsl0U2eTI8LTXxs3Ei/1yRHW1VXA1Om+Ccj5wtn2EXER/5g8fHF
+F9RWjB8PfPJJtGOI85E84nwUGK+9Zq2z+KioyMyncAu75JtBg+wXOd+p77wzcMgh9n2rq0mosFgx
+xUdlpZXH4kYph12czgcnnK5ZQ59x332BG24ovM/b1EQhlyQFMP/eTTu9UHCGXXLNbxGyh8OVd9wB
+fOtb9N2YN3VhMHM+TPEhzkd8iPNRYJgJhqZT0NBQ+OLDK+zywQfAlVfat/FFfMABtDRzPoI+l/Ou
+sru78DrjbOjooM/Cn98Mu7AI4STjQvu8GzcmP49JoQ0vZvj3Z4Zdttwyv+dUztTV0ciqFSuAAw+k
+uYPWr492DK+wC89hJc5H7oj4KDBMRW2OXunb1z7sshDFR79+3he5c/SN89znz6fx+G1twZ2M0/lo
+by+NsAt/v5y06SY+BgzwrqeST9j5SBLzN1NI5eU5p8kMu4j4yB91ddaQ/a23zi5ReeVKYMcdaX3C
+BGu7UoWde1RMSNilwGhtJcejq8suPnbYAXjvPetxIYqP2lr7RamU1Uk47XjnLL0AcP311KkGfS6n
++Fi50t1xKTZ4rh438WFWfnUrL59v0nA+zN9FZ6d1F+rGzJkUujM7jqQw85RYJHpNkCckj+mMjh6d
+vfjYbz+aR8l5M1TIo66KCXE+Coy2NmtIrik+Jk4E3nzTCk8Uqvjo7LTuyv2KnC1blrmtvp4ckKDP
+5ex0ttjCXkWzkO6Ks4HFh5lwyp1a//75Fx+rVmX+j9NwPkzM8tdufPWrdM2keS7V1cA229B6rpOZ
+CdnDNyd77kmCPhuxsGIFTW3h5sKK8xEPIj5SJmhIbGurJT623travvnmFJbg2RoLUXxEScY67rjM
+bbNmAffeaxXS8mPbbe0Tkpl4xWuLBdP54I5t3ToSo3V1JD4uuYSmcE+bxYupUb7/fvv2NJwPc56U
+QrrzNOvYXHop/S+iFLQS4mXJElpecgk5rqaID4PW1IYMHuz+vDgf8SDiI2WCfrStrdRwPf88cOON
+1nZW8y0t5CxoXbjiY8UKciPcqp0ye+5Jn+Gxx4CDD6aksCgZ6Z9+Cpxxhn1bbS11zlOnRj3z/GM6
+CV5hlwEDqDFl5+e889I9RwBYtIiWb79t397UlLz4MPNcCqnxN8MuSqU/rYFg57DDaHnwwbSMKhb+
+/camZKAAACAASURBVG9yFr0mORTnIx5EfKQMJ0J5wY7GwQfbY5csPjZtCleCPB/wOX72GfDf/1rb
+99nH+zXf+AYJLbfhs0E4P/922wHDh7tXWS10zDCKV8IpO2J+uQ5J0t4OvPgirTvt6DTCLoXgfDz8
+sD2XCbCHXYT809hI389mm9FjdhDDhmOffRYYNYqGtbshzkc8SMJpygSJj9ZW9zgjC5GWFmu90Bo7
+Pm9zVM4999BY+yBqa6PXb3B+fm5s3JJZCx0zh8Er5yPf4uOoo4DnnqN152807bBLUM5HUlx/PS1b
+W+k3u3IlsGABbSu061Eg+Hvp6PAvXsjMn0+5O141a8T5iAcRHylgKu6gH62X+Cgm58OcEXLw4HAX
+fG2texKqH87PP3AgdUrFKD5M58MUl4UkPl54wVp3OlXl4nwwLS30P+ARSkC437mQPmZV0rDig4fZ
+eh0v37+/UkDCLilgdizPP+9f6terzoUpPtg9KbSiS3w+fCcIhO8oa2ujh0uc4mPIELr7LkbxYd7J
+c3VX0y42Z+XMh/hw1lJxzs5cLgmnfCNhTvjHFNrNgEBELYk+f77/UGlxPuJBxEcKmD/6c84Bxo1z
+36+5GXjmGfdGzAy7cHii0Oa4YIF07bXWtrBCoLbWGgn061+He43z/zRmTPGKD7ehs9XV1Nl1dubf
++Whutj82xZLW9nBgUhSS+GhuzvydifgoTKKIj5YWSpj3Ex/ifMSDiI8UCPtDveQSWrqNEjGdDxYf
+ffvmfm5x4ubE+NmXJtxx9e8PXHFFuNc4bf4jj4xHfGzcCPzpT+nOFMyd+fPPW9vMRtMUH07XIQ2c
+4sO88+vspP9VNknDUTDFh18Sc5Lwb6KlxZ5UDcjw2kIlivhg11acj+QR8ZECYX+oc+fS0q1ORTGI
+D2fn09Xl7fJ4vTbK3fPAgda61lT7o6Ehd/Fx7LHA2WcDH3+c23GiwM6HeffM8em2NnvYxcwhSqvM
+OouPyy+npfmb5vWkw4DOEv1udHen8z9pabFPJVBVVXhOpEBEER/z59NSnI/kEfGRAuboDzd4Yipu
+NJcvz9zHDLtwo1dojZ2z8/GbmdZJNuLDjTicj9mzaTlnTnqFvNj5MEMqpuA0nQ+zc00rxMTi44QT
+gJ12sje+aeUg/eEPwFtvWY9bWzOF/THHREv8HDUK+Mtfwu9v5nyY4mPIkGRn9BWyJ4r4WLiQprcY
+McJ7H3E+4kHERwpwYSYT8+714IPpx84NvJv44E7pjDPI+aisLLwYcy6dT7bi47bbgKuvth737Zv7
+lOts7590EhXyChoeHQfsfJgdJ4vLJUvonFh8mOGHtBpB/m02NNDvLh/OR2WlVb4coLtT59T1Tz0V
+vp5DeztVbGU3Jwxmzod5U5FmaXkhGlHEx5o11uSNXtTUpNMmlDoiPnxYtIimZs6F5mbgiCMyt5t3
+TS++SPNlzJlDj++7L3N/865q/XrqZAvtTiuXXAS+0+jVK9rrzjkH+PnPrcdDh5IbcOed2Z+LM/nT
+me+QBG7OB4uNefNoyWEX83tPW3zU11PjazbkaYkPwC64ly+3X0dRy+qvWEHLKHMBeTkfSSfbCtkT
+Rny8/z4VRzQdRi8GDqQbgrvuKrzZpYsJER8+bL45lQnPBY4hOjGTSrk41saNVFL9m9/0P+bKlYWX
+78E88EB2rzvpJFpuv31u7z9qFC1/8AP79u5umuH0mWf8X9/VlRnKSEN8uDkfLDZYfHCjaNaWSCv2
+7BQf+XA+AH+3j6uvmpgukZOodWUAq7NpabE7H9ttF/1YQjqEER+77krf4bXXBoezBw+mNvj73wfe
+eSe+8yw3RHx4wI1WrsqWOw4nZodmzgVhdixO7riDlkuWFK74OPXU7F63446UcHvvvbm9P4sPwH5H
++/zzNCtwUA7HmjWZd8Ju4uPjj+3F1HLFz/ng0T/8eOhQa598OB/5CrsA5Prcdpu7Q/b++5nbvCqh
+/uAHwI9/TOtRnA92O5qbab1fP8oz+cMfwh9DSBdOTA9bRygojyof4r8UkQqnHnDSYa54OR9mh2Za
+tn7iY8wYWi5eXLjiA6Bhqn6F1Lzgz5cLI0da62bhq0cfpeX48f6vX7Uqc5vb0Ocdd6Q5JJwTrGWL
+m/Ph7MzZCTHzHNJ0Pnr3pvOrqbEX2UpTfAB0Dm6Oxtq1mdva292HAJthOT93xGTpUkpIBKiDWreO
+8k4efzzc64X80KcPiWae7daJU5QE5XOYs91K4mn2iPPhAU8ZXlER7c7IyaefAoMGAZ9/bt9uig8z
+x8BPfHBS2+LFhTfSxeSss/J3J1hXB3z1q7RuOhMvvUTLoM6a8wbMcJtXga0PP8z+PJ24OR/OnB7+
+zi+91Bp2mqbzwQ5dPp0PwHs0i/l9s9XulrztrE66dm04AWKOgFizhlzNLbcMfp2QX5SimxIv8eEc
+VhuUsG5W8hXxkT0iPjz44gtadnfnNnrivfeAQw4Bxo61bzfvps3G0C/HhMVHIYddCoE//pGWZmfE
+nZBfYzFjhnVnu/XW1nan+Fi8mJZmnZFccXM+nHCHOmQI8OCDtJ6m88HiY/hwyq/YdVe6+09bfDgr
+vLJwWLvWui74XN1yMZxuZHd3tGTVrbem39Znn1FtGaHwGTHCW3w4nc2gsMv221ttsYiP7BHx4UFT
+kxVbd7t7CoPWFIfeZZfM58wOzRQffvNj8A++rU3Ehx+cwMvio7vbsuQ3bSJX6/e/t7/m009JJJ52
+Gj028yqcjRMLlDjFh5vzAQAzZwJffpk56oo7+nw4HzzV+PvvU9gp384HX0tr11o5P2YH4qyz4zb0
+PUzy6YABwKGHUsjt3nvpezGH/gqFy7Bh3t/xTjvZH/PMzV707Wu1LYUiPr78MrieVKEh4sODpiar
+YckmKx4gx6SpyX4XzZjiY9Mmqifx5Zf+xzNrCYj48IZFAd/Nrl9vhc5aW0lgXHqptX9zc+YomwkT
+7M+bcFntoCF5UZg5k5bOjnXiRGD06Mx6FlEny8oVU3yYlUbr6/MvPpqayGF8800rNHLIIdb18sYb
+9v3NIbJM0JB6rel/cMwx9v/5YYdFO3chPzQ0uE8GCFBYhsNn220HHHRQ8PF696aQfKGIjzFjgP33
+z/dZREPEhwvvvUcqkkMl2TgfX3xhjfwYPtz+XGWl1aF1dtJdb2MjdTJ+mOIjX9OqFwP9+lFSGCe9
+8l2KM1eBcbvTufBCSjquqckUHyxGwyYqhuGmm2gZtlZKPp0P0xXatInOQan0fpNu4mPiRFrnkNgW
+W5D432yzTPHhFkYNusZbW+k6HTDA2vf22/3LcAuFQ22tt/jYuNGag8ot4dwNpQqv2NgHH+T7DKIR
+u/hQSl2hlHpTKbVBKbVcKfWoUiojMqqUukYptUQp1aKUek4pNdbxfLVS6hal1CqlVJNS6hGllE86
+Zjw0NwO77Ubx3FGjqKHLxvmYPBl4+mla57uxbbYhkVFfb3Vo/OMNMymX2egWm8WWNuPHWwmhnM0+
+YoT7iAjnHC7Dh9NdzU472b8rhu+S3UbBZIOZ0By2cJw570samOLDpKWFfsM1NekVvXOKj40brffm
+GZHPOIO2jR6dOQHchg2ZQj6olgtfb/37W4LjrLOyOXshH9TVeQuFjRuB3Xen9bDDcYHCKbNeCOeQ
+DUk4H/sCuAnABACHAKgE8KxS6n/dq1LqMgDnAzgbwF4AmgH8SyllNitTABwJ4HgA+wEYAeBvCZyv
+DbMR6tPHP1boh9m4sfPx2WcUI6+vtzouviDCVEhUCnj1VVqPq+MrVfbYgxyN1ast52PECPoOTLbc
+Evi//7Med3bacwIaGjL/1yw+4ppXhQXRww+Hf41S3k5OEjjFB+e9bNpEoz7M+ipJ4xQfnPR61100
+KaDWlhMyeHDm3eyGDdbIob339u6YrrzSErCm+Jg6lUI8UavxCvkjyPng4bN+c7o4KRTxweHlKHMa
+FQKxiw+t9de11vdpredorWcDOAPAFgAajd0uBPALrfU/tNYfAjgdJC6OBQClVF8AZwKYrLV+SWs9
+C8B3AeytlNor7nM2MRuhPn1oZAGXYY6CmQ/gFBbm/CMsdsJORz5xIhVH+sUvop9TOXHmmfQ/Pu00
+SyxsvrllywOUiMqdaH098KtfUYdiTojn5nywGI1LAPLvywxnhMFZ5jxJnOKDz3XTJuCjjyzbOg2c
+jSyPYnAbfj5oUKb44OkJFiygird1dZkdk9b0ezj0UHrMArFfP7q299wz988hpEdtrbvA7Oqi7Q0N
+Vt5QWApFfHD7UWwl/tPI+egPQANYAwBKqdEAhgGYwTtorTcAeAMAp7LtASqAZu7zKYCFxj6J4Bx5
+0rdvdp0MW+m77Zb5XP/+VtIbF6kKmzVfUUE1NDbfPPo5lRPbbUfW+5dfUv7NyJFWkS5m7lxr/Zhj
+gJ/+NPM4XmGXysrozodXjsgFF9AyqvhoagLuvjvaa7LFKT4qK0motbSQO+AcMZAkTvHBgtItCXvQ
+oMxhtBs20L5bbEGdjpv4YFHHQpPdMx5JJRQXbt8xYLXtffrQqESzSGEQhSY+wt7AFgqJig+llAKF
+T17RWnNkfRhIjDhTvJb3PAcAQwG094gSr30SwVTHWttDJFFYt45CNlzcyqR/f+tO6rnngB12kMS1
+JBg/nkIoc+dSNrhzNMasWda6l5Bw+/6XLSOx2N7uXb7byUMPUTKpW87J88/T0jmiJYjubpqMMOw5
+5IJTfChFjd2iRfT/yJfzUVFhiQ8358Mr7GIKFfOu+MEH6Zp0Ck4WMCI+ipPaWhKU3d327XxtZzMr
+caGID25Tii3sknR59VsB7ABg74Tf539MnjwZ/Ryt0KRJkzBp0qRQr2d1PGECDdf75z+zy/lYt44q
+bbrV7ejf3woFzJ2bbsNdTowaRZ3IK68AX/tapvjgeXeuvBI46ij3YzQ0WB3RY49RR7ZuHQ1r+/hj
+arzC1Pt45BFabtiQ6cAMHUr2frbDp8OeQy6YBbyYujrLps6X89HQEOx8rFlDrhPnaHDYhTHvirmZ
+4HAcs2oViZtia+AFgkMSmzbZRTTfdBSz+GAXPcrou2nTpmHatGmO47iMQU+QxMSHUupmAF8HsK/W
+2hxFvwyAArkbpvsxFMAsY58qpVRfh/sxtOc5T2644QbszqnLWcB3QNOnU6KoW8Ihs2YNdSrf+15m
+8tm6dd7JS/370x0rQB2gxI+TgS3UxYsprPLee/S4f3/6fhYsoO/XL3+mvt666zVnG+YwWdiOn3N8
+3CYq3LCBEmSj8tBDwMknJy8+Vq2i4aXjxtm319aSSzBwYLqVPlkA9O5N4n7BAnrs5XxoTdcqJxUu
+Xmyv5eBmyTudj1WrSMgIxQmHJJzigxOJnTcEYY9ZSOIjyuzbbjfk7777LhobGz1eET+JhF16hMc3
+AByotbbdQ2it54EExMHG/n1Bo2Ne69n0DoBOxz7bgRJXZyZxzgw3Qvxj9RMff/87zY7JNRpM1q3z
+LkI1YADdSXZ20jDAoPoeQnaYIzD22ceaN4fzZRYsCO5Q3HI+AEt8hM374P2cjVVbGzWI2RQs48/3
+zjv2+YHihidZ3Hln+3YWAZddlq4jwO917LEkJDh85pVwClihF63pezenMWDxYQoQ8zvXWsRHscPt
+uVNksvjIZq6sQnE++MZm7VqrvEMxkESdj1sBfAvAqQCalVJDe/5M03sKgCuVUkcrpcYDuBfAIgCP
+A/9LQL0bwPVKqQOUUo0A7gHwqtY6Qj5ydJxDX706n8MOA77/fVp3q0zqJz74zvu//yWrTMRHMpjF
+3QYMoGGVgHWnEEZ8sPh0xopN5yMMXuKDzyUb8cEhveOOS7bmBIennLMO8+9+r0THn2UyeDDw5z/T
+H/P88+51SPj7Zfdq7Vr6zswJ4TjnwxwJZXZSmzaR+JB8j+LFDLuYmEOoo1Io4mP9emuE3lNP5fdc
+opCE83EOgL4AXgSwxPg7iXfQWl8LqgVyB2iUSy2AI7TWZurcZAD/APCIcazjEzhfG2GdD7Mq5k03
+WZOZMX7io18/+sFw4y3iIxnMu3GlKLfmmGOAm2+mbZ9/bp8e2w0Wn2beT2WldeccVnzw3Ymzscql
+8TPj1Ek2OitXknhzVjD9+tep0cshypk1Z5xBn/+QQ+g8Dj7YfT/+ftn54NmlzQTvujqqn/PAA9Y2
+84Zj40b6nrKx5oXCwMv5uOsuWhZrzseGDcCtt1LY9uCDo02QmG+SqPNRobXu5fJ3r2O/q7TWI7TW
+dVrrw7XWcx3Pt2mtL9BaD9Ja99Fan6i1zqLiRjQ2baLiTawk/cIuJhddZKnq1lb68+pQ+A5tzhz7
+vAJCslRUAI8/Dhx+OD3u6AgvPsziZEOHWgmLuYZdcrF9zWTm1auTG/XiFXL4+9/pN5/PeYaee85f
+eA0YQN87i48ZM+iaNid7rKuja/zqq61tZgXhpiZ7YTKh+GAX1HS3Zs6k3wOQXXXepMTHxRcD//hH
+uH0feoiWb75JYVi3SRMLFZnbxUFLi328dH09NeocU29r856E6t4eeRVkpbMF+PHHlJTKk4QJ8XPB
+BcDll9u3VVVZHUlQRcN+/agj4nliAOqIuePPNezyxRe0DBJBbjjv1rKdADGIlSvdz69378If/VFR
+QQKEy2bPmkVhIvO83YozzZ9vrW/cmDk8VyguRoyga5anUvjsMxqNmAtJiY8bbgCOPjpz+7PPkkgy
+39MUTaNG2cVVoVNW4mPTJqpo6IdTfHAn09Rk3Sk7Z0BluNhL0N0sN3ZffhmtnK8QnRtvBH7zm8zt
+HL8P+v8PH07f+2uvWdvq60kw9uoV7Hx0dVFiMY9yccacH36YhnVHKW7EOEUrV/qMGy/xUSyYw6Xd
+hjo7J34E7JUu2fkQ8VG8KEX1lN56i5Iyo0xl4IWb+DjnHGtC0bhhl8Oci4pvhF98Mftq3PmirMTH
+lVcCRxzhf4e4YIG9eih3TosX0+u4IXKy5Zb0Q+A6EECw8zF/vjUCQ0gXHhodJD74+UcftQTL5ptT
+Y2aWyX/9dWseEJN997WHR5yN1bx52edM8F3P1lvTMmha+GwpdvFhDqXduDGz9g7//wC6YejTB/j3
+v61t4nyUBhMnUmmEI48E3n3X2v63LGcMc4qP5mbgjjuAadMyJzMMizOx3YRzA83Za5cupVFo++9P
+v8/WVvfh/IVIWYkPLhxkWqpOPvnE7mxwPsaCBZkzyU6cCFxzDa2PGwfcdhs10i+8QNuCnA8RH/mD
+O5IwzgdAHRDX4uDfB88bsmAB8JWvACeckPn6mTPtDZRTfCxfnttv4PXX6S69sjLT+Whtzd2G1ZoK
+4RVzBV5TfDQ1ZYarzJuN/v3pWl6/3nKjVq6k0KuIj+LGLCTIE3QCwH77ZXc8p/gwRz2aQ7mj4BbG
+bW2lWkQc+jXzz5Yts9oo06UvBspKfPTuKanGcXYnWmeKj2HDqGF3Ex8zZwI/+xm9zrTNuYCYV+En
+Duu0tUWfz0OIhwcfpAs6qLiXacmfcw4VlLvoInrM4oPrTITJuTAbq+5usklz+Q1MmECOzIgRwMsv
+kxsyeTI9d8opuc82u3AhDU/1CjUWA0HOh1kgraHB+s55ODUn8UnCaXFzyCFWx73cKG+Zrah0ig8u
+dpcLbq76M88AP/+5NRrLPPc1ayxHlj+H2zEKkbISH1wD360uB0B3OM6GtqKC6hs88oj7vByMeQe9
+cCEJFq/hW2aCmzgf+WHsWArDOYePOjHzKrbdlobmcSc0aBD9Lk4/nR7zZIIMT0bGVFXZGysu+x2H
+AB0xwooJT5lCy8cfp6WflRvEMcfQ0lndtJgIcj769ycxCtANCl/LI0dSg86OqTgfxc8222TmV2Wb
+NF1TY8/hikN8uLkWzpl2TfFhlnQoNvGR9NwuBcHixVRgin8onPnuhG2t7bazb//pT6mDOfBAejxl
+in3adcB+hzx/PrkeXsO3TPEhhYuKB2ejNXiw3SbdsME+AZvZGA0YYBcfra3WLLpxiQ8Trl8AUAOV
+bfn1//6X3JNiFx/z5lEj7uZ8AJYgqay0ruXhw6lh59ogSc+fI6TD8OHxjAqpqSH3Wmtq6z//nG5U
+99+fEkCzwU04zJ5NbQ+fsyk+1q+3boYk7FJA/P73QGMjcOaZ1BFwJrCXMvzkE0pEdFZyPPJIWj7x
+BP3gLrzQmgadMRv/BQv8GypTfEjhouLBeedr1r4491xamkmffMc8ZAhw553025kzh36H22wD/OlP
+1LHHMbcPJ01yGImr7wKZs7qGRWsS7D/5SXZ1EAqFujpKMJwwgUSfmyPJgnHoUKsxP+gguj45wS/b
+OL5QWPD3v+22uc1JxBNVvvUW3dD++980jcPWW2c3Ezrgfq0uW2af2oDFx2ef0Y0u/165fVqyhASQ
+X25jIVDS4uPSS6nRefZZ+3avyfs++YR+OM4hjAMHUmfxzjveYsG8e9XaX3yYQ3mzqWwppMvvfkd3
+/s4OmAXnWWcB559P607xUV1N2044ge5M/vpX+q1wHsHUqfHUyjj5ZFpedlnmc9mKj1WrqLM2EzKL
+EWcdDzfngzuS4cPpZuWZZ2hkXP/+FI7t00dyPkoFnv31ppuATz/N/jj8m5kwgQYfzJ5Nyat9+mQv
+PjiEa7J8OQ0TZlaupN8nO/Tch/Dv+oUXgP/8x33OsRdftE9LkE9KWnx44Sc+vBLreNp7L7HgtM79
+xIc5A644H4XPpZfax9YzEybQcuVKS4iYI04WLqSOm0N0zov+o4+8y4JHpbGRckhOOMEqqsYJk9mK
+D07MLjXx4eZ88DW58870PFfB5et9iy2K2/0RLDgHKs5k/7k99bm32IJ+Py0t0aa4ZzhvrLKSzlNr
+Eh9mFezWVitHCbBEcUMD/UbvvJMeu1U8vvBCEtfmcN18UbLi46OP3LfX1LiLj6VLgVdeyV58jB5N
+LguXbQ47A6Y4H8XLbrvR8qSTyPKsq6Pfkdb0x+KD2WMPeynwuKehZyHL9QA4fJit+PjHP+iYZiny
+YsQpPtxGAPF3c9559u38P82mCJxQmLAoGDYst+O0tWVuGznSErdRprhn6uspGb6jgwTxqlUkIpxC
+yQypcF2PXr1ohBs/3rgRuP9+GgXHsIDmEZn5pCTFR3MzqbvBg6kOgsmoUe7iY8oU+mJ++EP3Y3KD
+5ZfxvttulgoN27GI+CheqqtJZJx6Kv12hg8n5+PQQ+lOZeHCzDwBc3RT74TSvTmHZO5c6njNBLQ3
+3wxfAOmdd6hIWtCIoELHOdutWVSMUcqaKM+EE8JlSHzpcMQRtAx7g+jFySdnhuhN8RE29PLUU8B1
+19F6c7Pd5bjvPloOHkx5HFwSft48KwncFNOTJlnrs2YBp51mr2PCo74KYQ6YkhMfTz5JwuOjj6iM
+LlvjzKhR7neCjz5KX5zXDLNhKzzyiJqwdRHcpgEXipMRI2iisxkzqIN//fXMO2buxJKcz2fXXWl5
+zDH2KqyLFtH1EHbkytKlpXHHv9NO9sduc7l4wZ+/mCu8CnauvJJClGb4Oxt697aGogOUc9G3b3Tx
+cdRRwCWX0P4bN9pvWGbPto794ovAr39NjxcupPlfFi8GDjjA2t8cqfn++9Y6h2C4FlG2FVjjpOTE
+x1VXAdOnU2zLrYDUlltSvY7777e2rV9Pw6T8JhrixocnmPOC4+1BxavY3pU4cukwfDjw3nv2bU5x
+yb+juEMuJjz51B/+YImP556zQkDNzcA99wQfZ+lS93lPio1vfINuCgYNAn7wg2ivZfEhkz+WDjzZ
+YBycdZa1Pn48Ld3ExxlneBf8Y2fxpZeofzGrCbNDwYLZbE8GD84cYj9mDP3G33/fcngAEjfr1lku
+qDgfCWJ+0WZyztln03L+fJp0bPJkq8PgO0Y3woqP446jmGJQZckbb8ycZEwobtw66h/9yP64pga4
+9lrgsceSPZfqavv8M/Pm2Z//2c/8X9/ZSYm0pSA+APq/r1wJ3H57tNdxmMwteU8QDjsM+PvfaZ1F
+g9uM13/5i3ttke5uq0/ha9QMu7BIYNFhJku7uXG9etFvfOedyfnnkZ7Tp1uCa9w471pXaVKy4sOM
+rZ98slV0adw4ivk2N5M7MmUK2VZDhlhJpW6EFR9AZtzYax8eqiWUBjxk9m9/owborrvcR1b85Cfu
+eQdJwOLDeeduvn97O8WWu7ooT+T3vycHT+vSER/Zwm6RX9sglDfHHkszZ19xBT12Oh9uiamMOSUD
+J5Ga+UUsWNycjzDVsQ89lMIzZmGy/ffPnCokH5RshVPnF/O975H11asXfYHOTORjjvGPAfLQ2eOO
+i/U0hRKCG5khQwqnxDGLD2djYwrfGTOovkBXF024ZVZHNePJ5ciYMVTMaezYfJ+JUKgoZYXbAUt8
+cIjjiSe8X2sOzeeKyH36UI2OKVOs4e5hnQ83ODSz8850bT/2mP9UIWlRss6HW9lyFhdu4iNoWvOK
+CoqjX3JJPOcnlB7nnkvDUv3Cd2nD4sNsbL7xDavaL2DZvT/9qX168alTJSEaoHopkpslhIVdCnY+
+zBGXznmW2NkYOdJyPurrqWih2UfxzYIz5yMMfCN+4IE0Eq5//8JwPkpOfPAwQ7+p0t3Exz77BB+b
+4+iC4MZ221H+kNeEgvmgb19qaNasoZFcjz1GQ8I/+MCaVnzBAtpv6VK7SOG5jARBCE+vXiRAWHyY
+yZ3OPL9XXqHluHHWhKdm+XeGQ/lmNeSw4oNHt33ta7Ts359uSHKZcDIOSk58nHgixar96mfU19sb
+2QcftDKVBaGU2HZbChssWUJJ0N/4htUIPf00LefPpwqpU6fSNp4XRuYyEYTsaGigkg5PPUXinpM9
+77zTKnI2bx6NSNtyS8qtWrOGxAVfd5zI6kXYIeMnn0z9HV/3AwZQH5nv0HDJiY8whWPq66342s03
+W/NiCEKpcdBBlFD61FNWAzhhAhUe4nDLsmXU+H3nOzQ87/bbrdl3BUGITp8+wN13Uw2PN96wrHuw
+uwAACZ9JREFU6j5dfLGVU/XXv5JLMmOGNRXC+PGWu+E14/lf/gJ861vhz6Wiwn4zzoUwzTyVfFBy
+4iPMFPX19VbDu9deyZ6PIOQTbtRaW+1Z9GPGWMlsa9far5uKCqlrIQi50NBgTTLZ2EiOI8NJpp9+
+Sv3PmDFWQnOYUVWnn26vUxUVDsPccYc1l0w+KDnxEdb54HH7YYYrCUKxUlVljdQyxccOO1D1xOZm
+snv9JkIUBCEanLcxcSLw9ttUup+ZMYOGtH/+uZXXwbmKzrmFkmDUKCvkynkm+aDkxEeY2hnZZAwL
+QrHCosMUH8cdR8lvTz4p4kMQ4oaLTHL+htnnvPoqiZHZsy0XYuxYSgB1OvGzZlF14rjZYQdaXnxx
+/McOS8nW+fDDHAkTZZ4HQShGWJCbLt/WW1Puxx//SCJExIcgxAc7GtzJO9MBPv+clieeaG1zG0mZ
+1LB9Lp73xBP5m0ah5JyPMHA2vyCUAzx1uHP4+UknWTUI4prrQhAEa4K3o46iJSd5AiT4AUpITavS
+sROzCvecOXk6h/y8bX6pqgI+/tiKewlCKXP99cBDD2VOnHjssdY6z0chCELunHoqhVUaGzOfO/dc
+YOZMmn09n6xfT25LvsRHWYZd8P/bu//Qu+o6juPPl05dLoaFuiVlZdZcGGr+SmpqTRAWmhKoKPiH
+hJkJJsFyVFRGYUWmloEYJZs/Qg0jIbCWEWU60ZWCm2I4k9StzDGlmdr26Y/P+ebx+nXt+9295977
+/T4fcOB7zvlw7+e+7v3e+z7nc35Qx9p29tbi0jg75JBXT/VrO+igeqXThx6CJUu675c0UyVw6KGv
+XbZ6dT2zbM6ceiDqsM2fX4eF1q0bzvPP2uJDUj3geunSYfdCmvlG8f9s8WKHXSRJUocm9nyUsuO7
+7w6CxYckSbPQ4sWwaVO9BUPvMWGDZvEhSdIsNHEq8O23d//cFh+SJM1CE9cjWbGi++e2+JAkaRaa
+O3c4ez3A4kOSpFnrtNPqXd5Xruz2eS0+JEmaxQ48cOfuqNtPFh+SJKlTFh+SJKlTFh+SJKlTFh+S
+JKlTFh+SJKlTFh+SJKlTFh+SJKlTFh+SJKlTFh+SJKlTFh+SJKlTFh+SJKlTFh+SJKlTFh+SJKlT
+Fh+SJKlTFh/aJTfffPOwuzDrmHn3zLx7Zj6zjXzxkeSzSTYkeTHJvUmOHnaf9Cq/ILpn5t0z8+6Z
++cw20sVHkjOB7wJfAY4AHgTuTLLvUDsmSZKmbaSLD+AS4NpSyspSyiPABcBW4LzhdkuSJE3XyBYf
+SfYAjgR+M7GslFKA1cBxw+qXJEnaNXOG3YEd2BfYHdjUs3wTsGiS9nMB1q9fP+BuqW3Lli2sXbt2
+2N2YVcy8e2bePTPvVuu3c24Xz5e6M2H0JHkb8BRwXCllTWv5t4DjSynH9bQ/G7ix215KkjSjnFNK
+uWnQTzLKez6eBbYBC3qWLwA2TtL+TuAc4Ang3wPtmSRJM8tc4F3U39KBG9k9HwBJ7gXWlFIubuYD
+PAlcXUr5zlA7J0mSpmWU93wAXAFcn+QB4D7q2S97A9cPs1OSJGn6Rrr4KKXc0lzT4zLqcMufgZNL
+Kf8Ybs8kSdJ0jfSwiyRJmnlG9jofkiRpZrL4kCRJnZoRxYc3n+ufJCuS3Jfk+SSbktye5H2TtLss
+ydNJtib5dZKDe9bvleSaJM8meSHJbUn27+6VjKcklybZnuSKnuXm3WdJDkiyqslsa5IHk3ywp425
+90mS3ZJ8PcnjTZ5/SfKlSdqZ+TQlWZLkF0mear5HTp2kzS7nm+QtSW5MsiXJ5iQ/SjJvKn0d++LD
+m8/13RLg+8CxwEnAHsCvkrxpokGSLwAXAecDxwD/oma+Z+txrgQ+DnwSOB44APhZFy9gXDVF8/nU
+z3B7uXn3WZJ9gLuBl4CTgcXA54HNrTbm3l+XAp8GLgQOAZYDy5NcNNHAzHfZPOqJGRcCrzugs4/5
+3kT9n1natD0euHZKPS2ljPUE3Atc1ZoP8Ddg+bD7NhMm6mXutwMfaS17GrikNT8feBE4ozX/EnB6
+q82i5nGOGfZrGsUJeDPwKPAx4LfAFeY90LwvB373f9qYe38zvwO4rmfZbcBKMx9I3tuBU3uW7XK+
+1KJjO3BEq83JwH+AhTvbv7He8+HN5zqxD7WCfg4gybuBhbw28+eBNbya+VHU07jbbR6lXiDO92Vy
+1wB3lFLuai8074E5Bbg/yS3N8OLaJJ+aWGnuA/FHYGmS9wIkOQz4MPDLZt7MB6iP+X4I2FxK+VPr
+4VdTfyeO3dn+jPR1PnbCVG8+pylorih7JfCHUsq6ZvFC6odssswXNn8vAF5uPthv1EaNJGcBh1P/
+8XuZ92AcBHyGOmT7Deou6KuTvFRKWYW5D8Ll1C3rR5Jsow77f7GU8tNmvZkPVr/yXQj8vb2ylLIt
+yXNM4T0Y9+JDg/VD4P3UrRMNQJK3Uwu8k0oprwy7P7PIbsB9pZQvN/MPJjkUuABYNbxuzWhnAmcD
+ZwHrqAX3VUmebgo+zSJjPezC1G8+p52U5AfAMuDEUsozrVUbqcfV7CjzjcCeSebvoI2qI4H9gLVJ
+XknyCnACcHGSl6lbHObdf88A63uWrQcObP72c95/3wYuL6XcWkp5uJRyI/A9YEWz3swHq1/5bgR6
+z37ZHXgrU3gPxrr4aLYUH6AecQv8b6hgKXV8UdPQFB6fAD5aSnmyva6UsoH6AWtnPp861jeR+QPU
+g4/abRZRv9jvGWjnx89q4APUrcDDmul+4AbgsFLK45j3INzN64dmFwF/BT/nA7I3dWOxbTvN75CZ
+D1Yf870H2CfJEa2HX0otbNZMpUNjPQFnAFuBc6mnb10L/BPYb9h9G8eJOtSymXrK7YLWNLfVZnmT
+8SnUH86fA48Be/Y8zgbgROrW/d3A74f9+sZh4vVnu5h3/zM+inpU/wrgPdThgBeAs8x9YJn/hHrg
+4jLgncDp1GMHvmnmfct4HnUD5nBqYfe5Zv4d/cyXepDw/cDR1GH5R4FVU+rrsMPqU+AXAk9QTxm6
+Bzhq2H0a16n5wG6bZDq3p91XqadtbQXuBA7uWb8X9XohzzZf6rcC+w/79Y3DBNzVLj7Me2A5LwMe
+ajJ9GDhvkjbm3r+851HvVL6Ben2Jx4CvAXPMvG8Zn/AG3+E/7me+1LMgbwC2UDdWrwP2nkpfvbGc
+JEnq1Fgf8yFJksaPxYckSeqUxYckSeqUxYckSeqUxYckSeqUxYckSeqUxYckSeqUxYckSeqUxYck
+SeqUxYckSeqUxYckSerUfwHMHGrEchvlZwAAAABJRU5ErkJggg==
+">
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[28]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+&lt;div class=&#34; highlight hl-ipython3&#34;&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;%%&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;timeit&lt;/span&gt;
+
+xs = np.empty(shape=total_steps, dtype=float)
+xs[0] = x0
+for step in range(1,total_steps):
+    xs[step] = python_euler_step(xs[step-1], mu0, sigma0, dt0)
+&lt;/pre&gt;&lt;/div&gt;
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt"></div>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>100 loops, best of 3: 2.63 ms per loop
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
 </div>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Example-2:-GBM-with-Reflective-Boundary-Condition">Example 2: GBM with Reflective Boundary Condition<a class="anchor-link" href="#Example-2:-GBM-with-Reflective-Boundary-Condition">¶</a></h2>
+<h2 id="Example-2:-GBM-with-Reflective-Boundary-Condition">Example 2: GBM with Reflective Boundary Condition<a class="anchor-link" href="#Example-2:-GBM-with-Reflective-Boundary-Condition">&#182;</a></h2>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In [3]:</div>
+<div class="prompt input_prompt">In&nbsp;[10]:</div>
 <div class="inner_cell">
-<div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># Drift</span>
-<span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">mu</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">mu</span><span class="o">*</span><span class="n">x</span>
+    <div class="input_area">
+&lt;div class=&#34; highlight hl-ipython3&#34;&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;# Drift&lt;/span&gt;
+&lt;span class=&#34;k&#34;&gt;def&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;f&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;mu&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;):&lt;/span&gt;
+    &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;mu&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;x&lt;/span&gt;
 
-<span class="c1"># Volatility</span>
-<span class="k">def</span> <span class="nf">g</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">sigma</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">sigma</span><span class="o">*</span><span class="n">x</span>
+&lt;span class=&#34;c1&#34;&gt;# Volatility&lt;/span&gt;
+&lt;span class=&#34;k&#34;&gt;def&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;g&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;sigma&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;):&lt;/span&gt;
+    &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;sigma&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;x&lt;/span&gt;
 
-<span class="c1"># Stepping Function</span>
-<span class="k">def</span> <span class="nf">euler_step</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
-    <span class="n">result</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">dt</span><span class="o">*</span><span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">mu</span><span class="p">)</span> <span class="o">+</span> <span class="n">T</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">dt</span><span class="p">)</span><span class="o">*</span><span class="n">g</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">sigma</span><span class="p">)</span><span class="o">*</span><span class="n">rv_n</span>
-    <span class="c1">#if T.gt(result, 200):</span>
-    <span class="c1">#    result = 400 - result</span>
-    <span class="n">result</span> <span class="o">=</span> <span class="n">T</span><span class="o">.</span><span class="n">switch</span><span class="p">(</span><span class="n">T</span><span class="o">.</span><span class="n">gt</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="mi">1000</span><span class="p">),</span> <span class="n">T</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="mi">2000</span> <span class="o">-</span> <span class="n">result</span><span class="p">,</span> <span class="s1">&#39;float32&#39;</span><span class="p">),</span> <span class="n">T</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="s1">&#39;float32&#39;</span><span class="p">))</span>    
-    <span class="k">return</span> <span class="n">result</span>
-    <span class="c1">#return T.cast(result, &#39;float32&#39;)</span>
+&lt;span class=&#34;c1&#34;&gt;# Stepping Function&lt;/span&gt;
+&lt;span class=&#34;k&#34;&gt;def&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;euler_step&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;mu&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;sigma&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;dt&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;):&lt;/span&gt;
+    &lt;span class=&#34;n&#34;&gt;result&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;x&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;dt&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;f&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;mu&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;T&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;sqrt&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;dt&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;g&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;sigma&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;rv_n&lt;/span&gt;
+    &lt;span class=&#34;c1&#34;&gt;#if T.gt(result, 200):&lt;/span&gt;
+    &lt;span class=&#34;c1&#34;&gt;#    result = 400 - result&lt;/span&gt;
+    &lt;span class=&#34;n&#34;&gt;result&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;T&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;switch&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;T&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;gt&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;result&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1000&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;),&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;T&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;cast&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2000&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;result&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;float32&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;),&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;T&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;cast&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;result&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;float32&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;))&lt;/span&gt;    
+    &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;result&lt;/span&gt;
+    &lt;span class=&#34;c1&#34;&gt;#return T.cast(result, &amp;#39;float32&amp;#39;)&lt;/span&gt;
 
-<span class="c1"># Random Number Generator</span>
-<span class="n">srng</span> <span class="o">=</span> <span class="n">RandomStreams</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="mi">12345</span><span class="p">)</span>
+&lt;span class=&#34;c1&#34;&gt;# Random Number Generator&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;srng&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;RandomStreams&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;seed&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;12345&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
 
-<span class="c1"># Symbolic Variables</span>
-<span class="n">dt</span> <span class="o">=</span> <span class="n">T</span><span class="o">.</span><span class="n">fscalar</span><span class="p">(</span><span class="s2">&quot;dt&quot;</span><span class="p">)</span>
-<span class="n">mu</span> <span class="o">=</span> <span class="n">T</span><span class="o">.</span><span class="n">fscalar</span><span class="p">(</span><span class="s2">&quot;mu&quot;</span><span class="p">)</span>
-<span class="n">sigma</span> <span class="o">=</span> <span class="n">T</span><span class="o">.</span><span class="n">fscalar</span><span class="p">(</span><span class="s2">&quot;sigma&quot;</span><span class="p">)</span>
-<span class="n">x</span> <span class="o">=</span> <span class="n">T</span><span class="o">.</span><span class="n">fvector</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">)</span>
+&lt;span class=&#34;c1&#34;&gt;# Symbolic Variables&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;dt&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;T&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;fscalar&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;quot;dt&amp;quot;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;mu&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;T&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;fscalar&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;quot;mu&amp;quot;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;sigma&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;T&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;fscalar&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;quot;sigma&amp;quot;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;x&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;T&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;fvector&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;quot;x&amp;quot;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
 
-<span class="c1"># Numeric Variables</span>
-<span class="n">num_samples</span> <span class="o">=</span> <span class="mi">5000</span>
-<span class="n">dt0</span> <span class="o">=</span> <span class="mi">1</span> <span class="c1"># Timestep</span>
-<span class="n">total_time</span> <span class="o">=</span> <span class="mi">1000</span>
-<span class="n">total_steps</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">total_time</span><span class="o">/</span><span class="n">dt0</span><span class="p">)</span>
+&lt;span class=&#34;c1&#34;&gt;# Numeric Variables&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;num_samples&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;5000&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;dt0&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;# Timestep&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;total_time&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1000&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;total_steps&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;total_time&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;dt0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
 
-<span class="n">mu0</span> <span class="o">=</span> <span class="mf">0.0</span>
-<span class="n">sigma0</span> <span class="o">=</span> <span class="mf">0.1</span>
+&lt;span class=&#34;n&#34;&gt;mu0&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mf&#34;&gt;0.0&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;sigma0&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mf&#34;&gt;0.1&lt;/span&gt;
 
-<span class="n">x0</span> <span class="o">=</span> <span class="n">theano</span><span class="o">.</span><span class="n">shared</span><span class="p">(</span><span class="mi">100</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">num_samples</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float32&#39;</span><span class="p">))</span> <span class="c1"># IC</span>
-<span class="n">rv_n</span> <span class="o">=</span> <span class="n">srng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">std</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># Gaussian Noise</span>
+&lt;span class=&#34;n&#34;&gt;x0&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;theano&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;shared&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;100&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;np&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;ones&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;num_samples&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;dtype&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;float32&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;))&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;# IC&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;rv_n&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;srng&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;normal&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;shape&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;std&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;# Gaussian Noise&lt;/span&gt;
 
-<span class="c1"># Iteration Loop</span>
-<span class="p">(</span><span class="n">xout</span><span class="p">,</span> <span class="n">updates</span><span class="p">)</span> <span class="o">=</span> <span class="n">theano</span><span class="o">.</span><span class="n">scan</span><span class="p">(</span><span class="n">fn</span><span class="o">=</span><span class="n">euler_step</span><span class="p">,</span>
-                                <span class="n">outputs_info</span><span class="o">=</span><span class="p">[</span><span class="n">x</span><span class="p">],</span> <span class="c1">#output shape</span>
-                                <span class="n">non_sequences</span><span class="o">=</span><span class="p">[</span><span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">dt</span><span class="p">],</span> <span class="c1">#fixed parameters</span>
-                                <span class="n">n_steps</span><span class="o">=</span><span class="n">total_steps</span><span class="p">)</span>
-<span class="c1">#compile it</span>
-<span class="n">sim</span> <span class="o">=</span> <span class="n">theano</span><span class="o">.</span><span class="n">function</span><span class="p">(</span><span class="n">inputs</span><span class="o">=</span><span class="p">[</span><span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">dt</span><span class="p">],</span> 
-                    <span class="n">outputs</span><span class="o">=</span><span class="n">xout</span><span class="p">,</span> 
-                    <span class="n">givens</span><span class="o">=</span><span class="p">{</span><span class="n">x</span><span class="p">:</span><span class="n">x0</span><span class="p">},</span> 
-                    <span class="n">updates</span><span class="o">=</span><span class="n">updates</span><span class="p">,</span>
-                    <span class="n">allow_input_downcast</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+&lt;span class=&#34;c1&#34;&gt;# Iteration Loop&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;xout&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;updates&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;theano&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;scan&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;fn&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;euler_step&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+                                &lt;span class=&#34;n&#34;&gt;outputs_info&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;],&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;#output shape&lt;/span&gt;
+                                &lt;span class=&#34;n&#34;&gt;non_sequences&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;mu&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;sigma&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;dt&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;],&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;#fixed parameters&lt;/span&gt;
+                                &lt;span class=&#34;n&#34;&gt;n_steps&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;total_steps&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;span class=&#34;c1&#34;&gt;#compile it&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;sim&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;theano&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;function&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;inputs&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;mu&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;sigma&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;dt&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;],&lt;/span&gt; 
+                    &lt;span class=&#34;n&#34;&gt;outputs&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;xout&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; 
+                    &lt;span class=&#34;n&#34;&gt;givens&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;x0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;},&lt;/span&gt; 
+                    &lt;span class=&#34;n&#34;&gt;updates&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;updates&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+                    &lt;span class=&#34;n&#34;&gt;allow_input_downcast&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;kc&#34;&gt;True&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
 
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;Running sim...&quot;</span><span class="p">)</span>
-<span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">clock</span><span class="p">()</span>
-<span class="n">xout</span> <span class="o">=</span> <span class="n">sim</span><span class="p">(</span><span class="n">mu0</span><span class="p">,</span> <span class="n">sigma0</span><span class="p">,</span> <span class="n">dt0</span><span class="p">)</span>
-<span class="n">diff</span> <span class="o">=</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">clock</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;done in&quot;</span><span class="p">,</span> <span class="n">diff</span><span class="p">,</span> <span class="s2">&quot;s at &quot;</span><span class="p">,</span> <span class="n">diff</span><span class="o">/</span><span class="n">num_samples</span><span class="p">,</span> <span class="s2">&quot;s per path&quot;</span><span class="p">)</span>
-<span class="c1"># 6.130000000000003 s at  0.0012260000000000005</span>
-<span class="c1"># 8.5 s at  0.0017 s per path with reflection</span>
-<span class="c1"># 9.319999999999993 s at  0.0018639999999999987 s per path</span>
-</pre></div>
+&lt;span class=&#34;c1&#34;&gt;#print(&amp;quot;Running sim...&amp;quot;)&lt;/span&gt;
+&lt;span class=&#34;c1&#34;&gt;#start = time.clock()&lt;/span&gt;
+&lt;span class=&#34;k&#34;&gt;with&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Timer&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;num_samples&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;):&lt;/span&gt;
+    &lt;span class=&#34;n&#34;&gt;xout&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;sim&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;mu0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;sigma0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;dt0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;span class=&#34;c1&#34;&gt;#diff = (time.clock() - start)&lt;/span&gt;
+&lt;span class=&#34;c1&#34;&gt;#print(&amp;quot;done in&amp;quot;, diff, &amp;quot;s at &amp;quot;, diff/num_samples, &amp;quot;s per path&amp;quot;)&lt;/span&gt;
+&lt;span class=&#34;c1&#34;&gt;# 6.130000000000003 s at  0.0012260000000000005&lt;/span&gt;
+&lt;span class=&#34;c1&#34;&gt;# 8.5 s at  0.0017 s per path with reflection&lt;/span&gt;
+&lt;span class=&#34;c1&#34;&gt;# 9.319999999999993 s at  0.0018639999999999987 s per path&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
 
 </div>
 </div>
 </div>
+
 <div class="output_wrapper">
 <div class="output">
+
+
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Running sim...
-done in 0.3600000000000003 s at  7.200000000000007e-05 s per path
+<pre>The functions took 0.24499167319390125 seconds,
+equating to 4.899833463878025e-05 seconds per run.
 </pre>
 </div>
 </div>
+
 </div>
 </div>
+
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In [4]:</div>
+<div class="prompt input_prompt">In&nbsp;[28]:</div>
 <div class="inner_cell">
-<div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="n">downsample_factor_t</span> <span class="o">=</span> <span class="mi">1</span><span class="c1">#int(0.1/dt0) #always show 10 points per time unit</span>
-<span class="n">downsample_factor_p</span> <span class="o">=</span> <span class="n">num_samples</span><span class="o">//</span><span class="mi">50</span>
-<span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">total_time</span><span class="p">,</span> <span class="n">total_steps</span><span class="o">/</span><span class="n">downsample_factor_t</span><span class="p">)</span>
+    <div class="input_area">
+&lt;div class=&#34; highlight hl-ipython3&#34;&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;downsample_factor_t&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;#int(0.1/dt0) #always show 10 points per time unit&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;downsample_factor_p&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;num_samples&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;//&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;50&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;t&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;np&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;linspace&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;total_time&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;total_steps&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;downsample_factor_t&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
 
-<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">311</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">xout</span><span class="p">[::</span><span class="n">downsample_factor_t</span><span class="p">,</span> <span class="p">::</span><span class="n">downsample_factor_p</span><span class="p">]);</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">312</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">xout</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">));</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">313</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">xout</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,:],</span> <span class="n">bins</span><span class="o">=</span><span class="mi">20</span><span class="p">);</span>
-</pre></div>
+&lt;span class=&#34;n&#34;&gt;plt&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;subplot&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;311&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;plt&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;plot&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;t&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;xout&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[::&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;downsample_factor_t&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;::&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;downsample_factor_p&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]);&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;plt&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;subplot&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;312&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;plt&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;plot&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;t&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;xout&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;mean&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;axis&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;));&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;plt&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;subplot&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;313&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;plt&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;hist&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;xout&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,:],&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;bins&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;20&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
 
 </div>
 </div>
 </div>
+
 <div class="output_wrapper">
 <div class="output">
+
+
 <div class="output_area"><div class="prompt"></div>
+
+
 <div class="output_png output_subarea ">
 <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAh8AAAFkCAYAAACAUFlOAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAPYQAAD2EBqD+naQAAIABJREFUeJzsnXecFOX9x9/P3e31CscVygHSBQVBBUuEYFeMGmPsxliS
@@ -2425,120 +3059,133 @@ bGJ9iVeB7wFbOOZFi/Eh6/gd/stixpeYBXkb0Ex8WL0J6FZIXb2xnJmZmZVVVY/5MDMzs+rj5MPM
 zMzKysmHmZmZlZWTDzMzMysrJx9mZmZWVk4+zMzMrKycfJiZmVlZOfkwMzOzsnLyYWZmZmXl5MPM
 zMzKysmHmZmZldX/ByWQT4TskkODAAAAAElFTkSuQmCC
 ">
-</img></div>
+</div>
+
+</div>
+
 </div>
 </div>
-</div>
+
 </div>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Example-3:-Systems-with-Multiple-Favourable-Steady-States">Example 3: Systems with Multiple Favourable Steady States<a class="anchor-link" href="#Example-3:-Systems-with-Multiple-Favourable-Steady-States">¶</a></h2>
+<h2 id="Example-3:-Systems-with-Multiple-Favourable-Steady-States">Example 3: Systems with Multiple Favourable Steady States<a class="anchor-link" href="#Example-3:-Systems-with-Multiple-Favourable-Steady-States">&#182;</a></h2>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In [5]:</div>
+<div class="prompt input_prompt">In&nbsp;[6]:</div>
 <div class="inner_cell">
-<div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># Drift</span>
-<span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">k1</span><span class="p">,</span> <span class="n">k2</span><span class="p">,</span> <span class="n">k3</span><span class="p">,</span> <span class="n">k4</span><span class="p">,</span> <span class="n">k5</span><span class="p">):</span>
-    <span class="k">return</span> <span class="o">-</span><span class="n">k1</span><span class="o">*</span><span class="n">T</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span> <span class="o">+</span> <span class="n">k2</span><span class="o">*</span><span class="n">T</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">k3</span><span class="o">*</span><span class="n">x</span> <span class="o">+</span> <span class="n">k4</span>
+    <div class="input_area">
+&lt;div class=&#34; highlight hl-ipython3&#34;&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;# Drift&lt;/span&gt;
+&lt;span class=&#34;k&#34;&gt;def&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;f&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;k1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;k2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;k3&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;k4&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;k5&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;):&lt;/span&gt;
+    &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;k1&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;T&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;pow&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;3&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;k2&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;T&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;pow&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;k3&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;x&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;k4&lt;/span&gt;
 
-<span class="c1"># Volatility</span>
-<span class="k">def</span> <span class="nf">g</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">k1</span><span class="p">,</span> <span class="n">k2</span><span class="p">,</span> <span class="n">k3</span><span class="p">,</span> <span class="n">k4</span><span class="p">,</span> <span class="n">k5</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">k5</span>
+&lt;span class=&#34;c1&#34;&gt;# Volatility&lt;/span&gt;
+&lt;span class=&#34;k&#34;&gt;def&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;g&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;k1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;k2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;k3&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;k4&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;k5&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;):&lt;/span&gt;
+    &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;k5&lt;/span&gt;
 
-<span class="k">def</span> <span class="nf">euler_step</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">k1</span><span class="p">,</span> <span class="n">k2</span><span class="p">,</span> <span class="n">k3</span><span class="p">,</span> <span class="n">k4</span><span class="p">,</span> <span class="n">k5</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">T</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">dt</span><span class="o">*</span><span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">k1</span><span class="p">,</span> <span class="n">k2</span><span class="p">,</span> <span class="n">k3</span><span class="p">,</span> <span class="n">k4</span><span class="p">,</span> <span class="n">k5</span><span class="p">)</span> <span class="o">+</span> <span class="n">T</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">dt</span><span class="p">)</span><span class="o">*</span><span class="n">g</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">k1</span><span class="p">,</span> <span class="n">k2</span><span class="p">,</span> <span class="n">k3</span><span class="p">,</span> <span class="n">k4</span><span class="p">,</span> <span class="n">k5</span><span class="p">)</span><span class="o">*</span><span class="n">rv_n</span><span class="p">,</span> <span class="s1">&#39;float32&#39;</span><span class="p">)</span>
+&lt;span class=&#34;k&#34;&gt;def&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;euler_step&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;k1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;k2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;k3&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;k4&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;k5&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;dt&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;):&lt;/span&gt;
+    &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;T&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;cast&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;x&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;dt&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;f&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;k1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;k2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;k3&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;k4&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;k5&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;T&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;sqrt&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;dt&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;g&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;k1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;k2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;k3&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;k4&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;k5&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;rv_n&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;float32&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
 
-<span class="c1"># RNG</span>
-<span class="n">srng</span> <span class="o">=</span> <span class="n">RandomStreams</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="mi">12345</span><span class="p">)</span>
+&lt;span class=&#34;c1&#34;&gt;# RNG&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;srng&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;RandomStreams&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;seed&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;12345&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
 
-<span class="c1"># Symbolic variables</span>
-<span class="n">dt</span> <span class="o">=</span> <span class="n">T</span><span class="o">.</span><span class="n">fscalar</span><span class="p">(</span><span class="s2">&quot;dt&quot;</span><span class="p">)</span>
-<span class="n">k1</span> <span class="o">=</span> <span class="n">T</span><span class="o">.</span><span class="n">fscalar</span><span class="p">(</span><span class="s2">&quot;k1&quot;</span><span class="p">)</span>
-<span class="n">k2</span> <span class="o">=</span> <span class="n">T</span><span class="o">.</span><span class="n">fscalar</span><span class="p">(</span><span class="s2">&quot;k2&quot;</span><span class="p">)</span>
-<span class="n">k3</span> <span class="o">=</span> <span class="n">T</span><span class="o">.</span><span class="n">fscalar</span><span class="p">(</span><span class="s2">&quot;k3&quot;</span><span class="p">)</span>
-<span class="n">k4</span> <span class="o">=</span> <span class="n">T</span><span class="o">.</span><span class="n">fscalar</span><span class="p">(</span><span class="s2">&quot;k4&quot;</span><span class="p">)</span>
-<span class="n">k5</span> <span class="o">=</span> <span class="n">T</span><span class="o">.</span><span class="n">fscalar</span><span class="p">(</span><span class="s2">&quot;k5&quot;</span><span class="p">)</span>
-<span class="n">x</span> <span class="o">=</span> <span class="n">T</span><span class="o">.</span><span class="n">fvector</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">)</span>
+&lt;span class=&#34;c1&#34;&gt;# Symbolic variables&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;dt&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;T&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;fscalar&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;quot;dt&amp;quot;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;k1&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;T&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;fscalar&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;quot;k1&amp;quot;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;k2&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;T&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;fscalar&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;quot;k2&amp;quot;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;k3&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;T&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;fscalar&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;quot;k3&amp;quot;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;k4&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;T&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;fscalar&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;quot;k4&amp;quot;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;k5&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;T&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;fscalar&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;quot;k5&amp;quot;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;x&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;T&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;fvector&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;quot;x&amp;quot;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
 
-<span class="c1"># Define numeric variables</span>
-<span class="n">num_samples</span> <span class="o">=</span> <span class="mi">5000</span>
-<span class="n">x0</span> <span class="o">=</span> <span class="n">theano</span><span class="o">.</span><span class="n">shared</span><span class="p">(</span><span class="mi">250</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">num_samples</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float32&#39;</span><span class="p">))</span> <span class="c1"># IC</span>
+&lt;span class=&#34;c1&#34;&gt;# Define numeric variables&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;num_samples&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;5000&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;x0&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;theano&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;shared&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;250&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;np&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;ones&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;num_samples&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;dtype&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;float32&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;))&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;# IC&lt;/span&gt;
 
-<span class="n">k10</span> <span class="o">=</span> <span class="mf">1e-3</span>
-<span class="n">k20</span> <span class="o">=</span> <span class="mf">0.75</span>
-<span class="n">k30</span> <span class="o">=</span> <span class="mi">165</span>
-<span class="n">k40</span> <span class="o">=</span> <span class="mf">1e4</span>
-<span class="n">k50</span> <span class="o">=</span> <span class="mi">200</span>
+&lt;span class=&#34;n&#34;&gt;k10&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;e&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;3&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;k20&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mf&#34;&gt;0.75&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;k30&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;165&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;k40&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;e4&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;k50&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;200&lt;/span&gt;
 
-<span class="n">dt0</span> <span class="o">=</span> <span class="mf">0.01</span> <span class="c1"># Timestep</span>
-<span class="n">total_time</span> <span class="o">=</span> <span class="mi">1000</span>
-<span class="n">total_steps</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">total_time</span><span class="o">/</span><span class="n">dt0</span><span class="p">)</span>
-<span class="n">rv_n</span> <span class="o">=</span> <span class="n">srng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">avg</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">std</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># Gaussian Noise</span>
+&lt;span class=&#34;n&#34;&gt;dt0&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mf&#34;&gt;0.01&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;# Timestep&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;total_time&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1000&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;total_steps&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;total_time&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;dt0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;rv_n&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;srng&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;normal&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;shape&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;avg&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;std&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;# Gaussian Noise&lt;/span&gt;
 
-<span class="c1"># Iteration Loop</span>
-<span class="p">(</span><span class="n">xout</span><span class="p">,</span> <span class="n">updates</span><span class="p">)</span> <span class="o">=</span> <span class="n">theano</span><span class="o">.</span><span class="n">scan</span><span class="p">(</span><span class="n">fn</span><span class="o">=</span><span class="n">euler_step</span><span class="p">,</span>
-                                <span class="n">outputs_info</span><span class="o">=</span><span class="p">[</span><span class="n">x</span><span class="p">],</span> <span class="c1">#output shape</span>
-                                <span class="n">non_sequences</span><span class="o">=</span><span class="p">[</span><span class="n">k1</span><span class="p">,</span> <span class="n">k2</span><span class="p">,</span> <span class="n">k3</span><span class="p">,</span> <span class="n">k4</span><span class="p">,</span> <span class="n">k5</span><span class="p">,</span> <span class="n">dt</span><span class="p">],</span> <span class="c1">#fixed parameters</span>
-                                <span class="n">n_steps</span><span class="o">=</span><span class="n">total_steps</span><span class="p">)</span>
-<span class="c1">#compile it</span>
-<span class="n">sim</span> <span class="o">=</span> <span class="n">theano</span><span class="o">.</span><span class="n">function</span><span class="p">(</span><span class="n">inputs</span><span class="o">=</span><span class="p">[</span><span class="n">k1</span><span class="p">,</span> <span class="n">k2</span><span class="p">,</span> <span class="n">k3</span><span class="p">,</span> <span class="n">k4</span><span class="p">,</span> <span class="n">k5</span><span class="p">,</span> <span class="n">dt</span><span class="p">],</span> 
-                    <span class="n">outputs</span><span class="o">=</span><span class="n">xout</span><span class="p">,</span> 
-                    <span class="n">givens</span><span class="o">=</span><span class="p">{</span><span class="n">x</span><span class="p">:</span><span class="n">x0</span><span class="p">},</span> 
-                    <span class="n">updates</span><span class="o">=</span><span class="n">updates</span><span class="p">,</span>
-                    <span class="n">allow_input_downcast</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+&lt;span class=&#34;c1&#34;&gt;# Iteration Loop&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;xout&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;updates&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;theano&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;scan&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;fn&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;euler_step&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+                                &lt;span class=&#34;n&#34;&gt;outputs_info&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;],&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;#output shape&lt;/span&gt;
+                                &lt;span class=&#34;n&#34;&gt;non_sequences&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;k1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;k2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;k3&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;k4&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;k5&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;dt&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;],&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;#fixed parameters&lt;/span&gt;
+                                &lt;span class=&#34;n&#34;&gt;n_steps&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;total_steps&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;span class=&#34;c1&#34;&gt;#compile it&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;sim&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;theano&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;function&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;inputs&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;k1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;k2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;k3&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;k4&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;k5&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;dt&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;],&lt;/span&gt; 
+                    &lt;span class=&#34;n&#34;&gt;outputs&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;xout&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; 
+                    &lt;span class=&#34;n&#34;&gt;givens&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;x0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;},&lt;/span&gt; 
+                    &lt;span class=&#34;n&#34;&gt;updates&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;updates&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+                    &lt;span class=&#34;n&#34;&gt;allow_input_downcast&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;kc&#34;&gt;True&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
 
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;Running sim...&quot;</span><span class="p">)</span>
-<span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">clock</span><span class="p">()</span>
-<span class="n">xout</span> <span class="o">=</span> <span class="n">sim</span><span class="p">(</span><span class="n">k10</span><span class="p">,</span> <span class="n">k20</span><span class="p">,</span> <span class="n">k30</span><span class="p">,</span> <span class="n">k40</span><span class="p">,</span> <span class="n">k50</span><span class="p">,</span> <span class="n">dt0</span><span class="p">)</span>
-<span class="n">diff</span> <span class="o">=</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">clock</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;done in&quot;</span><span class="p">,</span> <span class="n">diff</span><span class="p">,</span> <span class="s2">&quot;s at &quot;</span><span class="p">,</span> <span class="n">diff</span><span class="o">/</span><span class="n">num_samples</span><span class="p">,</span> <span class="s2">&quot;s per path&quot;</span><span class="p">)</span>
-</pre></div>
+&lt;span class=&#34;nb&#34;&gt;print&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;quot;Running sim...&amp;quot;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;start&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;time&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;clock&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;xout&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;sim&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;k10&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;k20&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;k30&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;k40&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;k50&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;dt0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;diff&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;time&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;clock&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;start&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;span class=&#34;nb&#34;&gt;print&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;quot;done in&amp;quot;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;diff&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;quot;s at &amp;quot;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;diff&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;num_samples&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;quot;s per path&amp;quot;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
 
 </div>
 </div>
 </div>
+
 <div class="output_wrapper">
 <div class="output">
+
+
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>Running sim...
-done in 35.17 s at  0.007034 s per path
+done in 25.85957799705635 s at  0.00517191559941127 s per path
 </pre>
 </div>
 </div>
+
 </div>
 </div>
+
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In [6]:</div>
+<div class="prompt input_prompt">In&nbsp;[7]:</div>
 <div class="inner_cell">
-<div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="n">downsample_factor_t</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mf">0.1</span><span class="o">/</span><span class="n">dt0</span><span class="p">)</span> <span class="c1">#always show 10 points per time unit</span>
-<span class="n">downsample_factor_p</span> <span class="o">=</span> <span class="n">num_samples</span><span class="o">//</span><span class="mi">50</span>
-<span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">total_time</span><span class="p">,</span> <span class="n">total_steps</span><span class="o">/</span><span class="n">downsample_factor_t</span><span class="p">)</span>
+    <div class="input_area">
+&lt;div class=&#34; highlight hl-ipython3&#34;&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;downsample_factor_t&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mf&#34;&gt;0.1&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;dt0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;#always show 10 points per time unit&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;downsample_factor_p&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;num_samples&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;//&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;50&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;t&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;np&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;linspace&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;total_time&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;total_steps&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;downsample_factor_t&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
 
-<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">311</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">xout</span><span class="p">[::</span><span class="n">downsample_factor_t</span><span class="p">,</span> <span class="p">::</span><span class="n">downsample_factor_p</span><span class="p">]);</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">312</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">xout</span><span class="p">[::</span><span class="n">downsample_factor_t</span><span class="p">,</span> <span class="p">::</span><span class="n">downsample_factor_p</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">));</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">313</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">xout</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,:],</span> <span class="n">bins</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">normed</span><span class="o">=</span><span class="bp">True</span><span class="p">);</span>
-</pre></div>
+&lt;span class=&#34;n&#34;&gt;plt&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;subplot&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;311&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;plt&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;plot&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;t&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;xout&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[::&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;downsample_factor_t&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;::&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;downsample_factor_p&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]);&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;plt&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;subplot&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;312&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;plt&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;plot&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;t&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;xout&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[::&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;downsample_factor_t&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;::&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;downsample_factor_p&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;mean&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;axis&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;));&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;plt&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;subplot&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;313&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;plt&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;hist&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;xout&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,:],&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;bins&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;50&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;normed&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;kc&#34;&gt;True&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
 
 </div>
 </div>
 </div>
+
 <div class="output_wrapper">
 <div class="output">
+
+
 <div class="output_area"><div class="prompt"></div>
+
+
 <div class="output_png output_subarea ">
 <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAiQAAAFkCAYAAAAQQyCBAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAPYQAAD2EBqD+naQAAIABJREFUeJzsnXd4VTUbwH/pbilQKHtPmWWDyJS9ZSobQQSBT0CGooDK
@@ -3749,22 +4396,26 @@ IM9luCVj84HhwKahMlrjtDUacAaDjwJrV/rcqjFkaOtlwLGhfNbmxWvzu4GvvOfFt8BLfmfE2rus
 GIZhGEbFsQ6JYRiGYRgVxzokhmEYhmFUHOuQGIZhGIZRcaxDYhiGYRhGxbEOiWEYhmEYFcc6JIZh
 GIZhVBzrkBiGYRiGUXGsQ2IYhmEYRsX5fwV/EdNbU2TwAAAAAElFTkSuQmCC
 ">
-</img></div>
+</div>
+
+</div>
+
 </div>
 </div>
-</div>
+
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In [ ]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
-<div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span> 
-</pre></div>
+    <div class="input_area">
+&lt;div class=&#34; highlight hl-ipython3&#34;&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt; 
+&lt;/pre&gt;&lt;/div&gt;
 
 </div>
 </div>
 </div>
+
 </div>
 <script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
     var mathjaxscript = document.createElement('script');
@@ -3890,28 +4541,38 @@ GIZhVBzrkBiGYRiGUXGsQ2IYhmEYRsX5fwV/EdNbU2TwAAAAAElFTkSuQmCC
             <li class="list-group-item"><a href="../"><h4><i class="fa fa-tags fa-lg"></i><span class="icon-label">Tags</span></h4></a>
                 <ul class="list-group " id="tags">
                     <li class="list-group-item tag-1">
-                        <a href="../tag/ipython.html">
-                            IPython
-                        </a>
-                    </li>
-                    <li class="list-group-item tag-1">
                         <a href="../tag/python.html">
                             Python
                         </a>
                     </li>
-                    <li class="list-group-item tag-4">
-                        <a href="../tag/d3.html">
-                            D3
+                    <li class="list-group-item tag-1">
+                        <a href="../tag/ipython.html">
+                            IPython
                         </a>
                     </li>
                     <li class="list-group-item tag-4">
-                        <a href="../tag/anaconda.html">
-                            Anaconda
+                        <a href="../tag/parallel.html">
+                            Parallel
                         </a>
                     </li>
                     <li class="list-group-item tag-4">
-                        <a href="../tag/javascript.html">
-                            Javascript
+                        <a href="../tag/networkx.html">
+                            networkx
+                        </a>
+                    </li>
+                    <li class="list-group-item tag-4">
+                        <a href="../tag/simulation.html">
+                            Simulation
+                        </a>
+                    </li>
+                    <li class="list-group-item tag-4">
+                        <a href="../tag/leaflet.html">
+                            Leaflet
+                        </a>
+                    </li>
+                    <li class="list-group-item tag-4">
+                        <a href="../tag/virtualenv.html">
+                            virtualenv
                         </a>
                     </li>
                     <li class="list-group-item tag-4">
@@ -3920,23 +4581,13 @@ GIZhVBzrkBiGYRiGUXGsQ2IYhmEYRsX5fwV/EdNbU2TwAAAAAElFTkSuQmCC
                         </a>
                     </li>
                     <li class="list-group-item tag-4">
-                        <a href="../tag/academia.html">
-                            Academia
-                        </a>
-                    </li>
-                    <li class="list-group-item tag-4">
-                        <a href="../tag/epidemics.html">
-                            Epidemics
+                        <a href="../tag/folium.html">
+                            Folium
                         </a>
                     </li>
                     <li class="list-group-item tag-4">
                         <a href="../tag/reproducibility.html">
                             Reproducibility
-                        </a>
-                    </li>
-                    <li class="list-group-item tag-4">
-                        <a href="../tag/docker.html">
-                            Docker
                         </a>
                     </li>
                 </ul>
