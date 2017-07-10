@@ -980,7 +980,6 @@ h6:hover .anchor-link {
 distribution of a system governed by the master equation. Whilst this methodology has been used for the simulation of chemical
 reactions for decades, its applicability and utility in the simulation of dynamical processes on networks is not well known.
 We will look at an implementation the Gillespie Algorithm for an epidemic process on an random network, and consider the implementation issues when using Numpy.&lt;/p&gt;
-
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
@@ -989,89 +988,80 @@ We will look at an implementation the Gillespie Algorithm for an epidemic proces
 &lt;/div&gt;
 &lt;div class="inner_cell"&gt;
 &lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
-&lt;h2 id="The-Model"&gt;The Model&lt;a class="anchor-link" href="#The-Model"&gt;&amp;#182;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;We will look at one of the most simplistic models simple model of epidemic spread, the SI model. An &lt;em&gt;node&lt;/em&gt; (person) can either be susceptible (S) or infected (I) with a disease. Nodes are connected along &lt;em&gt;links&lt;/em&gt; which describe some interaction between the two bodies for which the disease may possibly travel. For example, our network might contain links between every two people who have passed within 5 metres of each other over a day [1]. Simpler networks could be family ties, coworkers, and coinhabitants if such high resolution data isn't achievable.&lt;/p&gt;
+&lt;h2 id="The-Model"&gt;The Model&lt;a class="anchor-link" href="#The-Model"&gt;¶&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;We will look at one of the most simplistic models simple model of epidemic spread, the SI model. An &lt;em&gt;node&lt;/em&gt; (person) can either be susceptible (S) or infected (I) with a disease. Nodes are connected along &lt;em&gt;links&lt;/em&gt; which describe some interaction between the two bodies for which the disease may possibly travel. For example, our network might contain links between every two people who have passed within 5 metres of each other over a day [1]. Simpler networks could be family ties, coworkers, and coinhabitants if such high resolution data isn't achievable.&lt;/p&gt;
 &lt;p&gt;The model consists of two reactions,
 $$\begin{align} 
     S + I &amp;\xrightarrow{\lambda} I + I,  \\
     S &amp;\xrightarrow{\gamma} I.
     \end{align}$$&lt;/p&gt;
 &lt;p&gt;A susceptible node can meet an infected node and subsequently become infected itself with some probability (contagion). A susceptible node can also spontaneously become infected by itself (spontaneous infection). This accounts for any chance of becoming infected which is not accounted for in our model otherwise.&lt;/p&gt;
-
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;div class="cell border-box-sizing code_cell rendered"&gt;
 &lt;div class="input"&gt;
-&lt;div class="prompt input_prompt"&gt;In&amp;nbsp;[14]:&lt;/div&gt;
+&lt;div class="prompt input_prompt"&gt;In [14]:&lt;/div&gt;
 &lt;div class="inner_cell"&gt;
-    &lt;div class="input_area"&gt;
-&amp;lt;div class=&amp;#34; highlight hl-ipython3&amp;#34;&amp;gt;&amp;lt;pre&amp;gt;&amp;lt;span&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;kn&amp;#34;&amp;gt;from&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;nn&amp;#34;&amp;gt;simulation&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;k&amp;#34;&amp;gt;import&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;SI_Simulation&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;c1&amp;#34;&amp;gt;# Import the model.&amp;lt;/span&amp;gt;
-&amp;lt;/pre&amp;gt;&amp;lt;/div&amp;gt;
+&lt;div class="input_area"&gt;
+&lt;div class=" highlight hl-ipython3"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;simulation&lt;/span&gt; &lt;span class="k"&gt;import&lt;/span&gt; &lt;span class="n"&gt;SI_Simulation&lt;/span&gt; &lt;span class="c1"&gt;# Import the model.&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-
 &lt;/div&gt;
 &lt;div class="cell border-box-sizing code_cell rendered"&gt;
 &lt;div class="input"&gt;
-&lt;div class="prompt input_prompt"&gt;In&amp;nbsp;[45]:&lt;/div&gt;
+&lt;div class="prompt input_prompt"&gt;In [45]:&lt;/div&gt;
 &lt;div class="inner_cell"&gt;
-    &lt;div class="input_area"&gt;
-&amp;lt;div class=&amp;#34; highlight hl-ipython3&amp;#34;&amp;gt;&amp;lt;pre&amp;gt;&amp;lt;span&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;G&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;nx&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;erdos_renyi_graph&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;1000&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mf&amp;#34;&amp;gt;0.05&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;)&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;c1&amp;#34;&amp;gt;# Use Networkx to generate a random graph.&amp;lt;/span&amp;gt;
-&amp;lt;/pre&amp;gt;&amp;lt;/div&amp;gt;
+&lt;div class="input_area"&gt;
+&lt;div class=" highlight hl-ipython3"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;G&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;nx&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;erdos_renyi_graph&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1000&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mf"&gt;0.05&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="c1"&gt;# Use Networkx to generate a random graph.&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-
 &lt;/div&gt;
 &lt;div class="cell border-box-sizing code_cell rendered"&gt;
 &lt;div class="input"&gt;
-&lt;div class="prompt input_prompt"&gt;In&amp;nbsp;[46]:&lt;/div&gt;
+&lt;div class="prompt input_prompt"&gt;In [46]:&lt;/div&gt;
 &lt;div class="inner_cell"&gt;
-    &lt;div class="input_area"&gt;
-&amp;lt;div class=&amp;#34; highlight hl-ipython3&amp;#34;&amp;gt;&amp;lt;pre&amp;gt;&amp;lt;span&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;model&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;SI_Simulation&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;G&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;lam&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mf&amp;#34;&amp;gt;0.8&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;gam&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mf&amp;#34;&amp;gt;0.001&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;i0&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mf&amp;#34;&amp;gt;0.0&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;)&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;c1&amp;#34;&amp;gt;# Setup the simulation with given parameters.&amp;lt;/span&amp;gt;
-&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;model&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;RunToConvergence&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;()&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;c1&amp;#34;&amp;gt;# Run the simulation.&amp;lt;/span&amp;gt;
-&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;model&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;IntegrateSolution&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;()&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;c1&amp;#34;&amp;gt;# Numerically integrate the mean field equations.&amp;lt;/span&amp;gt;
-&amp;lt;/pre&amp;gt;&amp;lt;/div&amp;gt;
+&lt;div class="input_area"&gt;
+&lt;div class=" highlight hl-ipython3"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;model&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;SI_Simulation&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;G&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;lam&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mf"&gt;0.8&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;gam&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mf"&gt;0.001&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;i0&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mf"&gt;0.0&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="c1"&gt;# Setup the simulation with given parameters.&lt;/span&gt;
+&lt;span class="n"&gt;model&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;RunToConvergence&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="c1"&gt;# Run the simulation.&lt;/span&gt;
+&lt;span class="n"&gt;model&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;IntegrateSolution&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="c1"&gt;# Numerically integrate the mean field equations.&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-
 &lt;/div&gt;
 &lt;div class="cell border-box-sizing code_cell rendered"&gt;
 &lt;div class="input"&gt;
-&lt;div class="prompt input_prompt"&gt;In&amp;nbsp;[50]:&lt;/div&gt;
+&lt;div class="prompt input_prompt"&gt;In [50]:&lt;/div&gt;
 &lt;div class="inner_cell"&gt;
-    &lt;div class="input_area"&gt;
-&amp;lt;div class=&amp;#34; highlight hl-ipython3&amp;#34;&amp;gt;&amp;lt;pre&amp;gt;&amp;lt;span&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;c1&amp;#34;&amp;gt;# Simulation.&amp;lt;/span&amp;gt;
-&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;plot&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;model&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;times&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;model&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;S&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;/&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;model&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;N&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;s1&amp;#34;&amp;gt;&amp;amp;#39;g-&amp;amp;#39;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;label&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;s1&amp;#34;&amp;gt;&amp;amp;#39;Susceptible (sim)&amp;amp;#39;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;);&amp;lt;/span&amp;gt;
-&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;plot&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;model&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;times&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;model&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;I&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;/&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;model&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;N&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;s1&amp;#34;&amp;gt;&amp;amp;#39;r-&amp;amp;#39;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;label&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;s1&amp;#34;&amp;gt;&amp;amp;#39;Infected (sim)&amp;amp;#39;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;);&amp;lt;/span&amp;gt;
+&lt;div class="input_area"&gt;
+&lt;div class=" highlight hl-ipython3"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;# Simulation.&lt;/span&gt;
+&lt;span class="n"&gt;plot&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;model&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;times&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;model&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;S&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;model&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;N&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;g-&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;label&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;Susceptible (sim)&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;span class="n"&gt;plot&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;model&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;times&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;model&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;I&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;model&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;N&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;r-&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;label&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;Infected (sim)&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
 
-&amp;lt;span class=&amp;#34;c1&amp;#34;&amp;gt;# Numerical Integration.&amp;lt;/span&amp;gt;
-&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;t&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;np&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;linspace&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;0&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;model&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;times&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;[&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;-&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;1&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;],&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;100&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;)&amp;lt;/span&amp;gt;
-&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;plot&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;t&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;model&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;solution&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;[:,&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;0&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;],&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;s1&amp;#34;&amp;gt;&amp;amp;#39;g--&amp;amp;#39;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;label&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;s1&amp;#34;&amp;gt;&amp;amp;#39;Susceptible (approx)&amp;amp;#39;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;);&amp;lt;/span&amp;gt;
-&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;plot&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;t&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;model&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;solution&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;[:,&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;1&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;],&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;s1&amp;#34;&amp;gt;&amp;amp;#39;r--&amp;amp;#39;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;label&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;s1&amp;#34;&amp;gt;&amp;amp;#39;Infected  (approx)&amp;amp;#39;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;);&amp;lt;/span&amp;gt;
+&lt;span class="c1"&gt;# Numerical Integration.&lt;/span&gt;
+&lt;span class="n"&gt;t&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;linspace&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;model&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;times&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt;&lt;span class="mi"&gt;100&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;plot&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;t&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;model&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;solution&lt;/span&gt;&lt;span class="p"&gt;[:,&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;g--&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;label&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;Susceptible (approx)&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;span class="n"&gt;plot&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;t&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;model&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;solution&lt;/span&gt;&lt;span class="p"&gt;[:,&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;r--&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;label&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;Infected  (approx)&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
 
-&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;xlabel&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;s1&amp;#34;&amp;gt;&amp;amp;#39;t&amp;amp;#39;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;)&amp;lt;/span&amp;gt;
-&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;ylabel&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;s1&amp;#34;&amp;gt;&amp;amp;#39;Population Fraction&amp;amp;#39;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;)&amp;lt;/span&amp;gt;
+&lt;span class="n"&gt;xlabel&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;t&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;ylabel&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;Population Fraction&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 
-&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;legend&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;bbox_to_anchor&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mf&amp;#34;&amp;gt;1.0&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mf&amp;#34;&amp;gt;0.7&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;));&amp;lt;/span&amp;gt;
-&amp;lt;/pre&amp;gt;&amp;lt;/div&amp;gt;
+&lt;span class="n"&gt;legend&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;bbox_to_anchor&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mf"&gt;1.0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mf"&gt;0.7&lt;/span&gt;&lt;span class="p"&gt;));&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-
 &lt;div class="output_wrapper"&gt;
 &lt;div class="output"&gt;
-
-
 &lt;div class="output_area"&gt;&lt;div class="prompt"&gt;&lt;/div&gt;
-
-
 &lt;div class="output_png output_subarea "&gt;
 &lt;img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAYcAAAEPCAYAAACp/QjLAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAALEgAACxIB0t1+/AAAIABJREFUeJzsnXd4FUUXh98JJKElpNBCCqEoHUFqQCAiIKIUEYEoTZGi
@@ -1491,13 +1481,10 @@ Sq+4A2OU8gmaHJRSSrnR5KBU6R0HqtsdhFIVQZODUqVkjDkM/CQiSTogrXyNDkgrpZRyoz0HpZRS
 bjQ5KKWUcqPJQSmllBtNDkoppdxoclBKKeVGk4NSSik3mhyUUkq50eSglFLKzf8Dhj/4OZ5VDNEA
 AAAASUVORK5CYII=
 "&gt;
-&lt;/div&gt;
-
-&lt;/div&gt;
-
+&lt;/img&gt;&lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-
+&lt;/div&gt;
 &lt;/div&gt;
 &lt;div class="cell border-box-sizing text_cell rendered"&gt;
 &lt;div class="prompt input_prompt"&gt;
@@ -1507,7 +1494,6 @@ AAAASUVORK5CYII=
 &lt;p&gt;The simulation approximately follows the mean-field prediction[2] which assumes all nodes have the same degree and are identical in their placement in the network. The number of infected follows an S-shaped curve; infection is slow at first and then rapidily increases before slowing towards the final state.&lt;/p&gt;
 &lt;p&gt;This model and the S-shaped curve has been used in marketing to model the adoption of consumer products from as early as 1969. The &lt;a href="http://en.wikipedia.org/wiki/Bass_diffusion_model"&gt;Bass Model&lt;/a&gt; as it is called is one of the top 5 most frequently cited papers in the 50-year history of the journal &lt;em&gt;Management Science&lt;/em&gt;. One might rightly question why such a simple model has been so well adopted when it is such an oversimplification. Partly the reason is due to the ability to fit parameters to data, or most likely &lt;em&gt;over-fit&lt;/em&gt; parameters to data, but that is a different issue entirely!&lt;/p&gt;
 &lt;p&gt;The literature on epidemic and innovation models is extremely rich and is at a point where any written review of it would be outdated by the time it was finished. For now we'll look at how to simulate these models on a network.&lt;/p&gt;
-
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
@@ -1516,7 +1502,7 @@ AAAASUVORK5CYII=
 &lt;/div&gt;
 &lt;div class="inner_cell"&gt;
 &lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
-&lt;h2 id="Gillespie"&gt;Gillespie&lt;a class="anchor-link" href="#Gillespie"&gt;&amp;#182;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;The &lt;a href="http://en.wikipedia.org/wiki/Gillespie_algorithm"&gt;Gillespie algorithm&lt;/a&gt;, or the stochastic simulation algorithm
+&lt;h2 id="Gillespie"&gt;Gillespie&lt;a class="anchor-link" href="#Gillespie"&gt;¶&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;The &lt;a href="http://en.wikipedia.org/wiki/Gillespie_algorithm"&gt;Gillespie algorithm&lt;/a&gt;, or the stochastic simulation algorithm
 (SSA) was first introduced in 1976 as a means of
 providing statistically exact simulations of reacting chemical
 species within a reaction volume. There are also
@@ -1573,7 +1559,6 @@ r_2 \geq \frac{1}{\alpha_0}\sum_{m=1}^{k-1}\sum_{i=1}^{j-1}\alpha_i^m(t) \hspace
 &lt;li&gt;Repeat from step 1(a) from time $t+\tau$.&lt;/li&gt;
 &lt;/ol&gt;
 &lt;/blockquote&gt;
-
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
@@ -1582,162 +1567,160 @@ r_2 \geq \frac{1}{\alpha_0}\sum_{m=1}^{k-1}\sum_{i=1}^{j-1}\alpha_i^m(t) \hspace
 &lt;/div&gt;
 &lt;div class="inner_cell"&gt;
 &lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
-&lt;h2 id="Code"&gt;Code&lt;a class="anchor-link" href="#Code"&gt;&amp;#182;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;The model is implemented as a Python class which keeps track of the individual node states as well as the overall level of infected and susceptible nodes. The main functions are &lt;em&gt;RunIteration()&lt;/em&gt; where the Gillespie algorithm is run, and &lt;em&gt;UpdatePropensity()&lt;/em&gt; which calculates the propensities for nodes to become infected. You will see that there are in fact 5 seperate implementations of the &lt;em&gt;UpdatePropensity()&lt;/em&gt; function. This is the computational bottleneck of the simulation and so, in the next section we explore the merits and caveats of these different implementations.&lt;/p&gt;
-
+&lt;h2 id="Code"&gt;Code&lt;a class="anchor-link" href="#Code"&gt;¶&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;The model is implemented as a Python class which keeps track of the individual node states as well as the overall level of infected and susceptible nodes. The main functions are &lt;em&gt;RunIteration()&lt;/em&gt; where the Gillespie algorithm is run, and &lt;em&gt;UpdatePropensity()&lt;/em&gt; which calculates the propensities for nodes to become infected. You will see that there are in fact 5 seperate implementations of the &lt;em&gt;UpdatePropensity()&lt;/em&gt; function. This is the computational bottleneck of the simulation and so, in the next section we explore the merits and caveats of these different implementations.&lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;div class="cell border-box-sizing code_cell rendered"&gt;
 &lt;div class="input"&gt;
-&lt;div class="prompt input_prompt"&gt;In&amp;nbsp;[&amp;nbsp;]:&lt;/div&gt;
+&lt;div class="prompt input_prompt"&gt;In [ ]:&lt;/div&gt;
 &lt;div class="inner_cell"&gt;
-    &lt;div class="input_area"&gt;
-&amp;lt;div class=&amp;#34; highlight hl-ipython3&amp;#34;&amp;gt;&amp;lt;pre&amp;gt;&amp;lt;span&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;kn&amp;#34;&amp;gt;import&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;nn&amp;#34;&amp;gt;networkx&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;k&amp;#34;&amp;gt;as&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;nn&amp;#34;&amp;gt;nx&amp;lt;/span&amp;gt;
-&amp;lt;span class=&amp;#34;kn&amp;#34;&amp;gt;import&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;nn&amp;#34;&amp;gt;numpy&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;k&amp;#34;&amp;gt;as&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;nn&amp;#34;&amp;gt;np&amp;lt;/span&amp;gt;
+&lt;div class="input_area"&gt;
+&lt;div class=" highlight hl-ipython3"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;networkx&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;nx&lt;/span&gt;
+&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;numpy&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;np&lt;/span&gt;
 
-&amp;lt;span class=&amp;#34;k&amp;#34;&amp;gt;class&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;nc&amp;#34;&amp;gt;SI_Simulation&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;():&amp;lt;/span&amp;gt;
-    &amp;lt;span class=&amp;#34;sd&amp;#34;&amp;gt;&amp;amp;quot;&amp;amp;quot;&amp;amp;quot;&amp;lt;/span&amp;gt;
-&amp;lt;span class=&amp;#34;sd&amp;#34;&amp;gt;    A class to simulate the SI Model.&amp;lt;/span&amp;gt;
-&amp;lt;span class=&amp;#34;sd&amp;#34;&amp;gt;    ===================================================&amp;lt;/span&amp;gt;
-&amp;lt;span class=&amp;#34;sd&amp;#34;&amp;gt;    Input: A - Network adjacency matrix (numpy array) or Networkx graph object.&amp;lt;/span&amp;gt;
-&amp;lt;span class=&amp;#34;sd&amp;#34;&amp;gt;           lam - Contagion parameter.&amp;lt;/span&amp;gt;
-&amp;lt;span class=&amp;#34;sd&amp;#34;&amp;gt;           gam - Spontaneous infection parameter.&amp;lt;/span&amp;gt;
-&amp;lt;span class=&amp;#34;sd&amp;#34;&amp;gt;           i0 - Initial infected fraction.&amp;lt;/span&amp;gt;
-&amp;lt;span class=&amp;#34;sd&amp;#34;&amp;gt;           prop - Propensity calculation method [ALL,TAKE,FANCY,LOOP,SLICE].&amp;lt;/span&amp;gt;
-&amp;lt;span class=&amp;#34;sd&amp;#34;&amp;gt;    &amp;amp;quot;&amp;amp;quot;&amp;amp;quot;&amp;lt;/span&amp;gt;
+&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;SI_Simulation&lt;/span&gt;&lt;span class="p"&gt;():&lt;/span&gt;
+    &lt;span class="sd"&gt;&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
+&lt;span class="sd"&gt;    A class to simulate the SI Model.&lt;/span&gt;
+&lt;span class="sd"&gt;    ===================================================&lt;/span&gt;
+&lt;span class="sd"&gt;    Input: A - Network adjacency matrix (numpy array) or Networkx graph object.&lt;/span&gt;
+&lt;span class="sd"&gt;           lam - Contagion parameter.&lt;/span&gt;
+&lt;span class="sd"&gt;           gam - Spontaneous infection parameter.&lt;/span&gt;
+&lt;span class="sd"&gt;           i0 - Initial infected fraction.&lt;/span&gt;
+&lt;span class="sd"&gt;           prop - Propensity calculation method [ALL,TAKE,FANCY,LOOP,SLICE].&lt;/span&gt;
+&lt;span class="sd"&gt;    &amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
 
-    &amp;lt;span class=&amp;#34;k&amp;#34;&amp;gt;def&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;nf&amp;#34;&amp;gt;__init__&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;A&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;lam&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mf&amp;#34;&amp;gt;0.1&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;gam&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mf&amp;#34;&amp;gt;0.001&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;i0&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mf&amp;#34;&amp;gt;0.1&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;prop&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;s1&amp;#34;&amp;gt;&amp;amp;#39;ALL&amp;amp;#39;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;):&amp;lt;/span&amp;gt;
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;__init__&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;A&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;lam&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mf"&gt;0.1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;gam&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mf"&gt;0.001&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;i0&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mf"&gt;0.1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;prop&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;ALL&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
 
-        &amp;lt;span class=&amp;#34;c1&amp;#34;&amp;gt;# Network setup.&amp;lt;/span&amp;gt;
-        &amp;lt;span class=&amp;#34;k&amp;#34;&amp;gt;if&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;nb&amp;#34;&amp;gt;type&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;A&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;)&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;==&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;np&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;ndarray&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;:&amp;lt;/span&amp;gt;
-            &amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;A&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;A&amp;lt;/span&amp;gt;
-        &amp;lt;span class=&amp;#34;k&amp;#34;&amp;gt;elif&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;nb&amp;#34;&amp;gt;type&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;A&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;)&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;==&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;nx&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;classes&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;graph&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;Graph&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;:&amp;lt;/span&amp;gt;
-            &amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;A&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;nx&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;adj_matrix&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;A&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;)&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;A&amp;lt;/span&amp;gt;
-        &amp;lt;span class=&amp;#34;k&amp;#34;&amp;gt;else&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;:&amp;lt;/span&amp;gt;
-            &amp;lt;span class=&amp;#34;k&amp;#34;&amp;gt;raise&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;ne&amp;#34;&amp;gt;BaseException&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;s2&amp;#34;&amp;gt;&amp;amp;quot;Input an adjacency matrix or networkx object only.&amp;amp;quot;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;)&amp;lt;/span&amp;gt;
+        &lt;span class="c1"&gt;# Network setup.&lt;/span&gt;
+        &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="nb"&gt;type&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;A&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;==&lt;/span&gt;&lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ndarray&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+            &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;A&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;A&lt;/span&gt;
+        &lt;span class="k"&gt;elif&lt;/span&gt; &lt;span class="nb"&gt;type&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;A&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;==&lt;/span&gt;&lt;span class="n"&gt;nx&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;classes&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;graph&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Graph&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+            &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;A&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;nx&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;adj_matrix&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;A&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;A&lt;/span&gt;
+        &lt;span class="k"&gt;else&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+            &lt;span class="k"&gt;raise&lt;/span&gt; &lt;span class="ne"&gt;BaseException&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;Input an adjacency matrix or networkx object only.&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 
-        &amp;lt;span class=&amp;#34;c1&amp;#34;&amp;gt;# Model Parameters.&amp;lt;/span&amp;gt;
-        &amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;N&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;A&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;shape&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;[&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;0&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;]&amp;lt;/span&amp;gt;
-        &amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;lam&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;lam&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;/&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;N&amp;lt;/span&amp;gt;
-        &amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;gam&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;gam&amp;lt;/span&amp;gt;
-        &amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;prop&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;prop&amp;lt;/span&amp;gt;
+        &lt;span class="c1"&gt;# Model Parameters.&lt;/span&gt;
+        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;N&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;A&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;shape&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;lam&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;lam&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;N&lt;/span&gt;
+        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;gam&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;gam&lt;/span&gt;
+        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;prop&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;prop&lt;/span&gt;
 
-        &amp;lt;span class=&amp;#34;c1&amp;#34;&amp;gt;# Time-keeping.&amp;lt;/span&amp;gt;
-        &amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;t&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;0&amp;lt;/span&amp;gt;
-        &amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;times&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;[&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;0&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;]&amp;lt;/span&amp;gt;
+        &lt;span class="c1"&gt;# Time-keeping.&lt;/span&gt;
+        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;t&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;
+        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;times&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
         
-        &amp;lt;span class=&amp;#34;c1&amp;#34;&amp;gt;# Node numbers.&amp;lt;/span&amp;gt;
-        &amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;I&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;[&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;nb&amp;#34;&amp;gt;int&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;i0&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;*&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;N&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;)]&amp;lt;/span&amp;gt;
-        &amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;S&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;[&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;N&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;-&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;I&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;[&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;0&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;]]&amp;lt;/span&amp;gt;
+        &lt;span class="c1"&gt;# Node numbers.&lt;/span&gt;
+        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;I&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nb"&gt;int&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;i0&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;N&lt;/span&gt;&lt;span class="p"&gt;)]&lt;/span&gt;
+        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;S&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;N&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;I&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]]&lt;/span&gt;
         
-        &amp;lt;span class=&amp;#34;c1&amp;#34;&amp;gt;# Node states.&amp;lt;/span&amp;gt;
-        &amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;X&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;np&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;array&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;([&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;1&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;]&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;*&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;S&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;[&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;0&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;]&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;+&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;[&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;2&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;]&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;*&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;I&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;[&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;0&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;])&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;reshape&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;((&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;N&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;1&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;))&amp;lt;/span&amp;gt;
-        &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;np&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;random&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;shuffle&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;X&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;)&amp;lt;/span&amp;gt;
+        &lt;span class="c1"&gt;# Node states.&lt;/span&gt;
+        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;X&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;array&lt;/span&gt;&lt;span class="p"&gt;([&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;S&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;I&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;reshape&lt;/span&gt;&lt;span class="p"&gt;((&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;N&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+        &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;random&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;shuffle&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;X&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
          
-        &amp;lt;span class=&amp;#34;c1&amp;#34;&amp;gt;# Initial propensity setup.        &amp;lt;/span&amp;gt;
-        &amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;UpdatePropensityALL&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;()&amp;lt;/span&amp;gt; 
+        &lt;span class="c1"&gt;# Initial propensity setup.        &lt;/span&gt;
+        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;UpdatePropensityALL&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; 
         
-        &amp;lt;span class=&amp;#34;c1&amp;#34;&amp;gt;# Select which propensity scheme to use.&amp;lt;/span&amp;gt;
-        &amp;lt;span class=&amp;#34;k&amp;#34;&amp;gt;if&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;prop&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;==&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;s1&amp;#34;&amp;gt;&amp;amp;#39;ALL&amp;amp;#39;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;:&amp;lt;/span&amp;gt;
-            &amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;UpdatePropensity&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;UpdatePropensityALL&amp;lt;/span&amp;gt; 
-        &amp;lt;span class=&amp;#34;k&amp;#34;&amp;gt;elif&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;prop&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;==&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;s1&amp;#34;&amp;gt;&amp;amp;#39;FANCY&amp;amp;#39;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;:&amp;lt;/span&amp;gt;
-            &amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;UpdatePropensity&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;UpdatePropensityFANCY&amp;lt;/span&amp;gt; 
-        &amp;lt;span class=&amp;#34;k&amp;#34;&amp;gt;elif&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;prop&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;==&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;s1&amp;#34;&amp;gt;&amp;amp;#39;TAKE&amp;amp;#39;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;:&amp;lt;/span&amp;gt;
-            &amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;UpdatePropensity&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;UpdatePropensityTAKE&amp;lt;/span&amp;gt; 
-        &amp;lt;span class=&amp;#34;k&amp;#34;&amp;gt;elif&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;prop&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;==&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;s1&amp;#34;&amp;gt;&amp;amp;#39;SLICE&amp;amp;#39;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;:&amp;lt;/span&amp;gt;
-            &amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;UpdatePropensity&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;UpdatePropensitySLICE&amp;lt;/span&amp;gt;
-        &amp;lt;span class=&amp;#34;k&amp;#34;&amp;gt;elif&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;prop&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;==&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;s1&amp;#34;&amp;gt;&amp;amp;#39;LOOP&amp;amp;#39;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;:&amp;lt;/span&amp;gt;
-            &amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;UpdatePropensity&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;UpdatePropensityLOOP&amp;lt;/span&amp;gt;
-        &amp;lt;span class=&amp;#34;k&amp;#34;&amp;gt;else&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;:&amp;lt;/span&amp;gt;
-            &amp;lt;span class=&amp;#34;k&amp;#34;&amp;gt;raise&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;ne&amp;#34;&amp;gt;BaseException&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;s2&amp;#34;&amp;gt;&amp;amp;quot;Please specify a propensity scheme [ALL,TAKE,FANCY,LOOP,SLICE].&amp;amp;quot;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;)&amp;lt;/span&amp;gt;
-        &amp;lt;span class=&amp;#34;k&amp;#34;&amp;gt;return&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;kc&amp;#34;&amp;gt;None&amp;lt;/span&amp;gt;
+        &lt;span class="c1"&gt;# Select which propensity scheme to use.&lt;/span&gt;
+        &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;prop&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;ALL&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+            &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;UpdatePropensity&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;UpdatePropensityALL&lt;/span&gt; 
+        &lt;span class="k"&gt;elif&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;prop&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;FANCY&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+            &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;UpdatePropensity&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;UpdatePropensityFANCY&lt;/span&gt; 
+        &lt;span class="k"&gt;elif&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;prop&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;TAKE&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+            &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;UpdatePropensity&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;UpdatePropensityTAKE&lt;/span&gt; 
+        &lt;span class="k"&gt;elif&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;prop&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;SLICE&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+            &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;UpdatePropensity&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;UpdatePropensitySLICE&lt;/span&gt;
+        &lt;span class="k"&gt;elif&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;prop&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;LOOP&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+            &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;UpdatePropensity&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;UpdatePropensityLOOP&lt;/span&gt;
+        &lt;span class="k"&gt;else&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+            &lt;span class="k"&gt;raise&lt;/span&gt; &lt;span class="ne"&gt;BaseException&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;Please specify a propensity scheme [ALL,TAKE,FANCY,LOOP,SLICE].&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="kc"&gt;None&lt;/span&gt;
         
-    &amp;lt;span class=&amp;#34;k&amp;#34;&amp;gt;def&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;nf&amp;#34;&amp;gt;UpdatePropensityALL&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;n_nodes&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;kc&amp;#34;&amp;gt;None&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;):&amp;lt;/span&amp;gt;
-        &amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;IP&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;gam&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;+&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;lam&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;*&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;A&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;dot&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;X&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;==&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;2&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;))&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;*&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;X&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;==&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;1&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;)&amp;lt;/span&amp;gt;
-        &amp;lt;span class=&amp;#34;k&amp;#34;&amp;gt;return&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;kc&amp;#34;&amp;gt;None&amp;lt;/span&amp;gt;
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;UpdatePropensityALL&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;n_nodes&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="kc"&gt;None&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;IP&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;gam&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;lam&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;A&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;dot&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;X&lt;/span&gt;&lt;span class="o"&gt;==&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;X&lt;/span&gt;&lt;span class="o"&gt;==&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="kc"&gt;None&lt;/span&gt;
     
-    &amp;lt;span class=&amp;#34;k&amp;#34;&amp;gt;def&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;nf&amp;#34;&amp;gt;UpdatePropensityTAKE&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;n_nodes&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;):&amp;lt;/span&amp;gt;   
-        &amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;IP&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;[&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;n_nodes&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;]&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;gam&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;+&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;lam&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;*&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;np&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;take&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;A&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;n_nodes&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;axis&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;0&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;)&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;dot&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;X&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;==&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;2&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;))&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;*&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;((&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;np&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;take&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;X&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;n_nodes&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;axis&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;0&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;)&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;==&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;1&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;))&amp;lt;/span&amp;gt;
-        &amp;lt;span class=&amp;#34;k&amp;#34;&amp;gt;return&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;kc&amp;#34;&amp;gt;None&amp;lt;/span&amp;gt;    
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;UpdatePropensityTAKE&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;n_nodes&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;   
+        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;IP&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;n_nodes&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;gam&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;lam&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;take&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;A&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;n_nodes&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;axis&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;dot&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;X&lt;/span&gt;&lt;span class="o"&gt;==&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="p"&gt;((&lt;/span&gt;&lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;take&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;X&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;n_nodes&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;axis&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;==&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="kc"&gt;None&lt;/span&gt;    
     
-    &amp;lt;span class=&amp;#34;k&amp;#34;&amp;gt;def&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;nf&amp;#34;&amp;gt;UpdatePropensityFANCY&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;n_nodes&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;):&amp;lt;/span&amp;gt;
-        &amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;IP&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;[&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;n_nodes&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;]&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;gam&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;+&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;lam&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;*&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;A&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;[&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;n_nodes&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;]&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;dot&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;X&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;==&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;2&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;))&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;*&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;X&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;[&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;n_nodes&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;]&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;==&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;1&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;)&amp;lt;/span&amp;gt;
-        &amp;lt;span class=&amp;#34;k&amp;#34;&amp;gt;return&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;kc&amp;#34;&amp;gt;None&amp;lt;/span&amp;gt;
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;UpdatePropensityFANCY&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;n_nodes&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;IP&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;n_nodes&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;gam&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;lam&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;A&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;n_nodes&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;dot&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;X&lt;/span&gt;&lt;span class="o"&gt;==&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;X&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;n_nodes&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;==&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="kc"&gt;None&lt;/span&gt;
         
-    &amp;lt;span class=&amp;#34;k&amp;#34;&amp;gt;def&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;nf&amp;#34;&amp;gt;UpdatePropensityLOOP&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;n_nodes&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;):&amp;lt;/span&amp;gt;        
-        &amp;lt;span class=&amp;#34;k&amp;#34;&amp;gt;for&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;node&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;ow&amp;#34;&amp;gt;in&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;n_nodes&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;:&amp;lt;/span&amp;gt;
-            &amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;IP&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;[&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;node&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;]&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;gam&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;+&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;lam&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;*&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;A&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;[&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;node&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;]&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;dot&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;X&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;==&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;2&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;))&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;*&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;X&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;[&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;node&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;]&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;==&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;1&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;)&amp;lt;/span&amp;gt;
-        &amp;lt;span class=&amp;#34;k&amp;#34;&amp;gt;return&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;kc&amp;#34;&amp;gt;None&amp;lt;/span&amp;gt;
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;UpdatePropensityLOOP&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;n_nodes&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;        
+        &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;node&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;n_nodes&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+            &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;IP&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;node&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;gam&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;lam&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;A&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;node&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;dot&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;X&lt;/span&gt;&lt;span class="o"&gt;==&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;X&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;node&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;==&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="kc"&gt;None&lt;/span&gt;
     
-    &amp;lt;span class=&amp;#34;k&amp;#34;&amp;gt;def&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;nf&amp;#34;&amp;gt;UpdatePropensitySLICE&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;n_nodes&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;):&amp;lt;/span&amp;gt;        
-        &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;nmax&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;nmin&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;n_nodes&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;max&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;()&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;+&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;1&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;n_nodes&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;min&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;()&amp;lt;/span&amp;gt;
-        &amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;IP&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;[&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;nmin&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;:&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;nmax&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;]&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;gam&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;+&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;lam&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;*&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;A&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;[&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;nmin&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;:&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;nmax&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,:]&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;dot&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;X&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;==&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;2&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;))&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;*&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;X&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;[&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;nmin&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;:&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;nmax&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;]&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;==&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;1&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;)&amp;lt;/span&amp;gt;
-        &amp;lt;span class=&amp;#34;k&amp;#34;&amp;gt;return&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;kc&amp;#34;&amp;gt;None&amp;lt;/span&amp;gt;
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;UpdatePropensitySLICE&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;n_nodes&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;        
+        &lt;span class="n"&gt;nmax&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;nmin&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;n_nodes&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;max&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;&lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;n_nodes&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;min&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;IP&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;nmin&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="n"&gt;nmax&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;gam&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;lam&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;A&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;nmin&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="n"&gt;nmax&lt;/span&gt;&lt;span class="p"&gt;,:]&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;dot&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;X&lt;/span&gt;&lt;span class="o"&gt;==&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;X&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;nmin&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="n"&gt;nmax&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;==&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="kc"&gt;None&lt;/span&gt;
         
-    &amp;lt;span class=&amp;#34;k&amp;#34;&amp;gt;def&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;nf&amp;#34;&amp;gt;RunIteration&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;):&amp;lt;/span&amp;gt;
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;RunIteration&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
         
-        &amp;lt;span class=&amp;#34;c1&amp;#34;&amp;gt;# Termination.&amp;lt;/span&amp;gt;
-        &amp;lt;span class=&amp;#34;k&amp;#34;&amp;gt;if&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;S&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;[&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;-&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;1&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;]&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;==&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;0&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;:&amp;lt;/span&amp;gt;
-            &amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;S&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;np&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;array&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;S&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;dtype&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;nb&amp;#34;&amp;gt;float&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;)&amp;lt;/span&amp;gt;
-            &amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;I&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;np&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;array&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;I&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;dtype&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;nb&amp;#34;&amp;gt;float&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;)&amp;lt;/span&amp;gt;
-            &amp;lt;span class=&amp;#34;k&amp;#34;&amp;gt;return&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;kc&amp;#34;&amp;gt;False&amp;lt;/span&amp;gt;
+        &lt;span class="c1"&gt;# Termination.&lt;/span&gt;
+        &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;S&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+            &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;S&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;array&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;S&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;dtype&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="nb"&gt;float&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+            &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;I&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;array&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;I&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;dtype&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="nb"&gt;float&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+            &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="kc"&gt;False&lt;/span&gt;
 
-        &amp;lt;span class=&amp;#34;c1&amp;#34;&amp;gt;# 1. Generate random numbers r1,r2 uniformly distributed in (0,1)&amp;lt;/span&amp;gt;
-        &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;r1&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;np&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;random&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;rand&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;()&amp;lt;/span&amp;gt;
-        &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;r2&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;np&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;random&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;rand&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;()&amp;lt;/span&amp;gt;
+        &lt;span class="c1"&gt;# 1. Generate random numbers r1,r2 uniformly distributed in (0,1)&lt;/span&gt;
+        &lt;span class="n"&gt;r1&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;random&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;rand&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+        &lt;span class="n"&gt;r2&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;random&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;rand&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
         
-        &amp;lt;span class=&amp;#34;c1&amp;#34;&amp;gt;# 2. Calculate alpha.&amp;lt;/span&amp;gt;
-        &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;cumsum&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;IP&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;cumsum&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;()&amp;lt;/span&amp;gt;
-        &amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;alpha&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;cumsum&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;[&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;-&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;1&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;]&amp;lt;/span&amp;gt;
+        &lt;span class="c1"&gt;# 2. Calculate alpha.&lt;/span&gt;
+        &lt;span class="n"&gt;cumsum&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;IP&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;cumsum&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;alpha&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;cumsum&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
 
-        &amp;lt;span class=&amp;#34;c1&amp;#34;&amp;gt;# 3. Compute the time until the next reaction takes place.&amp;lt;/span&amp;gt;
-        &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;tau&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mf&amp;#34;&amp;gt;1.0&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;/&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;alpha&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;)&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;*&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;np&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;log&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;nb&amp;#34;&amp;gt;float&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mf&amp;#34;&amp;gt;1.0&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;/&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;r1&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;))&amp;lt;/span&amp;gt;
-        &amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;t&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;+=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;tau&amp;lt;/span&amp;gt;
-        &amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;times&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;append&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;t&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;)&amp;lt;/span&amp;gt;
+        &lt;span class="c1"&gt;# 3. Compute the time until the next reaction takes place.&lt;/span&gt;
+        &lt;span class="n"&gt;tau&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mf"&gt;1.0&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;alpha&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;log&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;float&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mf"&gt;1.0&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;r1&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;t&lt;/span&gt; &lt;span class="o"&gt;+=&lt;/span&gt; &lt;span class="n"&gt;tau&lt;/span&gt;
+        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;times&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;append&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;t&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 
-        &amp;lt;span class=&amp;#34;c1&amp;#34;&amp;gt;# 4. Compute which reaction takes place.&amp;lt;/span&amp;gt;
-        &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;index&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;np&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;searchsorted&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;cumsum&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;r2&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;*&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;alpha&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;)&amp;lt;/span&amp;gt;
+        &lt;span class="c1"&gt;# 4. Compute which reaction takes place.&lt;/span&gt;
+        &lt;span class="n"&gt;index&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;searchsorted&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;cumsum&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;r2&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;alpha&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 
-        &amp;lt;span class=&amp;#34;c1&amp;#34;&amp;gt;# 5. Update node states. &amp;lt;/span&amp;gt;
-        &amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;X&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;[&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;index&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;%&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;k&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;.N] = 2
-        &amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;S&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;append&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;S&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;[&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;-&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;1&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;]&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;-&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;1&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;)&amp;lt;/span&amp;gt;
-        &amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;I&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;append&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;I&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;[&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;-&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;1&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;]&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;+&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;1&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;)&amp;lt;/span&amp;gt;
+        &lt;span class="c1"&gt;# 5. Update node states. &lt;/span&gt;
+        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;X&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;index&lt;/span&gt;&lt;span class="o"&gt;%&lt;/span&gt;&lt;span class="k"&gt;self&lt;/span&gt;.N] = 2
+        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;S&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;append&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;S&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;I&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;append&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;I&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
             
-        &amp;lt;span class=&amp;#34;c1&amp;#34;&amp;gt;# 6. Update propensities&amp;lt;/span&amp;gt;
-        &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;n1&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;np&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;nonzero&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;A&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;[&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;index&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;%&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;k&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;.N])[0]
-        &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;n1&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;np&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;append&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;n1&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;index&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;%&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;k&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;.N)
+        &lt;span class="c1"&gt;# 6. Update propensities&lt;/span&gt;
+        &lt;span class="n"&gt;n1&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;nonzero&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;A&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;index&lt;/span&gt;&lt;span class="o"&gt;%&lt;/span&gt;&lt;span class="k"&gt;self&lt;/span&gt;.N])[0]
+        &lt;span class="n"&gt;n1&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;append&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;n1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;index&lt;/span&gt;&lt;span class="o"&gt;%&lt;/span&gt;&lt;span class="k"&gt;self&lt;/span&gt;.N)
         
-        &amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;UpdatePropensity&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;n1&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;)&amp;lt;/span&amp;gt;
-        &amp;lt;span class=&amp;#34;k&amp;#34;&amp;gt;return&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;kc&amp;#34;&amp;gt;True&amp;lt;/span&amp;gt;
+        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;UpdatePropensity&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;n1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="kc"&gt;True&lt;/span&gt;
 
-    &amp;lt;span class=&amp;#34;k&amp;#34;&amp;gt;def&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;nf&amp;#34;&amp;gt;RunToConvergence&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;):&amp;lt;/span&amp;gt;
-        &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;running&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;kc&amp;#34;&amp;gt;True&amp;lt;/span&amp;gt;
-        &amp;lt;span class=&amp;#34;k&amp;#34;&amp;gt;while&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;running&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;:&amp;lt;/span&amp;gt;
-            &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;running&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;RunIteration&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;()&amp;lt;/span&amp;gt;
-        &amp;lt;span class=&amp;#34;k&amp;#34;&amp;gt;return&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;kc&amp;#34;&amp;gt;None&amp;lt;/span&amp;gt;
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;RunToConvergence&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="n"&gt;running&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="kc"&gt;True&lt;/span&gt;
+        &lt;span class="k"&gt;while&lt;/span&gt; &lt;span class="n"&gt;running&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+            &lt;span class="n"&gt;running&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;RunIteration&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="kc"&gt;None&lt;/span&gt;
     
-    &amp;lt;span class=&amp;#34;k&amp;#34;&amp;gt;def&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;nf&amp;#34;&amp;gt;IntegrateSolution&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;):&amp;lt;/span&amp;gt;
-        &amp;lt;span class=&amp;#34;kn&amp;#34;&amp;gt;from&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;nn&amp;#34;&amp;gt;scipy.integrate&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;k&amp;#34;&amp;gt;import&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;odeint&amp;lt;/span&amp;gt;
-        &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;gam&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;gam&amp;lt;/span&amp;gt;
-        &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;lam&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;lam&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;*&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;N&amp;lt;/span&amp;gt;
-        &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;k&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;A&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;sum&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;axis&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;0&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;)&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;mean&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;()&amp;lt;/span&amp;gt;
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;IntegrateSolution&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;scipy.integrate&lt;/span&gt; &lt;span class="k"&gt;import&lt;/span&gt; &lt;span class="n"&gt;odeint&lt;/span&gt;
+        &lt;span class="n"&gt;gam&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;gam&lt;/span&gt;
+        &lt;span class="n"&gt;lam&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;lam&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;N&lt;/span&gt;
+        &lt;span class="n"&gt;k&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;A&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sum&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;axis&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;mean&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
 
-        &amp;lt;span class=&amp;#34;k&amp;#34;&amp;gt;def&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;nf&amp;#34;&amp;gt;deriv&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;x&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;t&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;):&amp;lt;/span&amp;gt;
-            &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;xdot&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;[&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;-&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;x&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;[&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;0&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;]&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;*&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;gam&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;+&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;lam&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;*&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;x&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;[&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;1&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;]),&amp;lt;/span&amp;gt;
-                    &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;+&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;x&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;[&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;0&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;]&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;*&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;gam&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;+&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;lam&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;*&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;x&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;[&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;1&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;])]&amp;lt;/span&amp;gt;
-            &amp;lt;span class=&amp;#34;k&amp;#34;&amp;gt;return&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;xdot&amp;lt;/span&amp;gt;
+        &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;deriv&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;t&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+            &lt;span class="n"&gt;xdot&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;gam&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;lam&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]),&lt;/span&gt;
+                    &lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;gam&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;lam&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;])]&lt;/span&gt;
+            &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;xdot&lt;/span&gt;
 
-        &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;x0&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;[&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;nb&amp;#34;&amp;gt;float&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;S&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;[&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;0&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;])&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;/&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;N&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;nb&amp;#34;&amp;gt;float&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;I&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;[&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;0&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;])&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;/&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;N&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;]&amp;lt;/span&amp;gt;
-        &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;t&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;np&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;linspace&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;0&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;times&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;[&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;-&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;1&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;],&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;100&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;)&amp;lt;/span&amp;gt;
-        &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;x&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;odeint&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;deriv&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;x0&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;t&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;)&amp;lt;/span&amp;gt;
-        &amp;lt;span class=&amp;#34;bp&amp;#34;&amp;gt;self&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;solution&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;x&amp;lt;/span&amp;gt;
-        &amp;lt;span class=&amp;#34;k&amp;#34;&amp;gt;return&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;kc&amp;#34;&amp;gt;None&amp;lt;/span&amp;gt;
-&amp;lt;/pre&amp;gt;&amp;lt;/div&amp;gt;
+        &lt;span class="n"&gt;x0&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nb"&gt;float&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;S&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;N&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="nb"&gt;float&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;I&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;N&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+        &lt;span class="n"&gt;t&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;linspace&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;times&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt;&lt;span class="mi"&gt;100&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="n"&gt;x&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;odeint&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;deriv&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;x0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;t&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;solution&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;x&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="kc"&gt;None&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-
 &lt;/div&gt;
 &lt;div class="cell border-box-sizing text_cell rendered"&gt;
 &lt;div class="prompt input_prompt"&gt;
@@ -1745,7 +1728,7 @@ r_2 \geq \frac{1}{\alpha_0}\sum_{m=1}^{k-1}\sum_{i=1}^{j-1}\alpha_i^m(t) \hspace
 &lt;div class="inner_cell"&gt;
 &lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
 &lt;p&gt;This framework is designed to be general. Provided the propensity of a reaction is properly calculated, and the network states updated then any number of reactions can be cast into this form, including dynamics which alter the structure of the network itself.&lt;/p&gt;
-&lt;h2 id="Efficiency"&gt;Efficiency&lt;a class="anchor-link" href="#Efficiency"&gt;&amp;#182;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;In theory, this is the currently the most efficient way of implementing the model, however intricases in the Python language (and the Numpy package) require that more thought is given as to how it is written.&lt;/p&gt;
+&lt;h2 id="Efficiency"&gt;Efficiency&lt;a class="anchor-link" href="#Efficiency"&gt;¶&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;In theory, this is the currently the most efficient way of implementing the model, however intricases in the Python language (and the Numpy package) require that more thought is given as to how it is written.&lt;/p&gt;
 &lt;p&gt;The most intensive aspect of the algorithm is the calculation of the propensities for each node (and reaction).
 This can be written in terms of matrix multiplication.&lt;/p&gt;
 $$ \underline{\alpha} = (\gamma \textbf{1} + \lambda \textbf{A}\textbf{1}_{\{infected\}}) \circ \textbf{1}_{\{susceptible\}} $$&lt;p&gt;where $\circ$ is the element-wise vector multiplication and $(\textbf{1}_{\{infected\}})_i = 1$ if node $i$ is infected and $0$ otherwise. The indicator vector $\textbf{1}_{\{susceptible\}}$ is similarly defined. This definition calculates all the propensities however in most cases (particularly on sparse networks) when a node changes state only a small fraction of the nodes will change propensity.&lt;/p&gt;
@@ -1775,167 +1758,140 @@ Cons: Native Python loops inherently slow.&lt;/p&gt;
 Cons: Not fully efficient, efficiency is variable.&lt;/p&gt;
 &lt;p&gt;This method is more of a cheat. It takes a minimal covering of the effected nodes and uses slicing to get the relevant rows of the matrix. Slicing in Numpy does not make a copy of the array which is a clear advantage.&lt;/p&gt;
 &lt;p&gt;We'll look at the simulation times for near-complete graphs (high degree):&lt;/p&gt;
-
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;div class="cell border-box-sizing code_cell rendered"&gt;
 &lt;div class="input"&gt;
-&lt;div class="prompt input_prompt"&gt;In&amp;nbsp;[279]:&lt;/div&gt;
+&lt;div class="prompt input_prompt"&gt;In [279]:&lt;/div&gt;
 &lt;div class="inner_cell"&gt;
-    &lt;div class="input_area"&gt;
-&amp;lt;div class=&amp;#34; highlight hl-ipython3&amp;#34;&amp;gt;&amp;lt;pre&amp;gt;&amp;lt;span&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;G&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;nx&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;erdos_renyi_graph&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;1000&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mf&amp;#34;&amp;gt;0.95&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;)&amp;lt;/span&amp;gt;
-&amp;lt;/pre&amp;gt;&amp;lt;/div&amp;gt;
+&lt;div class="input_area"&gt;
+&lt;div class=" highlight hl-ipython3"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;G&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;nx&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;erdos_renyi_graph&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1000&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mf"&gt;0.95&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-
 &lt;/div&gt;
 &lt;div class="cell border-box-sizing code_cell rendered"&gt;
 &lt;div class="input"&gt;
-&lt;div class="prompt input_prompt"&gt;In&amp;nbsp;[280]:&lt;/div&gt;
+&lt;div class="prompt input_prompt"&gt;In [280]:&lt;/div&gt;
 &lt;div class="inner_cell"&gt;
-    &lt;div class="input_area"&gt;
-&amp;lt;div class=&amp;#34; highlight hl-ipython3&amp;#34;&amp;gt;&amp;lt;pre&amp;gt;&amp;lt;span&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;%%&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;k&amp;#34;&amp;gt;timeit&amp;lt;/span&amp;gt;
-model = SI_Simulation(G, lam=0.1, gam=0.05, i0=0.1, prop=&amp;amp;#39;TAKE&amp;amp;#39;)
+&lt;div class="input_area"&gt;
+&lt;div class=" highlight hl-ipython3"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="o"&gt;%%&lt;/span&gt;&lt;span class="k"&gt;timeit&lt;/span&gt;
+model = SI_Simulation(G, lam=0.1, gam=0.05, i0=0.1, prop=&amp;#39;TAKE&amp;#39;)
 model.RunToConvergence()
-&amp;lt;/pre&amp;gt;&amp;lt;/div&amp;gt;
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-
 &lt;div class="output_wrapper"&gt;
 &lt;div class="output"&gt;
-
-
 &lt;div class="output_area"&gt;&lt;div class="prompt"&gt;&lt;/div&gt;
 &lt;div class="output_subarea output_stream output_stdout output_text"&gt;
 &lt;pre&gt;1 loops, best of 3: 2.35 s per loop
 &lt;/pre&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-
 &lt;/div&gt;
 &lt;/div&gt;
-
 &lt;/div&gt;
 &lt;div class="cell border-box-sizing code_cell rendered"&gt;
 &lt;div class="input"&gt;
-&lt;div class="prompt input_prompt"&gt;In&amp;nbsp;[281]:&lt;/div&gt;
+&lt;div class="prompt input_prompt"&gt;In [281]:&lt;/div&gt;
 &lt;div class="inner_cell"&gt;
-    &lt;div class="input_area"&gt;
-&amp;lt;div class=&amp;#34; highlight hl-ipython3&amp;#34;&amp;gt;&amp;lt;pre&amp;gt;&amp;lt;span&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;%%&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;k&amp;#34;&amp;gt;timeit&amp;lt;/span&amp;gt;
-model = SI_Simulation(G, lam=0.1, gam=0.05, i0=0.1, prop=&amp;amp;#39;ALL&amp;amp;#39;)
+&lt;div class="input_area"&gt;
+&lt;div class=" highlight hl-ipython3"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="o"&gt;%%&lt;/span&gt;&lt;span class="k"&gt;timeit&lt;/span&gt;
+model = SI_Simulation(G, lam=0.1, gam=0.05, i0=0.1, prop=&amp;#39;ALL&amp;#39;)
 model.RunToConvergence()
-&amp;lt;/pre&amp;gt;&amp;lt;/div&amp;gt;
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-
 &lt;div class="output_wrapper"&gt;
 &lt;div class="output"&gt;
-
-
 &lt;div class="output_area"&gt;&lt;div class="prompt"&gt;&lt;/div&gt;
 &lt;div class="output_subarea output_stream output_stdout output_text"&gt;
 &lt;pre&gt;1 loops, best of 3: 1.72 s per loop
 &lt;/pre&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-
 &lt;/div&gt;
 &lt;/div&gt;
-
 &lt;/div&gt;
 &lt;div class="cell border-box-sizing code_cell rendered"&gt;
 &lt;div class="input"&gt;
-&lt;div class="prompt input_prompt"&gt;In&amp;nbsp;[282]:&lt;/div&gt;
+&lt;div class="prompt input_prompt"&gt;In [282]:&lt;/div&gt;
 &lt;div class="inner_cell"&gt;
-    &lt;div class="input_area"&gt;
-&amp;lt;div class=&amp;#34; highlight hl-ipython3&amp;#34;&amp;gt;&amp;lt;pre&amp;gt;&amp;lt;span&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;%%&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;k&amp;#34;&amp;gt;timeit&amp;lt;/span&amp;gt;
-model = SI_Simulation(G, lam=0.1, gam=0.05, i0=0.1, prop=&amp;amp;#39;LOOP&amp;amp;#39;)
+&lt;div class="input_area"&gt;
+&lt;div class=" highlight hl-ipython3"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="o"&gt;%%&lt;/span&gt;&lt;span class="k"&gt;timeit&lt;/span&gt;
+model = SI_Simulation(G, lam=0.1, gam=0.05, i0=0.1, prop=&amp;#39;LOOP&amp;#39;)
 model.RunToConvergence()
-&amp;lt;/pre&amp;gt;&amp;lt;/div&amp;gt;
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-
 &lt;div class="output_wrapper"&gt;
 &lt;div class="output"&gt;
-
-
 &lt;div class="output_area"&gt;&lt;div class="prompt"&gt;&lt;/div&gt;
 &lt;div class="output_subarea output_stream output_stdout output_text"&gt;
 &lt;pre&gt;1 loops, best of 3: 18.8 s per loop
 &lt;/pre&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-
 &lt;/div&gt;
 &lt;/div&gt;
-
 &lt;/div&gt;
 &lt;div class="cell border-box-sizing code_cell rendered"&gt;
 &lt;div class="input"&gt;
-&lt;div class="prompt input_prompt"&gt;In&amp;nbsp;[283]:&lt;/div&gt;
+&lt;div class="prompt input_prompt"&gt;In [283]:&lt;/div&gt;
 &lt;div class="inner_cell"&gt;
-    &lt;div class="input_area"&gt;
-&amp;lt;div class=&amp;#34; highlight hl-ipython3&amp;#34;&amp;gt;&amp;lt;pre&amp;gt;&amp;lt;span&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;%%&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;k&amp;#34;&amp;gt;timeit&amp;lt;/span&amp;gt;
-model = SI_Simulation(G, lam=0.1, gam=0.05, i0=0.1, prop=&amp;amp;#39;FANCY&amp;amp;#39;)
+&lt;div class="input_area"&gt;
+&lt;div class=" highlight hl-ipython3"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="o"&gt;%%&lt;/span&gt;&lt;span class="k"&gt;timeit&lt;/span&gt;
+model = SI_Simulation(G, lam=0.1, gam=0.05, i0=0.1, prop=&amp;#39;FANCY&amp;#39;)
 model.RunToConvergence()
-&amp;lt;/pre&amp;gt;&amp;lt;/div&amp;gt;
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-
 &lt;div class="output_wrapper"&gt;
 &lt;div class="output"&gt;
-
-
 &lt;div class="output_area"&gt;&lt;div class="prompt"&gt;&lt;/div&gt;
 &lt;div class="output_subarea output_stream output_stdout output_text"&gt;
 &lt;pre&gt;1 loops, best of 3: 9.62 s per loop
 &lt;/pre&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-
 &lt;/div&gt;
 &lt;/div&gt;
-
 &lt;/div&gt;
 &lt;div class="cell border-box-sizing code_cell rendered"&gt;
 &lt;div class="input"&gt;
-&lt;div class="prompt input_prompt"&gt;In&amp;nbsp;[284]:&lt;/div&gt;
+&lt;div class="prompt input_prompt"&gt;In [284]:&lt;/div&gt;
 &lt;div class="inner_cell"&gt;
-    &lt;div class="input_area"&gt;
-&amp;lt;div class=&amp;#34; highlight hl-ipython3&amp;#34;&amp;gt;&amp;lt;pre&amp;gt;&amp;lt;span&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;%%&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;k&amp;#34;&amp;gt;timeit&amp;lt;/span&amp;gt;
-model = SI_Simulation(G, lam=0.1, gam=0.05, i0=0.1, prop=&amp;amp;#39;SLICE&amp;amp;#39;)
+&lt;div class="input_area"&gt;
+&lt;div class=" highlight hl-ipython3"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="o"&gt;%%&lt;/span&gt;&lt;span class="k"&gt;timeit&lt;/span&gt;
+model = SI_Simulation(G, lam=0.1, gam=0.05, i0=0.1, prop=&amp;#39;SLICE&amp;#39;)
 model.RunToConvergence()
-&amp;lt;/pre&amp;gt;&amp;lt;/div&amp;gt;
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-
 &lt;div class="output_wrapper"&gt;
 &lt;div class="output"&gt;
-
-
 &lt;div class="output_area"&gt;&lt;div class="prompt"&gt;&lt;/div&gt;
 &lt;div class="output_subarea output_stream output_stdout output_text"&gt;
 &lt;pre&gt;1 loops, best of 3: 1.66 s per loop
 &lt;/pre&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-
 &lt;/div&gt;
 &lt;/div&gt;
-
 &lt;/div&gt;
 &lt;div class="cell border-box-sizing text_cell rendered"&gt;
 &lt;div class="prompt input_prompt"&gt;
@@ -1943,167 +1899,140 @@ model.RunToConvergence()
 &lt;div class="inner_cell"&gt;
 &lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
 &lt;p&gt;We can see that, for near-complete graphs the SLICE method is the fastest, followed closely by the ALL method. The TAKE method takes almost 50% more time again which is due to the copying previously mentioned. The FANCY index seems to have a large overhead given it is carrying out the exact same function as TAKE. The native Python LOOP is by contrast too slow to even consider. Conversely, we'll look at the behaviour on sparse networks (low degree):&lt;/p&gt;
-
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;div class="cell border-box-sizing code_cell rendered"&gt;
 &lt;div class="input"&gt;
-&lt;div class="prompt input_prompt"&gt;In&amp;nbsp;[285]:&lt;/div&gt;
+&lt;div class="prompt input_prompt"&gt;In [285]:&lt;/div&gt;
 &lt;div class="inner_cell"&gt;
-    &lt;div class="input_area"&gt;
-&amp;lt;div class=&amp;#34; highlight hl-ipython3&amp;#34;&amp;gt;&amp;lt;pre&amp;gt;&amp;lt;span&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;G&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;nx&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;erdos_renyi_graph&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;1000&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mf&amp;#34;&amp;gt;0.05&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;)&amp;lt;/span&amp;gt;
-&amp;lt;/pre&amp;gt;&amp;lt;/div&amp;gt;
+&lt;div class="input_area"&gt;
+&lt;div class=" highlight hl-ipython3"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;G&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;nx&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;erdos_renyi_graph&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1000&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mf"&gt;0.05&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-
 &lt;/div&gt;
 &lt;div class="cell border-box-sizing code_cell rendered"&gt;
 &lt;div class="input"&gt;
-&lt;div class="prompt input_prompt"&gt;In&amp;nbsp;[286]:&lt;/div&gt;
+&lt;div class="prompt input_prompt"&gt;In [286]:&lt;/div&gt;
 &lt;div class="inner_cell"&gt;
-    &lt;div class="input_area"&gt;
-&amp;lt;div class=&amp;#34; highlight hl-ipython3&amp;#34;&amp;gt;&amp;lt;pre&amp;gt;&amp;lt;span&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;%%&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;k&amp;#34;&amp;gt;timeit&amp;lt;/span&amp;gt;
-model = SI_Simulation(G, lam=0.1, gam=0.05, i0=0.1, prop=&amp;amp;#39;TAKE&amp;amp;#39;)
+&lt;div class="input_area"&gt;
+&lt;div class=" highlight hl-ipython3"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="o"&gt;%%&lt;/span&gt;&lt;span class="k"&gt;timeit&lt;/span&gt;
+model = SI_Simulation(G, lam=0.1, gam=0.05, i0=0.1, prop=&amp;#39;TAKE&amp;#39;)
 model.RunToConvergence()
-&amp;lt;/pre&amp;gt;&amp;lt;/div&amp;gt;
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-
 &lt;div class="output_wrapper"&gt;
 &lt;div class="output"&gt;
-
-
 &lt;div class="output_area"&gt;&lt;div class="prompt"&gt;&lt;/div&gt;
 &lt;div class="output_subarea output_stream output_stdout output_text"&gt;
 &lt;pre&gt;1 loops, best of 3: 200 ms per loop
 &lt;/pre&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-
 &lt;/div&gt;
 &lt;/div&gt;
-
 &lt;/div&gt;
 &lt;div class="cell border-box-sizing code_cell rendered"&gt;
 &lt;div class="input"&gt;
-&lt;div class="prompt input_prompt"&gt;In&amp;nbsp;[287]:&lt;/div&gt;
+&lt;div class="prompt input_prompt"&gt;In [287]:&lt;/div&gt;
 &lt;div class="inner_cell"&gt;
-    &lt;div class="input_area"&gt;
-&amp;lt;div class=&amp;#34; highlight hl-ipython3&amp;#34;&amp;gt;&amp;lt;pre&amp;gt;&amp;lt;span&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;%%&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;k&amp;#34;&amp;gt;timeit&amp;lt;/span&amp;gt;
-model = SI_Simulation(G, lam=0.1, gam=0.05, i0=0.1, prop=&amp;amp;#39;ALL&amp;amp;#39;)
+&lt;div class="input_area"&gt;
+&lt;div class=" highlight hl-ipython3"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="o"&gt;%%&lt;/span&gt;&lt;span class="k"&gt;timeit&lt;/span&gt;
+model = SI_Simulation(G, lam=0.1, gam=0.05, i0=0.1, prop=&amp;#39;ALL&amp;#39;)
 model.RunToConvergence()
-&amp;lt;/pre&amp;gt;&amp;lt;/div&amp;gt;
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-
 &lt;div class="output_wrapper"&gt;
 &lt;div class="output"&gt;
-
-
 &lt;div class="output_area"&gt;&lt;div class="prompt"&gt;&lt;/div&gt;
 &lt;div class="output_subarea output_stream output_stdout output_text"&gt;
 &lt;pre&gt;1 loops, best of 3: 841 ms per loop
 &lt;/pre&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-
 &lt;/div&gt;
 &lt;/div&gt;
-
 &lt;/div&gt;
 &lt;div class="cell border-box-sizing code_cell rendered"&gt;
 &lt;div class="input"&gt;
-&lt;div class="prompt input_prompt"&gt;In&amp;nbsp;[288]:&lt;/div&gt;
+&lt;div class="prompt input_prompt"&gt;In [288]:&lt;/div&gt;
 &lt;div class="inner_cell"&gt;
-    &lt;div class="input_area"&gt;
-&amp;lt;div class=&amp;#34; highlight hl-ipython3&amp;#34;&amp;gt;&amp;lt;pre&amp;gt;&amp;lt;span&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;%%&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;k&amp;#34;&amp;gt;timeit&amp;lt;/span&amp;gt;
-model = SI_Simulation(G, lam=0.1, gam=0.05, i0=0.1, prop=&amp;amp;#39;LOOP&amp;amp;#39;)
+&lt;div class="input_area"&gt;
+&lt;div class=" highlight hl-ipython3"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="o"&gt;%%&lt;/span&gt;&lt;span class="k"&gt;timeit&lt;/span&gt;
+model = SI_Simulation(G, lam=0.1, gam=0.05, i0=0.1, prop=&amp;#39;LOOP&amp;#39;)
 model.RunToConvergence()
-&amp;lt;/pre&amp;gt;&amp;lt;/div&amp;gt;
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-
 &lt;div class="output_wrapper"&gt;
 &lt;div class="output"&gt;
-
-
 &lt;div class="output_area"&gt;&lt;div class="prompt"&gt;&lt;/div&gt;
 &lt;div class="output_subarea output_stream output_stdout output_text"&gt;
 &lt;pre&gt;1 loops, best of 3: 1.03 s per loop
 &lt;/pre&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-
 &lt;/div&gt;
 &lt;/div&gt;
-
 &lt;/div&gt;
 &lt;div class="cell border-box-sizing code_cell rendered"&gt;
 &lt;div class="input"&gt;
-&lt;div class="prompt input_prompt"&gt;In&amp;nbsp;[289]:&lt;/div&gt;
+&lt;div class="prompt input_prompt"&gt;In [289]:&lt;/div&gt;
 &lt;div class="inner_cell"&gt;
-    &lt;div class="input_area"&gt;
-&amp;lt;div class=&amp;#34; highlight hl-ipython3&amp;#34;&amp;gt;&amp;lt;pre&amp;gt;&amp;lt;span&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;%%&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;k&amp;#34;&amp;gt;timeit&amp;lt;/span&amp;gt;
-model = SI_Simulation(G, lam=0.1, gam=0.05, i0=0.1, prop=&amp;amp;#39;FANCY&amp;amp;#39;)
+&lt;div class="input_area"&gt;
+&lt;div class=" highlight hl-ipython3"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="o"&gt;%%&lt;/span&gt;&lt;span class="k"&gt;timeit&lt;/span&gt;
+model = SI_Simulation(G, lam=0.1, gam=0.05, i0=0.1, prop=&amp;#39;FANCY&amp;#39;)
 model.RunToConvergence()
-&amp;lt;/pre&amp;gt;&amp;lt;/div&amp;gt;
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-
 &lt;div class="output_wrapper"&gt;
 &lt;div class="output"&gt;
-
-
 &lt;div class="output_area"&gt;&lt;div class="prompt"&gt;&lt;/div&gt;
 &lt;div class="output_subarea output_stream output_stdout output_text"&gt;
 &lt;pre&gt;1 loops, best of 3: 592 ms per loop
 &lt;/pre&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-
 &lt;/div&gt;
 &lt;/div&gt;
-
 &lt;/div&gt;
 &lt;div class="cell border-box-sizing code_cell rendered"&gt;
 &lt;div class="input"&gt;
-&lt;div class="prompt input_prompt"&gt;In&amp;nbsp;[290]:&lt;/div&gt;
+&lt;div class="prompt input_prompt"&gt;In [290]:&lt;/div&gt;
 &lt;div class="inner_cell"&gt;
-    &lt;div class="input_area"&gt;
-&amp;lt;div class=&amp;#34; highlight hl-ipython3&amp;#34;&amp;gt;&amp;lt;pre&amp;gt;&amp;lt;span&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;%%&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;k&amp;#34;&amp;gt;timeit&amp;lt;/span&amp;gt;
-model = SI_Simulation(G, lam=0.1, gam=0.05, i0=0.1, prop=&amp;amp;#39;SLICE&amp;amp;#39;)
+&lt;div class="input_area"&gt;
+&lt;div class=" highlight hl-ipython3"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="o"&gt;%%&lt;/span&gt;&lt;span class="k"&gt;timeit&lt;/span&gt;
+model = SI_Simulation(G, lam=0.1, gam=0.05, i0=0.1, prop=&amp;#39;SLICE&amp;#39;)
 model.RunToConvergence()
-&amp;lt;/pre&amp;gt;&amp;lt;/div&amp;gt;
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-
 &lt;div class="output_wrapper"&gt;
 &lt;div class="output"&gt;
-
-
 &lt;div class="output_area"&gt;&lt;div class="prompt"&gt;&lt;/div&gt;
 &lt;div class="output_subarea output_stream output_stdout output_text"&gt;
 &lt;pre&gt;1 loops, best of 3: 832 ms per loop
 &lt;/pre&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-
 &lt;/div&gt;
 &lt;/div&gt;
-
 &lt;/div&gt;
 &lt;div class="cell border-box-sizing text_cell rendered"&gt;
 &lt;div class="prompt input_prompt"&gt;
@@ -2112,124 +2041,42 @@ model.RunToConvergence()
 &lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
 &lt;p&gt;Now we can see that the TAKE function is by far the fastest in the low degree limit. With only a relatively small amount of data to be copied this undertaking does not outweigh the potentially huge gains over calculating all propensities.&lt;/p&gt;
 &lt;p&gt;These are single instances and so we should not take them as gospel. What we're interested in is when should we value one method over another? To investigate this we should look over a full range of values for repeated simulation, for which we'll need to import the timeit module (rather than using the in-built cell magic). An example statement would be something along the lines of:&lt;/p&gt;
-
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;div class="cell border-box-sizing code_cell rendered"&gt;
 &lt;div class="input"&gt;
-&lt;div class="prompt input_prompt"&gt;In&amp;nbsp;[&amp;nbsp;]:&lt;/div&gt;
+&lt;div class="prompt input_prompt"&gt;In [ ]:&lt;/div&gt;
 &lt;div class="inner_cell"&gt;
-    &lt;div class="input_area"&gt;
-&amp;lt;div class=&amp;#34; highlight hl-ipython3&amp;#34;&amp;gt;&amp;lt;pre&amp;gt;&amp;lt;span&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;kn&amp;#34;&amp;gt;from&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;nn&amp;#34;&amp;gt;timeit&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;k&amp;#34;&amp;gt;import&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;timeit&amp;lt;/span&amp;gt;
-&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;num_sims&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;10&amp;lt;/span&amp;gt;
+&lt;div class="input_area"&gt;
+&lt;div class=" highlight hl-ipython3"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;timeit&lt;/span&gt; &lt;span class="k"&gt;import&lt;/span&gt; &lt;span class="n"&gt;timeit&lt;/span&gt;
+&lt;span class="n"&gt;num_sims&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;10&lt;/span&gt;
 
-&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;setup&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;s2&amp;#34;&amp;gt;&amp;amp;quot;&amp;amp;quot;&amp;amp;quot;&amp;lt;/span&amp;gt;
-&amp;lt;span class=&amp;#34;s2&amp;#34;&amp;gt;from simulation import SI_Simulation&amp;lt;/span&amp;gt;
-&amp;lt;span class=&amp;#34;s2&amp;#34;&amp;gt;import networkx as nx&amp;lt;/span&amp;gt;
-&amp;lt;span class=&amp;#34;s2&amp;#34;&amp;gt;G = nx.erdos_renyi_graph(1000,0.5, seed=50)&amp;lt;/span&amp;gt;
-&amp;lt;span class=&amp;#34;s2&amp;#34;&amp;gt;&amp;amp;quot;&amp;amp;quot;&amp;amp;quot;&amp;lt;/span&amp;gt;
+&lt;span class="n"&gt;setup&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
+&lt;span class="s2"&gt;from simulation import SI_Simulation&lt;/span&gt;
+&lt;span class="s2"&gt;import networkx as nx&lt;/span&gt;
+&lt;span class="s2"&gt;G = nx.erdos_renyi_graph(1000,0.5, seed=50)&lt;/span&gt;
+&lt;span class="s2"&gt;&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
 
-&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;stmt&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;s2&amp;#34;&amp;gt;&amp;amp;quot;&amp;amp;quot;&amp;amp;quot;&amp;lt;/span&amp;gt;
-&amp;lt;span class=&amp;#34;s2&amp;#34;&amp;gt;model = SI_Simulation(G,lam=0.1, gam=0.05, i0=0.1, prop=&amp;amp;#39;TAKE&amp;amp;#39;)&amp;lt;/span&amp;gt;
-&amp;lt;span class=&amp;#34;s2&amp;#34;&amp;gt;model.RunToConvergence()&amp;lt;/span&amp;gt;
-&amp;lt;span class=&amp;#34;s2&amp;#34;&amp;gt;&amp;amp;quot;&amp;amp;quot;&amp;amp;quot;&amp;lt;/span&amp;gt;
+&lt;span class="n"&gt;stmt&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
+&lt;span class="s2"&gt;model = SI_Simulation(G,lam=0.1, gam=0.05, i0=0.1, prop=&amp;#39;TAKE&amp;#39;)&lt;/span&gt;
+&lt;span class="s2"&gt;model.RunToConvergence()&lt;/span&gt;
+&lt;span class="s2"&gt;&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
 
-&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;timeit&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;stmt&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;stmt&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;setup&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;setup&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;number&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;num_sims&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;)&amp;lt;/span&amp;gt;
-&amp;lt;/pre&amp;gt;&amp;lt;/div&amp;gt;
+&lt;span class="n"&gt;timeit&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;stmt&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;stmt&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;setup&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;setup&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;number&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;num_sims&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="cell border-box-sizing code_cell rendered"&gt;
 
 &lt;/div&gt;
 &lt;div class="cell border-box-sizing code_cell rendered"&gt;
-&lt;div class="input"&gt;
-&lt;div class="prompt input_prompt"&gt;In&amp;nbsp;[&amp;nbsp;]:&lt;/div&gt;
-&lt;div class="inner_cell"&gt;
-    &lt;div class="input_area"&gt;
-&amp;lt;div class=&amp;#34; highlight hl-ipython3&amp;#34;&amp;gt;&amp;lt;pre&amp;gt;&amp;lt;span&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;c1&amp;#34;&amp;gt;#ignore&amp;lt;/span&amp;gt;
-&amp;lt;span class=&amp;#34;kn&amp;#34;&amp;gt;from&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;nn&amp;#34;&amp;gt;timeit&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;k&amp;#34;&amp;gt;import&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;timeit&amp;lt;/span&amp;gt;
-&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;sims&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;5&amp;lt;/span&amp;gt;
-
-&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;t_take_store&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;[]&amp;lt;/span&amp;gt;
-&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;t_all_store&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;[]&amp;lt;/span&amp;gt;
-
-&amp;lt;span class=&amp;#34;k&amp;#34;&amp;gt;for&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;N&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;ow&amp;#34;&amp;gt;in&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;np&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;logspace&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;1&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mf&amp;#34;&amp;gt;3.5&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;10&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;):&amp;lt;/span&amp;gt;
-    &amp;lt;span class=&amp;#34;nb&amp;#34;&amp;gt;print&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;s2&amp;#34;&amp;gt;&amp;amp;quot;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;se&amp;#34;&amp;gt;\n&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;s2&amp;#34;&amp;gt; &amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;si&amp;#34;&amp;gt;{:.0f}&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;s2&amp;#34;&amp;gt;: &amp;amp;quot;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;format&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;N&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;),&amp;lt;/span&amp;gt;
-    &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;t_take&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;[]&amp;lt;/span&amp;gt;
-    &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;t_all&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;[]&amp;lt;/span&amp;gt;
-    &amp;lt;span class=&amp;#34;k&amp;#34;&amp;gt;for&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;k&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;ow&amp;#34;&amp;gt;in&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;np&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;linspace&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;1&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;N&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;10&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;):&amp;lt;/span&amp;gt;
-        &amp;lt;span class=&amp;#34;nb&amp;#34;&amp;gt;print&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;s2&amp;#34;&amp;gt;&amp;amp;quot;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;si&amp;#34;&amp;gt;{:.2f}&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;s2&amp;#34;&amp;gt;&amp;amp;quot;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;format&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;k&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;),&amp;lt;/span&amp;gt;
-
-        &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;setup&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;s2&amp;#34;&amp;gt;&amp;amp;quot;&amp;amp;quot;&amp;amp;quot;&amp;lt;/span&amp;gt;
-&amp;lt;span class=&amp;#34;s2&amp;#34;&amp;gt;from simulation import SI_Simulation&amp;lt;/span&amp;gt;
-&amp;lt;span class=&amp;#34;s2&amp;#34;&amp;gt;import networkx as nx&amp;lt;/span&amp;gt;
-&amp;lt;span class=&amp;#34;s2&amp;#34;&amp;gt;G = nx.erdos_renyi_graph(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;si&amp;#34;&amp;gt;{N:.0f}&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;s2&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;si&amp;#34;&amp;gt;{p:.4f}&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;s2&amp;#34;&amp;gt;, seed=50)&amp;lt;/span&amp;gt;
-&amp;lt;span class=&amp;#34;s2&amp;#34;&amp;gt;&amp;amp;quot;&amp;amp;quot;&amp;amp;quot;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;format&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;N&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;N&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;p&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;nb&amp;#34;&amp;gt;float&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;k&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;)&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;/&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;N&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;)&amp;lt;/span&amp;gt;
-
-        &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;stmt&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;s2&amp;#34;&amp;gt;&amp;amp;quot;&amp;amp;quot;&amp;amp;quot;&amp;lt;/span&amp;gt;
-&amp;lt;span class=&amp;#34;s2&amp;#34;&amp;gt;model = SI_Simulation(G,lam=0.1, gam=0.05, i0=0.1, prop=&amp;amp;#39;TAKE&amp;amp;#39;)&amp;lt;/span&amp;gt;
-&amp;lt;span class=&amp;#34;s2&amp;#34;&amp;gt;model.RunToConvergence()&amp;lt;/span&amp;gt;
-&amp;lt;span class=&amp;#34;s2&amp;#34;&amp;gt;&amp;amp;quot;&amp;amp;quot;&amp;amp;quot;&amp;lt;/span&amp;gt;        
-        &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;t_take&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;append&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;timeit&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;stmt&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;stmt&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;setup&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;setup&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;number&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;sims&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;)&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;/&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;sims&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;)&amp;lt;/span&amp;gt; 
-    
-        &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;stmt&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;s2&amp;#34;&amp;gt;&amp;amp;quot;&amp;amp;quot;&amp;amp;quot;&amp;lt;/span&amp;gt;
-&amp;lt;span class=&amp;#34;s2&amp;#34;&amp;gt;model = SI_Simulation(G,lam=0.1, gam=0.05, i0=0.1, prop=&amp;amp;#39;ALL&amp;amp;#39;)&amp;lt;/span&amp;gt;
-&amp;lt;span class=&amp;#34;s2&amp;#34;&amp;gt;model.RunToConvergence()&amp;lt;/span&amp;gt;
-&amp;lt;span class=&amp;#34;s2&amp;#34;&amp;gt;&amp;amp;quot;&amp;amp;quot;&amp;amp;quot;&amp;lt;/span&amp;gt;          
-        &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;t_all&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;append&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;timeit&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;stmt&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;stmt&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;setup&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;setup&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;number&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;sims&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;)&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;/&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;sims&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;)&amp;lt;/span&amp;gt; 
-    
-    &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;t_take_store&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;append&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;t_take&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;)&amp;lt;/span&amp;gt;
-    &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;t_all_store&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;append&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;t_all&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;)&amp;lt;/span&amp;gt;
-    
-&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;t_take_store&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;np&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;array&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;t_take_store&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;)&amp;lt;/span&amp;gt;
-&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;t_all_store&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;np&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;array&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;t_all_store&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;)&amp;lt;/span&amp;gt;
-&amp;lt;/pre&amp;gt;&amp;lt;/div&amp;gt;
-
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
 
 &lt;/div&gt;
 &lt;div class="cell border-box-sizing code_cell rendered"&gt;
-&lt;div class="input"&gt;
-&lt;div class="prompt input_prompt"&gt;In&amp;nbsp;[100]:&lt;/div&gt;
-&lt;div class="inner_cell"&gt;
-    &lt;div class="input_area"&gt;
-&amp;lt;div class=&amp;#34; highlight hl-ipython3&amp;#34;&amp;gt;&amp;lt;pre&amp;gt;&amp;lt;span&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;c1&amp;#34;&amp;gt;#ignore&amp;lt;/span&amp;gt;
-&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;np&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;savez&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;s1&amp;#34;&amp;gt;&amp;amp;#39;benchmarks.npz&amp;amp;#39;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;t_take&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;t_take_store&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;t_all&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;t_all_store&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;)&amp;lt;/span&amp;gt;
-&amp;lt;/pre&amp;gt;&amp;lt;/div&amp;gt;
-
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-
-&lt;/div&gt;
-&lt;div class="cell border-box-sizing code_cell rendered"&gt;
-&lt;div class="input"&gt;
-&lt;div class="prompt input_prompt"&gt;In&amp;nbsp;[&amp;nbsp;]:&lt;/div&gt;
-&lt;div class="inner_cell"&gt;
-    &lt;div class="input_area"&gt;
-&amp;lt;div class=&amp;#34; highlight hl-ipython3&amp;#34;&amp;gt;&amp;lt;pre&amp;gt;&amp;lt;span&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;c1&amp;#34;&amp;gt;#ignore&amp;lt;/span&amp;gt;
-&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;data&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;np&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;load&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;s1&amp;#34;&amp;gt;&amp;amp;#39;benchmarks.npz&amp;amp;#39;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;)&amp;lt;/span&amp;gt;
-&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;cmap&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;matplotlib&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;cm&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;gnuplot&amp;lt;/span&amp;gt;
-
-&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;fig&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;figure&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;figsize&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;[&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;7&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;10&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;])&amp;lt;/span&amp;gt;
-&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;ax&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;fig&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;add_subplot&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;111&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;)&amp;lt;/span&amp;gt;
-&amp;lt;span class=&amp;#34;k&amp;#34;&amp;gt;for&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;ix&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;N&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;ow&amp;#34;&amp;gt;in&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;nb&amp;#34;&amp;gt;enumerate&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;np&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;logspace&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;1&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mf&amp;#34;&amp;gt;3.5&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;10&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;)):&amp;lt;/span&amp;gt;
-    &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;ax&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;semilogy&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;np&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;linspace&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;0&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;1&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;10&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;),&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;data&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;[&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;s1&amp;#34;&amp;gt;&amp;amp;#39;t_take&amp;amp;#39;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;]&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;T&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;[:,&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;ix&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;],&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;color&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;cmap&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;nb&amp;#34;&amp;gt;float&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;ix&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;)&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;/&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;10&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;),&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;linestyle&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;s1&amp;#34;&amp;gt;&amp;amp;#39;-&amp;amp;#39;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;linewidth&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;3&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;label&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;s2&amp;#34;&amp;gt;&amp;amp;quot;N = &amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;si&amp;#34;&amp;gt;{:.0f}&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;s2&amp;#34;&amp;gt;&amp;amp;quot;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;format&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;N&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;));&amp;lt;/span&amp;gt;
-    &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;ax&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;semilogy&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;np&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;linspace&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;0&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;1&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;10&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;),&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;data&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;[&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;s1&amp;#34;&amp;gt;&amp;amp;#39;t_all&amp;amp;#39;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;]&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;T&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;[:,&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;ix&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;],&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;color&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;cmap&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;nb&amp;#34;&amp;gt;float&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;ix&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;)&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;/&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;10&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;),&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;linestyle&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;s1&amp;#34;&amp;gt;&amp;amp;#39;--&amp;amp;#39;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;linewidth&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;3&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;);&amp;lt;/span&amp;gt;
-&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;ax&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;legend&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;bbox_to_anchor&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mf&amp;#34;&amp;gt;1.18&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mf&amp;#34;&amp;gt;1.1&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;),&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;ncol&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;5&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;loc&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;1&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;)&amp;lt;/span&amp;gt;
-&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;ax&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;set_xlabel&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;s2&amp;#34;&amp;gt;r&amp;amp;quot;$\langle k \rangle/N$&amp;amp;quot;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;fontsize&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;16&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;);&amp;lt;/span&amp;gt;
-&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;ax&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;set_ylabel&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;s2&amp;#34;&amp;gt;r&amp;amp;quot;Average Execution Time (s)&amp;amp;quot;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;fontsize&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;mi&amp;#34;&amp;gt;16&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;);&amp;lt;/span&amp;gt;
-
-&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;plt&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;savefig&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;s1&amp;#34;&amp;gt;&amp;amp;#39;performance.png&amp;amp;#39;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;,&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;#34;n&amp;#34;&amp;gt;bbox_inches&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;o&amp;#34;&amp;gt;=&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;s2&amp;#34;&amp;gt;&amp;amp;quot;tight&amp;amp;quot;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;p&amp;#34;&amp;gt;)&amp;lt;/span&amp;gt;
-&amp;lt;/pre&amp;gt;&amp;lt;/div&amp;gt;
-
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
 
 &lt;/div&gt;
 &lt;div class="cell border-box-sizing text_cell rendered"&gt;
@@ -2238,9 +2085,8 @@ model.RunToConvergence()
 &lt;div class="inner_cell"&gt;
 &lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
 &lt;p&gt;Now, computing simulation times for across networks of varying size and degree we can see when we should use either method. The dashed lines are for the ALL method and the solid lines represent the TAKE method.&lt;/p&gt;
-&lt;p&gt;&lt;img src="https://andrewmellor.co.uk/blog/images/performance.png" alt="Performance" title="Performance"&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Performance" src="https://andrewmellor.co.uk/blog/images/performance.png" title="Performance" /&gt;&lt;/p&gt;
 &lt;p&gt;For small networks there is little in terms of performance between the two implementations. As we increase the system size we see that the TAKE method performs significantly faster for small $\langle k \rangle / N$, and significantly slower for large $\langle k \rangle / N$. From this quick study it seems sensible to use TAKE when $\langle k \rangle / N &lt; 0.5$. This figure is dependent the propensity calculation as well as the underlying tradeoff between calculation and array copying and so should not be taken as gospel. For the SI model one would most likely use the TAKE method as most human contact networks are sparse in nature.&lt;/p&gt;
-
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
@@ -2249,10 +2095,9 @@ model.RunToConvergence()
 &lt;/div&gt;
 &lt;div class="inner_cell"&gt;
 &lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
-&lt;h2 id="Concluding-Remarks"&gt;Concluding Remarks&lt;a class="anchor-link" href="#Concluding-Remarks"&gt;&amp;#182;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Epidemic modelling has exploded in recent years. Not long ago this simple model was once state-of-the-art. Variants now combine in a number of different factors; edge creation/breaking, vaccination, behavioural changes, travel, susceptibility to name just a few. Regardless of the complexity the underlying principles often boil down to the simple contagion principle in this model. The mathematics of these more complex models is lagging behind and large-scale simulation is used to understand their behaviours. It is therefore extremely important that simulation is accurate and efficient.&lt;/p&gt;
+&lt;h2 id="Concluding-Remarks"&gt;Concluding Remarks&lt;a class="anchor-link" href="#Concluding-Remarks"&gt;¶&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Epidemic modelling has exploded in recent years. Not long ago this simple model was once state-of-the-art. Variants now combine in a number of different factors; edge creation/breaking, vaccination, behavioural changes, travel, susceptibility to name just a few. Regardless of the complexity the underlying principles often boil down to the simple contagion principle in this model. The mathematics of these more complex models is lagging behind and large-scale simulation is used to understand their behaviours. It is therefore extremely important that simulation is accurate and efficient.&lt;/p&gt;
 &lt;p&gt;From a technical standpoint this Python implementation of the simulation allows for suitable trade-off with the tools used, but I am keen to improve this framework where possible. The developers of Numpy have stated that fancy indexing will always copy an array and there are no plans to change it. There are some other avenues to explore such as Cython, or even a full C implementation. I am however interested to see if anyone has any other possible implementations (in Python or otherwise) which would significantly improve on this.&lt;/p&gt;
 &lt;p&gt;Understandably, this post has been on the technical side but if you've made it this far then I hope you've found it interesting and clear. Feel free to contact me with any questions.&lt;/p&gt;
-
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
@@ -2261,20 +2106,19 @@ model.RunToConvergence()
 &lt;/div&gt;
 &lt;div class="inner_cell"&gt;
 &lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
-&lt;h4 id="References"&gt;References&lt;a class="anchor-link" href="#References"&gt;&amp;#182;&lt;/a&gt;&lt;/h4&gt;&lt;hr&gt;
+&lt;h4 id="References"&gt;References&lt;a class="anchor-link" href="#References"&gt;¶&lt;/a&gt;&lt;/h4&gt;&lt;hr&gt;
 &lt;p&gt;[1]: SocioPatterns: &lt;a href="http://www.sociopatterns.org/datasets/"&gt;http://www.sociopatterns.org/datasets/&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;[2]: The solution of the differential equations
     \begin{align&lt;em&gt;}
-    \frac{dS}{dt} &amp;amp;= -\gamma S - \lambda \frac{k}{N} S I,\
-    \frac{dI}{dt} &amp;amp;= +\gamma S + \lambda \frac{k}{N} S I,
+    \frac{dS}{dt} &amp;= -\gamma S - \lambda \frac{k}{N} S I,\
+    \frac{dI}{dt} &amp;= +\gamma S + \lambda \frac{k}{N} S I,
     \end{align&lt;/em&gt;}
     where $k$ is the average degree of the network. Left as an exercise.&lt;/p&gt;
 &lt;p&gt;[3]: M. A. Gibson and J. Bruck. &lt;em&gt;Effcient exact stochastic simulation of chemical systems with many species and many
 channels.&lt;/em&gt; The Journal of Physical Chemistry A&lt;/p&gt;
 &lt;p&gt;[4]: M. Rathinam, L. R. Petzold, Y. Cao, and D. T. Gillespie. &lt;em&gt;Stiffness in stochastic chemically reacting systems: The
 implicit tau-leaping method.&lt;/em&gt; The Journal of Chemical Physics&lt;/p&gt;
-
-&lt;/div&gt;
+&lt;/hr&gt;&lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;script type="text/javascript"&gt;if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
