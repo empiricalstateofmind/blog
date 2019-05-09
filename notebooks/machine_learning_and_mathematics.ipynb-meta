@@ -1,0 +1,8 @@
+Title: Machine Learning and Mathematics: Collaborators or Competitors?
+Date: 05-09-2019
+Author: Andy Mellor
+Slug: machine-learning
+Tags: Machine Learning, Python, Mathematics, PyTorch, Deep Neural Networks, Neural ODEs
+Category: Python
+Status: Published
+Summary: So just where does machine learning fit in to the scientific world? And are we eventually going to have to resort to such methods to make progress in modelling if mathematical models cannot keep up? I'd like to argue that machine learning and mathematical models can coexist nicely in both research and industrial applications, and that the most interesting models appear when we utilise the power of both paradigms. To illustrate this point we take a trip to a civilisation who are in the contradictory position of having invented machine learning (implemented in PyTorch, strangely...) but their mathematics is not up to scratch. In particular they are not familiar with modern calculus. This example should hopefully replicate and illuminate the situation we find ourselves in now - where mathematics is difficult but data collection is easy.
